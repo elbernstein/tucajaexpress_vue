@@ -108,6 +108,13 @@
                         class="box-option"
                         :class="{ 'selected': quoteData.selectedStandardBox === box.id_local }"
                         @click="selectStandardBox(box)">
+                        <div class="box-image-container">
+                          <img 
+                            :src="getBoxImage(box.medida)" 
+                            :alt="'Caja ' + box.medida" 
+                            class="box-image"
+                            onerror="this.src='/images/default-box.png'">
+                        </div>
                         <div class="box-info">
                           <div class="box-dimensions">{{ box.medida }}</div>
                           <div class="box-features">
@@ -167,6 +174,12 @@
                     
                     <div v-if="customBoxPrice" class="custom-box-result">
                       <div class="box-option selected">
+                        <div class="box-image-container">
+                          <img 
+                            src="/images/16x16x16.png" 
+                            alt="Caja personalizada" 
+                            class="box-image">
+                        </div>
                         <div class="box-info">
                           <div class="box-dimensions">{{ getCustomBoxDimensions() }}</div>
                           <div class="box-features">
@@ -294,6 +307,13 @@
                   class="box-option" 
                   :class="{ 'selected': quoteData.selectedStandardBox === box.id_local }"
                   @click="selectStandardBox(box)">
+                  <div class="box-image-container">
+                    <img 
+                      :src="getBoxImage(box.medida)" 
+                      :alt="'Caja ' + box.medida" 
+                      class="box-image"
+                      onerror="this.src='/images/default-box.png'">
+                  </div>
                   <div class="box-info">
                     <div class="box-dimensions">{{ box.medida }}</div>
                     <div class="box-features">
@@ -319,6 +339,12 @@
 
               <div v-else-if="quoteData.boxType === 'custom'" class="box-options">
                 <div class="box-option selected">
+                  <div class="box-image-container">
+                    <img 
+                      src="/images/16x16x16.png" 
+                      alt="Caja personalizada" 
+                      class="box-image">
+                  </div>
                   <div class="box-info">
                     <div class="box-dimensions">{{ getCustomBoxDimensions() }}</div>
                     <div class="box-features">
@@ -503,6 +529,20 @@ const fetchTabuladores = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// Imagenes cajas
+// Método para obtener la imagen de la caja basada en sus dimensiones
+const getBoxImage = (dimensions) => {
+  // Normaliza el string de dimensiones para crear el nombre del archivo
+  const normalized = dimensions.toLowerCase()
+    .replace(/\s+/g, '') // Elimina espacios
+    .replace(/x/g, 'x')  // Asegura que las x sean minúsculas
+    .replace(/"/g, '')   // Elimina comillas si las hay
+    .replace(/'/g, '')   // Elimina apóstrofes si los hay
+  
+  // Ejemplo: "16 x 16 x 16" se convierte en "16x16x16.png"
+  return `/images/${normalized}.png`
 }
 
 // Validar valor declarado
@@ -794,11 +834,45 @@ onMounted(() => {
 }
 
 .box-option {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   padding: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+}
+
+.box-image-container {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.box-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.box-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Para la versión móvil */
+@media (max-width: 576px) {
+  .box-option {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .box-image-container {
+    width: 100%;
+    height: 120px;
+  }
 }
 
 .box-option.selected {
