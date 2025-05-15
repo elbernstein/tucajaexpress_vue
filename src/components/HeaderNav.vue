@@ -66,6 +66,7 @@
               <ul>
                 <li><RouterLink to="/">Inicio</RouterLink></li>
                 <li><RouterLink to="/conocenos">Conócenos</RouterLink></li>
+                <li><RouterLink to="/calificanos">Calificanos</RouterLink></li>
                 <li><RouterLink to="/paises">Paises</RouterLink></li>
                 <li><RouterLink to="/puerta-puerta">Puerta a Puerta</RouterLink></li>
                 <li><RouterLink to="/rutas">Zonas de Recolección</RouterLink></li>

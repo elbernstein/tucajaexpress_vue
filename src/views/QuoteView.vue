@@ -52,12 +52,15 @@
                       <select 
                         v-model="quoteData.destination" 
                         id="destination" 
-                        @change="updateAvailableBoxes" 
+                        @change="fetchTabuladores" 
                         class="form-select"
                         required>
                         <option disabled value="">Selecciona un país</option>
-                        <option v-for="(country, index) in countries" :key="index" :value="country">
-                          {{ country }}
+                        <option 
+                          v-for="country in availableCountries" 
+                          :key="country.codpais" 
+                          :value="country.codpais">
+                          {{ country.pais_destino }}
                         </option>
                       </select>
                     </div>
@@ -82,7 +85,7 @@
                           type="radio" 
                           v-model="quoteData.boxType" 
                           value="standard"
-                          @change="quoteData.selectedStandardBox = null">
+                          @change="resetStandardBoxSelection">
                         Caja estándar
                       </label>
                       <label class="radio-option">
@@ -90,42 +93,88 @@
                           type="radio" 
                           v-model="quoteData.boxType" 
                           value="custom"
-                          @change="quoteData.customDimensions = { height: null, length: null, width: null }">
+                          @change="resetCustomDimensions">
                         Caja personalizada
                       </label>
                     </div>
                   </div>
                   
+                  <!-- Cajas estándar -->
+                  <div v-if="quoteData.boxType === 'standard' && availableBoxes.length > 0" class="standard-box-options">
+                    <div class="box-list">
+                      <div 
+                        v-for="box in availableBoxes" 
+                        :key="box.id" 
+                        class="box-option"
+                        :class="{ 'selected': quoteData.selectedStandardBox === box.id_local }"
+                        @click="selectStandardBox(box)">
+                        <div class="box-info">
+                          <div class="box-dimensions">{{ box.medida }}</div>
+                          <div class="box-features">
+                            <span class="box-feature">Peso: {{ box.peso }} lbs</span>
+                            <span class="box-feature">Pies cúbicos: {{ parseFloat(box.pie_cubic).toFixed(4) }}</span>
+                          </div>
+                          <div class="box-price">{{ formatPrice(box.precio_p_c) }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div v-else-if="quoteData.boxType === 'standard'" class="empty-state">
+                    <div class="empty-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      </svg>
+                    </div>
+                    <p class="empty-text">Selecciona un país destino para ver las cajas disponibles</p>
+                  </div>
+                  
+                  <!-- Caja personalizada -->
                   <div v-if="quoteData.boxType === 'custom'" class="custom-box-form">
-                    <label>Ingresa las dimensiones personalizadas (cm)</label>
                     <div class="form-row">
                       <div class="form-group">
+                        <label>Alto (pulgadas)</label>
                         <input 
                           v-model.number="quoteData.customDimensions.height" 
                           type="number" 
-                          placeholder="Alto"
+                          placeholder="Ej: 10"
                           min="1"
-                          @input="calculatePrice">
+                          @input="calculateCustomBoxPrice">
                       </div>
                       <div class="form-group">
+                        <label>Largo (pulgadas)</label>
                         <input 
                           v-model.number="quoteData.customDimensions.length" 
                           type="number" 
-                          placeholder="Largo"
+                          placeholder="Ej: 12"
                           min="1"
-                          @input="calculatePrice">
+                          @input="calculateCustomBoxPrice">
                       </div>
                       <div class="form-group">
+                        <label>Ancho (pulgadas)</label>
                         <input 
                           v-model.number="quoteData.customDimensions.width" 
                           type="number" 
-                          placeholder="Ancho"
+                          placeholder="Ej: 8"
                           min="1"
-                          @input="calculatePrice">
+                          @input="calculateCustomBoxPrice">
                       </div>
                     </div>
-                    <div v-if="!validateCustomBox() && quoteData.boxType === 'custom'" class="warning-message">
+                    
+                    <div v-if="!validateCustomBox()" class="warning-message">
                       Por favor ingresa todas las dimensiones válidas
+                    </div>
+                    
+                    <div v-if="customBoxPrice" class="custom-box-result">
+                      <div class="box-option selected">
+                        <div class="box-info">
+                          <div class="box-dimensions">{{ getCustomBoxDimensions() }}</div>
+                          <div class="box-features">
+                            <span class="box-feature">Pies cúbicos: {{ calculatedCubicFeet.toFixed(4) }}</span>
+                          </div>
+                          <div class="box-price">{{ formatPrice(customBoxPrice) }}</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -139,30 +188,30 @@
                     Valor declarado
                   </h3>
                   <div class="form-group">
-                  <label for="declaredValue">Valor declarado (USD)</label>
-                  <input 
-                    v-model.number="quoteData.declaredValue" 
-                    type="number" 
-                    id="declaredValue" 
-                    class="form-input" 
-                    placeholder="Ej: 100"
-                    min="0"
-                    max="500"
-                    @input="validateDeclaredValue">
-                  <p class="input-hint">Máximo $500. El seguro será calculado como 5% de este valor (mínimo $10, máximo $25)</p>
-                  <p v-if="declaredValueError" class="error-message">{{ declaredValueError }}</p>
-                </div>
-                
-                <div class="form-group" v-if="quoteData.declaredValue && quoteData.declaredValue > 0 && !declaredValueError">
-                  <label class="checkbox-option">
+                    <label for="declaredValue">Valor declarado (USD)</label>
                     <input 
-                      type="checkbox" 
-                      v-model="quoteData.includeInsurance">
-                    <span class="checkmark"></span>
-                    Añadir seguro por {{ calculateInsuranceCost() }} (Cubre ${{ Math.min(quoteData.declaredValue, 500).toFixed(2) }})
-                  </label>
+                      v-model.number="quoteData.declaredValue" 
+                      type="number" 
+                      id="declaredValue" 
+                      class="form-input" 
+                      placeholder="Ej: 100"
+                      min="0"
+                      max="500"
+                      @input="validateDeclaredValue">
+                    <p class="input-hint">Máximo $500. El seguro será calculado como 5% de este valor (mínimo $10, máximo $25)</p>
+                    <p v-if="declaredValueError" class="error-message">{{ declaredValueError }}</p>
+                  </div>
+                  
+                  <div class="form-group" v-if="quoteData.declaredValue && quoteData.declaredValue > 0 && !declaredValueError">
+                    <label class="checkbox-option">
+                      <input 
+                        type="checkbox" 
+                        v-model="quoteData.includeInsurance">
+                      <span class="checkmark"></span>
+                      Añadir seguro por {{ calculateInsuranceCost() }} (Cubre ${{ Math.min(quoteData.declaredValue, 500).toFixed(2) }})
+                    </label>
+                  </div>
                 </div>
-              </div>
 
                 <div class="form-section">
                   <h3 class="section-title">
@@ -238,31 +287,20 @@
                 <p class="empty-text">Elige el país de destino para ver las opciones disponibles</p>
               </div>
 
-              <div v-else-if="quoteData.boxType === 'standard'" class="box-options">
-                <div v-for="(box, index) in availableBoxes" :key="index" 
-                     class="box-option" 
-                     :class="{ 'selected': quoteData.selectedStandardBox === box.id }"
-                     @click="quoteData.selectedStandardBox = box.id">
-                  <div class="box-image-container">
-                    <img :src="box.image" :alt="box.dimensions" class="box-image">
-                    <div class="box-dimensions">{{ box.dimensions }}</div>
-                  </div>
-                  <div class="box-details">
-                    <div class="box-price">{{ calculatePrice(box) }}</div>
+              <div v-else-if="quoteData.boxType === 'standard' && availableBoxes.length > 0" class="box-options">
+                <div 
+                  v-for="(box, index) in availableBoxes" 
+                  :key="index" 
+                  class="box-option" 
+                  :class="{ 'selected': quoteData.selectedStandardBox === box.id_local }"
+                  @click="selectStandardBox(box)">
+                  <div class="box-info">
+                    <div class="box-dimensions">{{ box.medida }}</div>
                     <div class="box-features">
-                      <div class="feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                        Seguro disponible: {{ calculateInsuranceCost() }}
-                      </div>
-                      <div class="feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                        Soporte 24/7
-                      </div>
+                      <div class="box-feature">Peso: {{ box.peso }} lbs</div>
+                      <div class="box-feature">Pies cúbicos: {{ parseFloat(box.pie_cubic).toFixed(4) }}</div>
                     </div>
+                    <div class="box-price">{{ formatPrice(box.precio_p_c) }}</div>
                   </div>
                 </div>
               </div>
@@ -281,30 +319,12 @@
 
               <div v-else-if="quoteData.boxType === 'custom'" class="box-options">
                 <div class="box-option selected">
-                  <div class="box-image-container">
-                    <div class="custom-box-image">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                      </svg>
-                    </div>
-                    <div class="box-dimensions">{{ getSelectedBox().dimensions }}</div>
-                  </div>
-                  <div class="box-details">
-                    <div class="box-price">{{ calculatePrice(getSelectedBox()) }}</div>
+                  <div class="box-info">
+                    <div class="box-dimensions">{{ getCustomBoxDimensions() }}</div>
                     <div class="box-features">
-                      <div class="feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                        Seguro disponible: {{ calculateInsuranceCost() }}
-                      </div>
-                      <div class="feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                        Soporte 24/7
-                      </div>
+                      <div class="box-feature">Pies cúbicos: {{ calculatedCubicFeet.toFixed(4) }}</div>
                     </div>
+                    <div class="box-price">{{ formatPrice(customBoxPrice) }}</div>
                   </div>
                 </div>
               </div>
@@ -319,11 +339,23 @@
                 </div>
                 <div v-if="quoteData.destination" class="detail-row">
                   <span class="detail-label">Ruta:</span>
-                  <span class="detail-value">Estados Unidos → {{ quoteData.destination }}</span>
+                  <span class="detail-value">Estados Unidos → {{ getCountryName(quoteData.destination) }}</span>
                 </div>
                 <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
                   <span class="detail-label">Tamaño de caja:</span>
-                  <span class="detail-value">{{ getSelectedBox().dimensions }}</span>
+                  <span class="detail-value">
+                    {{ quoteData.boxType === 'standard' ? 
+                       getSelectedBox().medida : 
+                       getCustomBoxDimensions() }}
+                  </span>
+                </div>
+                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
+                  <span class="detail-label">Pies cúbicos:</span>
+                  <span class="detail-value">
+                    {{ quoteData.boxType === 'standard' ? 
+                       parseFloat(getSelectedBox().pie_cubic).toFixed(4) : 
+                       calculatedCubicFeet.toFixed(4) }}
+                  </span>
                 </div>
                 <div v-if="quoteData.declaredValue" class="detail-row">
                   <span class="detail-label">Valor declarado:</span>
@@ -331,14 +363,15 @@
                 </div>
                 <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
                   <span class="detail-label">Precio envío:</span>
-                  <span class="detail-value">{{ calculatePrice(getSelectedBox()) }}</span>
+                  <span class="detail-value">
+                    {{ quoteData.boxType === 'standard' ? 
+                       formatPrice(getSelectedBox().precio_p_c) : 
+                       formatPrice(customBoxPrice) }}
+                  </span>
                 </div>
                 <div v-if="quoteData.includeInsurance && quoteData.declaredValue && quoteData.declaredValue > 0" class="detail-row">
                   <span class="detail-label">Seguro:</span>
-                  <span class="detail-value">{{ calculateInsuranceCost() }} (Cubre ${{
-                    quoteData.declaredValue >= 500 ? '500' : 
-                    quoteData.declaredValue >= 200 ? quoteData.declaredValue.toFixed(2) : '200'
-                  }})</span>
+                  <span class="detail-value">{{ calculateInsuranceCost() }} (Cubre ${{ Math.min(quoteData.declaredValue, 500).toFixed(2) }})</span>
                 </div>
                 <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row total-row">
                   <span class="detail-label">Total estimado:</span>
@@ -364,264 +397,449 @@
   </div>
 </template>
 
-<script>
-import { useRoute } from 'vue-router';
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-const BOX_SIZES = [
-  { id: '16x16x16', dimensions: '16x16x16 cm', basePrice: 25, image: '/images/16x16x16.png' },
-  { id: '18x18x18', dimensions: '18x18x18 cm', basePrice: 30, image: '/images/18x18x18.png' },
-  { id: '20x20x20', dimensions: '20x20x20 cm', basePrice: 35, image: '/images/20x20x20.png' },
-  { id: '20x20x28', dimensions: '20x20x28 cm', basePrice: 40, image: '/images/20x20x28.png' },
-  { id: '26x24x24', dimensions: '26x24x24 cm', basePrice: 45, image: '/images/26x24x24.png' },
-  { id: '30x26x24', dimensions: '30x26x24 cm', basePrice: 50, image: '/images/30x26x24.png' },
-  { id: '34x26x28', dimensions: '34x26x28 cm', basePrice: 55, image: '/images/34x26x28.png' }
-];
+const route = useRoute()
 
-export default {
-  name: 'QuoteSimulator',
-  setup() {
-    const route = useRoute();
-    let customerData = {};
+// Datos del cliente desde la URL
+const customerData = ref({})
+try {
+  if (route.query.customer) {
+    customerData.value = JSON.parse(decodeURIComponent(route.query.customer))
+  }
+} catch (e) {
+  console.error("Error parsing customer data:", e)
+}
 
-    if (route.query.customer) {
-      try {
-        customerData = JSON.parse(decodeURIComponent(route.query.customer));
-      } catch (e) {
-        console.error("Error parsing customer data:", e);
-      }
+// Estado del formulario
+const quoteData = ref({
+  origin: 'Estados Unidos',
+  destination: '',
+  boxType: 'standard',
+  selectedStandardBox: null,
+  customDimensions: {
+    height: null,
+    length: null,
+    width: null
+  },
+  declaredValue: null,
+  includeInsurance: false,
+  address: '',
+  location: null,
+  lat: null,
+  lng: null
+})
+
+// Estados de la aplicación
+const declaredValueError = ref(null)
+const availableBoxes = ref([])
+const tabuladores = ref([])
+const customBoxPrice = ref(null)
+const calculatedCubicFeet = ref(0)
+const location = ref(null)
+const lat = ref(null)
+const lng = ref(null)
+const loading = ref(false)
+const error = ref(null)
+
+// Obtener países únicos de los tabuladores (excluyendo Estados Unidos como destino)
+const availableCountries = computed(() => {
+  const uniqueCountries = []
+  const seen = new Set()
+  
+  tabuladores.value.forEach(item => {
+    if (!seen.has(item.codpais) && item.pais_destino !== 'Estados Unidos') {
+      seen.add(item.codpais)
+      uniqueCountries.push({
+        codpais: item.codpais,
+        pais_destino: item.pais_destino
+      })
     }
+  })
+  
+  return uniqueCountries
+})
 
-    return {
-      customerData
-    };
-  },
-  data() {
-    return {
-      quoteData: {
-        origin: 'Estados Unidos',
-        destination: '',
-        boxType: 'standard',
-        selectedStandardBox: null,
-        customDimensions: {
-          height: null,
-          length: null,
-          width: null
-        },
-        weight: null,
-        declaredValue: null,
-        includeInsurance: false,
-        address: '',
-        location: null,
-        lat: null,
-        lng: null
-      },
-      declaredValueError: null,
-      countries: ['México', 'Colombia', 'España', 'China', 'República Dominicana', 'Perú', 'Chile', 'Argentina'],
-      availableBoxes: [],
-      location: null,
-      lat: null,
-      lng: null
-    };
-  },
-  computed: {
-    googleMapsLink() {
-      if (this.lat && this.lng) {
-        return `https://www.google.com/maps?q=${this.lat},${this.lng}`;
-      }
-      return '#';
-    },
-    isFormValid() {
-      if (!this.quoteData.destination || !this.quoteData.address) return false;
-      
-      if (this.quoteData.boxType === 'standard') {
-        return !!this.quoteData.selectedStandardBox;
-      } else {
-        return this.validateCustomBox();
-      }
+// Obtener nombre del país por código
+const getCountryName = (codpais) => {
+  const country = availableCountries.value.find(c => c.codpais === codpais)
+  return country ? country.pais_destino : ''
+}
+
+// Formatear precio
+const formatPrice = (price) => {
+  if (!price) return '$0.00'
+  return `$${parseFloat(price).toFixed(2)}`
+}
+
+// Obtener tabuladores de la API
+const fetchTabuladores = async () => {
+  loading.value = true
+  error.value = null
+  
+  try {
+    const response = await fetch('https://sistematce.com/api/obtener_tabulado')
+    if (!response.ok) {
+      throw new Error('Error al obtener los tabuladores')
     }
-  },
-  methods: {
-    validateDeclaredValue() {
-      if (this.quoteData.declaredValue === null || this.quoteData.declaredValue === '') {
-        this.declaredValueError = null;
-        return;
-      }
-      
-      const value = parseFloat(this.quoteData.declaredValue);
-      
-      if (isNaN(value)) {
-        this.declaredValueError = 'Por favor ingresa un valor numérico válido';
-        return;
-      }
-      
-      if (value < 0) {
-        this.declaredValueError = 'El valor no puede ser negativo';
-        return;
-      }
-      
-      if (value > 500) {
-        this.quoteData.declaredValue = 500;
-        this.declaredValueError = 'El valor máximo permitido es $500';
-        return;
-      }
-      
-      this.declaredValueError = null;
-    },
-
-    updateAvailableBoxes() {
-      if (this.quoteData.destination) {
-        this.availableBoxes = BOX_SIZES;
-        this.quoteData.selectedStandardBox = null;
-      }
-    },
     
-    validateCustomBox() {
-      const { height, length, width } = this.quoteData.customDimensions;
-      return height > 0 && length > 0 && width > 0;
-    },
+    const data = await response.json()
+    tabuladores.value = data.tabuladores
     
-    getSelectedBox() {
-      if (this.quoteData.boxType === 'standard') {
-        return BOX_SIZES.find(box => box.id === this.quoteData.selectedStandardBox);
-      } else {
-        return {
-          id: 'custom',
-          dimensions: `${this.quoteData.customDimensions.height}x${this.quoteData.customDimensions.length}x${this.quoteData.customDimensions.width} cm`,
-          basePrice: 60,
-          image: null
-        };
-      }
-    },
-    
-    calculatePrice(box) {
-      if (!box) return '$0.00';
+    // Filtrar cajas disponibles para el país seleccionado
+    if (quoteData.value.destination) {
+      availableBoxes.value = tabuladores.value.filter(
+        item => item.codpais === quoteData.value.destination
+      )
       
-      let price = box.basePrice;
-      
-      // Aumento por peso (ejemplo: $1.5 por libra después de 5 libras)
-      if (this.quoteData.weight > 5) {
-        price += (this.quoteData.weight - 5) * 1.5;
-      }
-      
-      // Aumento por distancia (ejemplo basado en países)
-      if (this.quoteData.destination) {
-        // Países con mayor costo
-        const premiumDestinations = ['China', 'España'];
-        if (premiumDestinations.includes(this.quoteData.destination)) {
-          price += 20;
-        } else {
-          price += 10;
-        }
-      }
-      
-      // Aumento adicional para cajas personalizadas
-      if (this.quoteData.boxType === 'custom') {
-        price += 15;
-      }
-      
-      return `$${price.toFixed(2)}`;
-    },
+      // Ordenar por pies cúbicos
+      availableBoxes.value.sort((a, b) => parseFloat(a.pie_cubic) - parseFloat(b.pie_cubic))
+    }
+  } catch (err) {
+    console.error('Error fetching tabuladores:', err)
+    error.value = 'No se pudieron cargar las opciones de envío. Por favor intenta más tarde.'
+  } finally {
+    loading.value = false
+  }
+}
 
-    calculateInsuranceCost() {
-      if (!this.quoteData.declaredValue || this.quoteData.declaredValue <= 0) {
-        return '$0.00';
-      }
+// Validar valor declarado
+const validateDeclaredValue = () => {
+  if (quoteData.value.declaredValue === null || quoteData.value.declaredValue === '') {
+    declaredValueError.value = null
+    return
+  }
+  
+  const value = parseFloat(quoteData.value.declaredValue)
+  
+  if (isNaN(value)) {
+    declaredValueError.value = 'Por favor ingresa un valor numérico válido'
+    return
+  }
+  
+  if (value < 0) {
+    declaredValueError.value = 'El valor no puede ser negativo'
+    return
+  }
+  
+  if (value > 500) {
+    quoteData.value.declaredValue = 500
+    declaredValueError.value = 'El valor máximo permitido es $500'
+    return
+  }
+  
+  declaredValueError.value = null
+}
 
-      // Calculamos el 5% del valor declarado
-      let insuranceCost = this.quoteData.declaredValue * 0.05;
+// Resetear selección de caja estándar
+const resetStandardBoxSelection = () => {
+  quoteData.value.selectedStandardBox = null
+}
 
-      // Aplicamos mínimo y máximo
-      insuranceCost = Math.max(insuranceCost, 10); // Mínimo $10
-      insuranceCost = Math.min(insuranceCost, 25); // Máximo $25
+// Resetear dimensiones personalizadas
+const resetCustomDimensions = () => {
+  quoteData.value.customDimensions = { height: null, length: null, width: null }
+  customBoxPrice.value = null
+  calculatedCubicFeet.value = 0
+}
 
-      return `$${insuranceCost.toFixed(2)}`;
-    },
+// Seleccionar caja estándar
+const selectStandardBox = (box) => {
+  quoteData.value.selectedStandardBox = box.id_local
+}
 
-    calculateTotalPrice() {
-      if (!this.quoteData.selectedStandardBox && this.quoteData.boxType === 'standard') {
-        return '$0.00';
-      }
+// Validar caja personalizada
+const validateCustomBox = () => {
+  const { height, length, width } = quoteData.value.customDimensions
+  return height > 0 && length > 0 && width > 0
+}
 
-      if (this.quoteData.boxType === 'custom' && !this.validateCustomBox()) {
-        return '$0.00';
-      }
+// Obtener caja seleccionada
+const getSelectedBox = () => {
+  return availableBoxes.value.find(box => box.id_local === quoteData.value.selectedStandardBox)
+}
 
-      const box = this.getSelectedBox();
-      const basePrice = parseFloat(this.calculatePrice(box).replace('$', ''));
-      let insuranceCost = 0;
+// Obtener dimensiones de caja personalizada
+const getCustomBoxDimensions = () => {
+  const { height, length, width } = quoteData.value.customDimensions
+  return `${height}x${length}x${width} pulgadas`
+}
 
-      if (this.quoteData.includeInsurance && this.quoteData.declaredValue && this.quoteData.declaredValue > 0) {
-        insuranceCost = this.quoteData.declaredValue * 0.05;
-        insuranceCost = Math.max(insuranceCost, 10);
-        insuranceCost = Math.min(insuranceCost, 25);
-      }
+// Calcular precio para caja personalizada según la nueva función
+const calculateCustomBoxPrice = () => {
+  if (!validateCustomBox() || !quoteData.value.destination) {
+    customBoxPrice.value = null
+    return
+  }
+  
+  const { height, length, width } = quoteData.value.customDimensions
+  const numAlto = parseFloat(height)
+  const numLargo = parseFloat(length)
+  const numAncho = parseFloat(width)
 
-      const total = parseFloat(basePrice) + parseFloat(insuranceCost);
-      return `$${total.toFixed(2)}`;
-    },
-    
-    getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            this.lat = position.coords.latitude;
-            this.lng = position.coords.longitude;
-            this.location = `Ubicación: ${this.lat.toFixed(4)}, ${this.lng.toFixed(4)}`;
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-            alert("No se pudo obtener la ubicación. Asegúrate de haber permitido el acceso.");
-          }
-        );
-      } else {
-        alert("La geolocalización no es soportada por este navegador.");
-      }
-    },
-    
-    requestPickup() {
-      if (!this.isFormValid) {
-        alert("Por favor completa todos los campos requeridos.");
-        return;
-      }
-      
-      const selectedBoxData = this.getSelectedBox();
-      const insuranceInfo = this.quoteData.includeInsurance ? this.calculateInsuranceCost() : 'No incluido';
-      const totalPrice = this.calculateTotalPrice();
-      
-      const pickupRequest = {
-        customer: this.customerData,
-        quote: this.quoteData,
-        selectedBox: selectedBoxData,
-        insurance: insuranceInfo,
-        price: totalPrice,
-        location: this.location,
-        coordinates: { lat: this.lat, lng: this.lng },
-        timestamp: new Date().toISOString()
-      };
-      
-      console.log("Solicitud de recogida:", pickupRequest);
-      
-      this.$swal.fire({
-        title: '¡Recogida solicitada!',
-        html: `
-          <p>Hemos recibido tu solicitud para ${selectedBoxData.dimensions}.</p>
-          <p><strong>Precio envío:</strong> ${this.calculatePrice(selectedBoxData)}</p>
-          ${this.quoteData.includeInsurance ? `<p><strong>Seguro:</strong> ${insuranceInfo}</p>` : ''}
-          <p><strong>Total:</strong> ${totalPrice}</p>
-          <p>Nos pondremos en contacto contigo pronto.</p>
-        `,
-        icon: 'success',
-        confirmButtonText: 'Entendido',
-        confirmButtonColor: '#3a7bd5'
-      });
-      
-      this.$router.push('/');
+  if (isNaN(numAlto) || isNaN(numLargo) || isNaN(numAncho) ||
+      numAlto <= 0 || numLargo <= 0 || numAncho <= 0) {
+    customBoxPrice.value = null
+    return
+  }
+
+  // 1. Calcular pies cúbicos según la nueva fórmula
+  const constante_cubico = 1728
+  const pre_valor_cubico = (numAlto * numLargo * numAncho) / constante_cubico
+  let valor_cubico_ajustado = (Math.floor(pre_valor_cubico * 100) / 100) - 0.01
+  const valor_cubico = Math.max(0.001, valor_cubico_ajustado)
+  calculatedCubicFeet.value = parseFloat(valor_cubico.toFixed(4))
+
+  // 2. Filtrar tabuladores para el país seleccionado
+  const itemsDelPais = tabuladores.value
+    .filter(item => item.codpais === quoteData.value.destination)
+    .map(item => ({
+      ...item,
+      pie_cubic_num: parseFloat(item.pie_cubic),
+      precio_p_c_num: parseFloat(item.precio_p_c)
+    }))
+    .filter(item =>
+      !isNaN(item.pie_cubic_num) && item.pie_cubic_num > 0 &&
+      !isNaN(item.precio_p_c_num) && item.precio_p_c_num >= 0
+    )
+    .sort((a, b) => a.pie_cubic_num - b.pie_cubic_num)
+
+  if (itemsDelPais.length === 0) {
+    customBoxPrice.value = null
+    return
+  }
+
+  // 3. Buscar coincidencia exacta
+  const tolerancia = 0.0001
+  for (const item of itemsDelPais) {
+    if (Math.abs(item.pie_cubic_num - valor_cubico) < tolerancia) {
+      customBoxPrice.value = Math.ceil(item.precio_p_c_num)
+      return
     }
   }
-};
+
+  // 4. Manejar casos donde el valor es menor que la caja más pequeña
+  const cajaMasPequena = itemsDelPais[0]
+  const cajaMasGrande = itemsDelPais[itemsDelPais.length - 1]
+
+  if (valor_cubico < cajaMasPequena.pie_cubic_num) {
+    if (cajaMasPequena.pie_cubic_num > 0) {
+      customBoxPrice.value = Math.ceil((cajaMasPequena.precio_p_c_num / cajaMasPequena.pie_cubic_num) * valor_cubico)
+    } else {
+      customBoxPrice.value = Math.ceil(cajaMasPequena.precio_p_c_num)
+    }
+    return
+  }
+
+  // 5. Manejar casos donde el valor es mayor que la caja más grande
+  if (valor_cubico > cajaMasGrande.pie_cubic_num) {
+    if (cajaMasGrande.pie_cubic_num > 0) {
+      customBoxPrice.value = Math.ceil((cajaMasGrande.precio_p_c_num / cajaMasGrande.pie_cubic_num) * valor_cubico)
+    } else {
+      customBoxPrice.value = Math.ceil(cajaMasGrande.precio_p_c_num)
+    }
+    return
+  }
+
+  // 6. Interpolación lineal para valores intermedios
+  let caja_inferior = null
+  let caja_superior = null
+
+  for (let i = 0; i < itemsDelPais.length - 1; i++) {
+    if (itemsDelPais[i].pie_cubic_num < valor_cubico && itemsDelPais[i+1].pie_cubic_num > valor_cubico) {
+      caja_inferior = itemsDelPais[i]
+      caja_superior = itemsDelPais[i+1]
+      break
+    }
+  }
+
+  if (caja_inferior && caja_superior) {
+    const x1 = caja_inferior.pie_cubic_num
+    const y1 = caja_inferior.precio_p_c_num
+    const x2 = caja_superior.pie_cubic_num
+    const y2 = caja_superior.precio_p_c_num
+
+    if (x2 - x1 === 0) {
+      customBoxPrice.value = Math.ceil(y1)
+    } else {
+      const precioCalculado = y1 + (valor_cubico - x1) * (y2 - y1) / (x2 - x1)
+      customBoxPrice.value = Math.ceil(precioCalculado)
+    }
+  } else {
+    customBoxPrice.value = null
+  }
+}
+
+// Calcular costo del seguro
+const calculateInsuranceCost = () => {
+  if (!quoteData.value.declaredValue || quoteData.value.declaredValue <= 0) {
+    return '$0.00'
+  }
+
+  // Calculamos el 5% del valor declarado
+  let insuranceCost = quoteData.value.declaredValue * 0.05
+
+  // Aplicamos mínimo y máximo
+  insuranceCost = Math.max(insuranceCost, 10) // Mínimo $10
+  insuranceCost = Math.min(insuranceCost, 25) // Máximo $25
+
+  return `$${insuranceCost.toFixed(2)}`
+}
+
+// Calcular precio total
+const calculateTotalPrice = () => {
+  let basePrice = 0
+  
+  if (quoteData.value.boxType === 'standard' && quoteData.value.selectedStandardBox) {
+    const box = getSelectedBox()
+    basePrice = parseFloat(box.precio_p_c)
+  } else if (quoteData.value.boxType === 'custom' && validateCustomBox() && customBoxPrice.value) {
+    basePrice = customBoxPrice.value
+  } else {
+    return '$0.00'
+  }
+  
+  let insuranceCost = 0
+  if (quoteData.value.includeInsurance && quoteData.value.declaredValue && quoteData.value.declaredValue > 0) {
+    insuranceCost = quoteData.value.declaredValue * 0.05
+    insuranceCost = Math.max(insuranceCost, 10)
+    insuranceCost = Math.min(insuranceCost, 25)
+  }
+  
+  const total = basePrice + insuranceCost
+  return `$${total.toFixed(2)}`
+}
+
+// Obtener ubicación del usuario
+const getLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        lat.value = position.coords.latitude
+        lng.value = position.coords.longitude
+        location.value = `Ubicación: ${lat.value.toFixed(4)}, ${lng.value.toFixed(4)}`
+      },
+      (error) => {
+        console.error("Error getting location:", error)
+        alert("No se pudo obtener la ubicación. Asegúrate de haber permitido el acceso.")
+      }
+    )
+  } else {
+    alert("La geolocalización no es soportada por este navegador.")
+  }
+}
+
+// Link a Google Maps
+const googleMapsLink = computed(() => {
+  if (lat.value && lng.value) {
+    return `https://www.google.com/maps?q=${lat.value},${lng.value}`
+  }
+  return '#'
+})
+
+// Validar si el formulario está completo
+const isFormValid = computed(() => {
+  if (!quoteData.value.destination || !quoteData.value.address) return false
+  
+  if (quoteData.value.boxType === 'standard') {
+    return !!quoteData.value.selectedStandardBox
+  } else {
+    return validateCustomBox()
+  }
+})
+
+// Solicitar recogida
+const requestPickup = () => {
+  if (!isFormValid.value) {
+    alert("Por favor completa todos los campos requeridos.")
+    return
+  }
+  
+  const pickupRequest = {
+    customer: customerData.value,
+    quote: quoteData.value,
+    selectedBox: quoteData.value.boxType === 'standard' ? getSelectedBox() : {
+      medida: getCustomBoxDimensions(),
+      precio_p_c: customBoxPrice.value,
+      pie_cubic: calculatedCubicFeet.value
+    },
+    insurance: quoteData.value.includeInsurance ? calculateInsuranceCost() : 'No incluido',
+    price: calculateTotalPrice(),
+    location: location.value,
+    coordinates: { lat: lat.value, lng: lng.value },
+    timestamp: new Date().toISOString()
+  }
+  
+  console.log("Solicitud de recogida:", pickupRequest)
+  
+  // Aquí iría la lógica para enviar la solicitud al backend
+  alert('Solicitud de recogida enviada correctamente')
+}
+
+// Cargar tabuladores al montar el componente
+onMounted(() => {
+  fetchTabuladores()
+})
 </script>
 
 <style scoped>
+/* Estilos específicos para los cambios */
+.box-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.box-option {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.box-option.selected {
+  border-color: #3a7bd5;
+  background-color: rgba(58, 123, 213, 0.05);
+}
+
+.box-option:hover {
+  border-color: #3a7bd5;
+}
+
+.box-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.box-dimensions {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.box-weight {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
+
+.box-price {
+  font-weight: 700;
+  color: #3a7bd5;
+}
+
+.custom-box-result {
+  margin-top: 1rem;
+}
+
+.box-feature {
+  font-size: 0.875rem;
+  color: #2c3e50;
+  margin-top: 0.25rem;
+}
 .quote-simulator-page {
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -807,6 +1025,104 @@ export default {
   resize: vertical;
 }
 
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.radio-option input {
+  margin: 0;
+}
+
+.standard-box-options {
+  margin-top: 1rem;
+}
+
+.box-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.box-option {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.box-option:hover {
+  border-color: #3a7bd5;
+}
+
+.box-option.selected {
+  border-color: #3a7bd5;
+  background-color: rgba(58, 123, 213, 0.05);
+  box-shadow: 0 0 0 2px rgba(58, 123, 213, 0.2);
+}
+
+.box-image-container {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.box-dimensions {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.box-weight {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+}
+
+.box-price {
+  font-weight: 700;
+  color: #3a7bd5;
+  text-align: center;
+}
+
+.custom-box-form {
+  margin-top: 1rem;
+}
+
+.custom-box-price {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.price-label {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
+
+.price-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3a7bd5;
+  margin: 0.25rem 0;
+}
+
+.price-details {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+}
+
 .checkbox-option {
   display: flex;
   align-items: center;
@@ -905,6 +1221,19 @@ export default {
   text-decoration: underline;
 }
 
+.error-message {
+  color: #e74c3c;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.warning-message {
+  color: #e67e22;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 .results-column {
   display: flex;
   flex-direction: column;
@@ -976,6 +1305,8 @@ export default {
 .empty-state {
   text-align: center;
   padding: 2rem 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 }
 
 .empty-icon {
@@ -1023,12 +1354,6 @@ export default {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.error-message {
-  color: #e74c3c;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-}
-
 .box-option.selected {
   border-color: #3a7bd5;
   box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
@@ -1045,10 +1370,12 @@ export default {
   position: relative;
 }
 
-.box-image {
+.custom-box-image {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .box-dimensions {
@@ -1059,6 +1386,16 @@ export default {
   text-align: center;
   font-size: 0.75rem;
   font-weight: 600;
+  color: #7f8c8d;
+}
+
+.box-weight {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.75rem;
   color: #7f8c8d;
 }
 
@@ -1176,6 +1513,42 @@ export default {
   box-shadow: none;
 }
 
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3a7bd5;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  color: #e74c3c;
+  padding: 1rem;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 @media (max-width: 992px) {
   .simulator-grid {
     grid-template-columns: 1fr;
@@ -1206,6 +1579,11 @@ export default {
   .box-image-container {
     width: 100%;
     padding: 1.5rem;
+  }
+  
+  .radio-group {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
 </style>

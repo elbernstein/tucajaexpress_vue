@@ -17,6 +17,7 @@
       <ul>
         <li><RouterLink to="/" @click="closeMenu"><span>🏠</span> Inicio</RouterLink></li>
         <li><RouterLink to="/nosotros" @click="closeMenu"><span>👤</span> Conócenos</RouterLink></li>
+        <li><RouterLink to="/calificanos" @click="closeMenu"><span>⭐</span> Calificanos</RouterLink></li>
         <li><RouterLink to="/puerta-puerta" @click="closeMenu"><span>📦</span> Puerta a Puerta</RouterLink></li>
         <li><RouterLink to="/rutas" @click="closeMenu"><span>🛣️</span> Rutas en EEUU</RouterLink></li>
         <li><RouterLink to="/paises" @click="closeMenu"><span>🌎</span> Países</RouterLink></li>

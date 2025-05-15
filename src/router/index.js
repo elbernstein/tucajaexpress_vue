@@ -14,6 +14,8 @@ import Nicaragua from '@/components/coverage/Nicaragua.vue'
 import Rutas from '@/views/Rutas.vue'
 import QuoteView from '@/views/QuoteView.vue'
 import QuoteForm from '@/components/QuoteForm.vue'
+import Gana from '@/views/Gana.vue'
+import Calificanos from '@/views/Calificanos.vue'
 
 const routes = [
   { path: '/', name: 'inicio', component: InicioView },
@@ -21,6 +23,9 @@ const routes = [
   { path: '/conocenos', name: 'Conocenos', component: Conocenos },
   { path: '/puerta-puerta', name: 'Puerta a Puerta', component: Puerta },
   { path: '/rutas', name: 'Rutas en EEUU', component: Rutas },
+  { path: '/gana', name: 'Gana Dinero Con Nosotros', component: Gana },
+  { path: '/calificanos', name: 'Calificanos', component: Calificanos },
+
   {
     path: '/cotizar-form',
     name: 'QuoteForm',

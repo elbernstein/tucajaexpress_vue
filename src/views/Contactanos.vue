@@ -3,6 +3,7 @@
       <div class="container">
         <div class="row">
           <!-- 📍 Dirección y mapa -->
+          
           <div class="col-lg-5 pb-4 pb-lg-0">
             <div class="text-white text-center p-4 bg-danger rounded mb-3">
               <h4 class="m-0">
@@ -12,7 +13,7 @@
             </div>
             <iframe
               style="width: 100%; height: 470px; border: none; border-radius: 8px;"
-              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3257.87154988322..."
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3257.87154988322!2d-80.82062192512599!3d35.25945125302993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzXCsDE1JzM0LjAiTiA4MMKwNDknMDUuMCJX!5e0!3m2!1ses-419!2sco!4v1716124661944!5m2!1ses-419!2sco"
               allowfullscreen
             ></iframe>
           </div>
