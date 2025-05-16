@@ -30,7 +30,8 @@
 
         <!-- Botón de acción -->
         <a 
-          href="https://search.google.com/local/writereview?placeid=TU_PLACE_ID_DE_GOOGLE" 
+          href="https://g.page/r/CRhEmVgp4nwIEBM/review" 
+          
           target="_blank"
           class="rate-us-button"
           @mouseenter="startButtonAnimation"
