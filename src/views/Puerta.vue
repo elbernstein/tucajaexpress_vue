@@ -379,10 +379,11 @@ export default {
     const testimonials = ref([
       { name: 'María González', location: 'Morristown TN a Guatemala', text: 'Servicio excepcional, rápido y confiable. Mi paquete llegó perfecto.', rating: 5 },
       { name: 'Carlos Mendoza', location: 'Charlotte NC a El Salvador', text: 'Excelente comunicación y seguimiento. Muy profesionales.', rating: 5 },
-      { name: 'Laura Ramírez', location: 'LA a Nicaragua', text: 'Precios justos y entrega antes de lo esperado. Muy satisfecha.', rating: 4 },
-      { name: 'Roberto Sánchez', location: 'Virginia a el Salvador', text: 'Un aliado clave para nuestro negocio. Siempre cumplen.', rating: 5 }
+      { name: 'Laura Ramírez', location: 'Raleigh NC a Nicaragua', text: 'Precios justos y entrega antes de lo esperado. Muy satisfecha.', rating: 4 },
+      { name: 'Roberto Sánchez', location: 'Virginia a el Salvador', text: 'Un aliado clave para nuestro negocio. Siempre cumplen.', rating: 5 },
+      { name: 'Felipe Velez', location: 'NC a Mexico', text: 'Súper confiable y a tiempo.', rating: 6 }
     ]);
-
+    
     // Funciones auxiliares
     const getRandomColor = () => {
       const colors = ['#3B75F4', '#9023E5', '#599933', '#9FC914', '#FFD400', '#FF8500'];
@@ -403,7 +404,6 @@ export default {
         isSubmitting.value = false;
       }, 1500);
     };
-    
     
     const onImageError = (event) => {
       console.warn("Error al cargar ilustración:", event.target.src);
