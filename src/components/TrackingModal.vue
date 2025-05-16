@@ -95,12 +95,12 @@ const isVisible = ref(false);
 const trackingData = ref({
   guideNumber: '',
   phoneNumber: '',
-  countryCode: '52' // México por defecto
+  countryCode: '1' // México por defecto
 });
 
 const countries = [
-  { name: 'México', code: '52', flag: 'mexico.png' },
   { name: 'Estados Unidos', code: '1', flag: 'usa.png' },
+  { name: 'México', code: '52', flag: 'mexico.png' },
   { name: 'Guatemala', code: '502', flag: 'guatemala.png' },
   { name: 'El Salvador', code: '503', flag: 'el-salvador.png' },
   { name: 'Honduras', code: '504', flag: 'honduras.png' },
@@ -113,7 +113,7 @@ const showModal = () => {
   trackingData.value = {
     guideNumber: '',
     phoneNumber: '',
-    countryCode: '52'
+    countryCode: '1'
   };
 };
 

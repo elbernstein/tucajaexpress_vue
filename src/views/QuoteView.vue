@@ -176,7 +176,7 @@
                       <div class="box-option selected">
                         <div class="box-image-container">
                           <img 
-                            src="/images/16x16x16.png" 
+                            src="/images/26x24x24.png" 
                             alt="Caja personalizada" 
                             class="box-image">
                         </div>
@@ -341,7 +341,7 @@
                 <div class="box-option selected">
                   <div class="box-image-container">
                     <img 
-                      src="/images/16x16x16.png" 
+                      src="/images/26x24x24.png" 
                       alt="Caja personalizada" 
                       class="box-image">
                   </div>
