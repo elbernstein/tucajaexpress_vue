@@ -64,11 +64,13 @@
             <h3>Historial de Eventos</h3>
             <div class="timeline" v-if="trackingInfo.history && trackingInfo.history.length > 0">
               <div v-for="(event, index) in trackingInfo.history" :key="index" class="timeline-item">
-                <div class="timeline-marker"></div>
+                <div class="timeline-marker">
+                  <span class="marker-number">{{ event.index }}</span>
+                </div>
                 <div class="timeline-content">
                   <div class="timeline-date">{{ formatDateTime(event.date) }}</div>
                   <div class="timeline-event">{{ event.description }}</div>
-                  </div>
+                </div>
               </div>
             </div>
             <div v-else>
@@ -95,242 +97,224 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref, computed, onMounted } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import axios from 'axios'; 
-  
-  const route = useRoute();
-  const router = useRouter();
-  
-  // Estados
-  const loading = ref(true);
-  const error = ref(null);
-  const trackingInfo = ref(null); // Aquí guardaremos la info procesada de la API
-  
-  // Datos de rastreo extraídos de la URL
-  const trackingData = ref({
-    guide: '',
-    phone: '', // Número sin código de país
-    countryCode: ''
-  });
-  
-  // Mapeo de países (igual que antes)
-  const countries = {
-    '52': { name: 'México', flag: 'mexico.png' },
-    '1': { name: 'Estados Unidos', flag: 'usa.png' },
-    '502': { name: 'Guatemala', flag: 'guatemala.png' },
-    '503': { name: 'El Salvador', flag: 'el-salvador.png' }, // Asegúrate que el nombre del flag sea correcto
-    '504': { name: 'Honduras', flag: 'honduras.png' },
-    '505': { name: 'Nicaragua', flag: 'nicaragua.png' }
-    // Agrega más si es necesario
-  };
-  
-  // --- Computados ---
-  const currentCountry = computed(() => {
-    return countries[trackingData.value.countryCode] || {};
-  });
-  
-  // Clase CSS basada en el estado (última descripción)
-  const statusClass = computed(() => {
-    if (!trackingInfo.value || !trackingInfo.value.status) return 'desconocido';
-    // Convertimos el estado a un formato usable como clase CSS
-    return trackingInfo.value.status.toLowerCase()
-             .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quitar acentos
-             .replace(/[^a-z0-9]+/g, '-') // Reemplazar caracteres no alfanuméricos con -
-             .replace(/^-+|-+$/g, ''); // Quitar guiones al inicio/fin
-  });
-  
-  // --- Métodos ---
-  const formatDate = (dateString) => {
-      if (!dateString) return 'N/A';
-      try {
-          // Formato esperado: YYYY-MM-DDTHH:mm:ss.sssZ
-          const date = new Date(dateString);
-          //toLocaleDateString podría dar formatos diferentes según el navegador/OS
-          // Forzamos un formato YYYY-MM-DD
-          const year = date.getFullYear();
-          const month = (date.getMonth() + 1).toString().padStart(2, '0');
-          const day = date.getDate().toString().padStart(2, '0');
-          return `${year}-${month}-${day}`;
-      } catch (e) {
-          console.error("Error formatting date:", dateString, e);
-          return 'Fecha inválida';
-      }
-  };
-  
-  const formatDateTime = (dateString) => {
-      if (!dateString) return 'N/A';
-       try {
-          const date = new Date(dateString);
-          // Formato deseado: DD/MM/YYYY HH:mm (ej. 28/04/2025 13:58)
-          const day = date.getDate().toString().padStart(2, '0');
-          const month = (date.getMonth() + 1).toString().padStart(2, '0');
-          const year = date.getFullYear();
-          const hours = date.getHours().toString().padStart(2, '0');
-          const minutes = date.getMinutes().toString().padStart(2, '0');
-          return `${day}/${month}/${year} ${hours}:${minutes}`;
-       } catch (e) {
-          console.error("Error formatting datetime:", dateString, e);
-          return 'Fecha/hora inválida';
-       }
-  };
-  
-  // Extrae guía y teléfono de la URL, y determina código de país
-  const extractTrackingData = () => {
-    const { guide, phone: fullPhone } = route.query; // Renombramos 'phone' a 'fullPhone' para claridad
-  
-    if (!guide || !fullPhone) {
-      error.value = 'Faltan parámetros de búsqueda (guía o teléfono) en la URL.';
-      loading.value = false; // Detener carga si faltan datos
-      return false; // Indica que no se pudo extraer
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+
+const route = useRoute();
+const router = useRouter();
+
+// Estados
+const loading = ref(true);
+const error = ref(null);
+const trackingInfo = ref(null);
+
+// Datos de rastreo
+const trackingData = ref({
+  guide: '',
+  phone: '',
+  countryCode: ''
+});
+
+// Mapeo de países
+const countries = {
+  '52': { name: 'México', flag: 'mexico.png' },
+  '1': { name: 'Estados Unidos', flag: 'usa.png' },
+  '502': { name: 'Guatemala', flag: 'guatemala.png' },
+  '503': { name: 'El Salvador', flag: 'el-salvador.png' },
+  '504': { name: 'Honduras', flag: 'honduras.png' },
+  '505': { name: 'Nicaragua', flag: 'nicaragua.png' }
+};
+
+// Computados
+const currentCountry = computed(() => {
+  return countries[trackingData.value.countryCode] || {};
+});
+
+const statusClass = computed(() => {
+  if (!trackingInfo.value || !trackingInfo.value.status) return 'desconocido';
+  return trackingInfo.value.status.toLowerCase()
+           .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+           .replace(/[^a-z0-9]+/g, '-')
+           .replace(/^-+|-+$/g, '');
+});
+
+// Métodos
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  try {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  } catch (e) {
+    console.error("Error formatting date:", dateString, e);
+    return 'Fecha inválida';
+  }
+};
+
+const formatDateTime = (dateString) => {
+  if (!dateString) return 'N/A';
+  try {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  } catch (e) {
+    console.error("Error formatting datetime:", dateString, e);
+    return 'Fecha/hora inválida';
+  }
+};
+
+const extractTrackingData = () => {
+  const { guide, phone: fullPhone } = route.query;
+
+  if (!guide || !fullPhone) {
+    error.value = 'Faltan parámetros de búsqueda (guía o teléfono) en la URL.';
+    loading.value = false;
+    return false;
+  }
+
+  trackingData.value.guide = guide;
+
+  const possibleCodes = Object.keys(countries).sort((a, b) => b.length - a.length);
+  let foundCode = false;
+  for (const code of possibleCodes) {
+    if (fullPhone.startsWith(code)) {
+      trackingData.value.phone = fullPhone.substring(code.length);
+      trackingData.value.countryCode = code;
+      foundCode = true;
+      break;
     }
-  
-    trackingData.value.guide = guide;
-  
-    // Extraer código de país (los primeros 1-3 dígitos)
-    const possibleCodes = Object.keys(countries).sort((a, b) => b.length - a.length);
-    let foundCode = false;
-    for (const code of possibleCodes) {
-      if (fullPhone.startsWith(code)) {
-        trackingData.value.phone = fullPhone.substring(code.length); // Guarda el número sin código
-        trackingData.value.countryCode = code; // Guarda el código
-        foundCode = true;
-        break;
-      }
-    }
-  
-    if (!foundCode) {
-        // Si no se encuentra un código de país conocido, asumimos que no tiene prefijo o es desconocido
-        console.warn(`No se encontró código de país conocido para ${fullPhone}. Se usará el número completo.`);
-        trackingData.value.phone = fullPhone; // Guardamos el número completo como 'phone'
-        trackingData.value.countryCode = ''; // Sin código de país
-    }
-  
-    return true; // Datos extraídos (o intentado)
-  };
-  
-  // *** NUEVA FUNCIÓN: Llama a la API real ***
-  const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
-    // Validar que tenemos guía y teléfono
-    if (!guideToFetch || !phoneToFetch) {
-        error.value = "No se proporcionó número de guía o teléfono para la búsqueda.";
-        loading.value = false;
-        return;
-    }
-  
-    loading.value = true;
-    error.value = null;
-    trackingInfo.value = null; // Limpiar resultados anteriores
-  
-    // Construir la URL de la API
-    // Usamos el número de teléfono COMPLETO (con código de país) como 'celular'
-    const apiUrl = `https://sistematce.com/api/obtener_info_guia_web?nroGuia=${encodeURIComponent(guideToFetch)}&celular=${encodeURIComponent(phoneToFetch)}`;
-    console.log("Consultando API:", apiUrl); // Para depuración
-  
-    try {
-      const response = await axios.post(apiUrl);
-      console.log("Respuesta API:", response.data); // Para depuración
-  
-      // Verificar si la API respondió correctamente y si success es true
-      if (response.data && response.data.success) {
-        const apiData = response.data;
-  
-        // Procesar movimientos para crear el historial
-        const history = [];
-        if (apiData.movimientos && typeof apiData.movimientos === 'object') {
-          // Convertir el objeto movimientos en un array
-          const movementsArray = Object.entries(apiData.movimientos).map(([key, value]) => ({
-              type: key, // Guardamos el tipo de movimiento si es útil
-              ...value // Copiamos el resto de propiedades (fecha, observacion, nro_guia)
-          }));
-  
-          // Ordenar los movimientos por fecha (más reciente primero)
-          movementsArray.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  
-          // Mapear al formato de historial que espera el componente
-          history.push(...movementsArray.map(mov => ({
+  }
+
+  if (!foundCode) {
+    trackingData.value.phone = fullPhone;
+    trackingData.value.countryCode = '';
+  }
+
+  return true;
+};
+
+const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
+  if (!guideToFetch || !phoneToFetch) {
+    error.value = "No se proporcionó número de guía o teléfono para la búsqueda.";
+    loading.value = false;
+    return;
+  }
+
+  loading.value = true;
+  error.value = null;
+  trackingInfo.value = null;
+
+  const apiUrl = `https://sistematce.com/api/obtener_info_guia_web?nroGuia=${encodeURIComponent(guideToFetch)}&celular=${encodeURIComponent(phoneToFetch)}`;
+
+  try {
+    const response = await axios.post(apiUrl);
+    
+    if (response.data && response.data.success) {
+      const apiData = response.data;
+      const history = [];
+      
+      if (apiData.movimientos && typeof apiData.movimientos === 'object') {
+        // Convertir a array y ordenar por índice (orden lógico)
+        const movementsArray = Object.entries(apiData.movimientos).map(([key, value]) => ({
+          type: key,
+          ...value
+        })).sort((a, b) => a.indice - b.indice);
+
+        // Crear historial en orden inverso (último primero)
+        for (let i = movementsArray.length - 1; i >= 0; i--) {
+          const mov = movementsArray[i];
+          history.push({
             date: mov.fecha,
-            description: mov.observacion || `Movimiento: ${mov.type}`, // Usar observacion o el tipo
-            // location: mov.location || 'N/A' // Descomentar si la API devuelve ubicación por evento
-          })));
+            description: mov.observacion || `Movimiento: ${mov.type}`,
+            index: mov.indice
+          });
         }
-  
-        // Determinar estado actual, ubicación (descripción) y última actualización
-        const latestMovement = history.length > 0 ? history[0] : null; // El primero después de ordenar desc
-  
-        trackingInfo.value = {
-          // Usamos la descripción del último movimiento como estado principal
-          status: latestMovement ? latestMovement.description : 'Información Recibida',
-          // También usamos la descripción como 'location' ya que no hay un campo específico
-          location: latestMovement ? latestMovement.description : 'No hay detalles de ubicación',
-          // Usamos la fecha del último movimiento o la fecha general de la guía
-          lastUpdate: latestMovement ? latestMovement.date : apiData.fecha,
-          estimatedDelivery: null, // Tu API no lo provee
-          history: history // El historial ordenado
-        };
-  
-      } else {
-        // La API respondió pero success no es true o no hay data
-        console.warn("La API no devolvió resultados exitosos:", response.data);
-        trackingInfo.value = null; // Para mostrar el estado "No se encontraron resultados"
       }
-  
-    } catch (err) {
-      console.error('Error al obtener Guia:', err);
-      if (err.response) {
-          // Error desde el servidor (ej. 404, 500)
-          error.value = `Error del servidor (${err.response.status}). Intenta más tarde.`;
-      } else if (err.request) {
-          // No hubo respuesta del servidor
-          error.value = 'No se pudo conectar con el servidor de rastreo. Verifica tu conexión.';
-      } else {
-          // Otro tipo de error
-          error.value = 'Ocurrió un error inesperado al procesar la solicitud.';
-      }
+
+      // Determinar estado actual (primer elemento del historial invertido)
+      const currentStatus = history[0] || null;
+      // Usar fecha del primer elemento o fecha general
+      const lastUpdate = currentStatus ? currentStatus.date : apiData.fecha;
+
+      trackingInfo.value = {
+        status: currentStatus ? currentStatus.description : 'Información Recibida',
+        location: currentStatus ? currentStatus.description : 'No hay detalles de ubicación',
+        lastUpdate: lastUpdate,
+        estimatedDelivery: null,
+        history: history
+      };
+
+    } else {
       trackingInfo.value = null;
-    } finally {
-      loading.value = false; // Finaliza la carga independientemente del resultado
     }
-  };
-  
-  // --- Acciones ---
-  const retrySearch = () => {
-    // Reintentar la búsqueda usando los datos ya extraídos
-    const guide = trackingData.value.guide;
-    const fullPhone = route.query.phone; // Necesitamos el teléfono completo original
-    if(guide && fullPhone) {
-        fetchTrackingInfo(guide, fullPhone);
+  } catch (err) {
+    console.error('Error al obtener Guia:', err);
+    if (err.response) {
+      error.value = `Error del servidor (${err.response.status}). Intenta más tarde.`;
+    } else if (err.request) {
+      error.value = 'No se pudo conectar con el servidor de rastreo. Verifica tu conexión.';
     } else {
-        error.value = "No hay datos válidos para reintentar la búsqueda.";
+      error.value = 'Ocurrió un error inesperado al procesar la solicitud.';
     }
-  };
-  
-  const goBack = () => {
-    // Ir a la página anterior (probablemente el formulario de rastreo)
-    if (window.history.length > 1) {
-      router.go(-1);
-    } else {
-      // Si no hay historial, ir a la raíz o a una página definida
-      router.push('/');
-    }
-  };
-  
-  // --- Ciclo de vida ---
-  onMounted(() => {
-    // 1. Extraer datos de la URL
-    const dataExtracted = extractTrackingData();
-  
-    // 2. Si se extrajeron datos y no hubo error inicial, llamar a la API
-    if (dataExtracted && !error.value) {
-      // Usamos la guía extraída y el teléfono COMPLETO original de la URL
-      fetchTrackingInfo(trackingData.value.guide, route.query.phone);
-    }
-    // Si hubo error en extractTrackingData, loading ya se puso en false allí
-  });
-  </script>
+    trackingInfo.value = null;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const retrySearch = () => {
+  const guide = trackingData.value.guide;
+  const fullPhone = route.query.phone;
+  if (guide && fullPhone) {
+    fetchTrackingInfo(guide, fullPhone);
+  } else {
+    error.value = "No hay datos válidos para reintentar la búsqueda.";
+  }
+};
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.go(-1);
+  } else {
+    router.push('/');
+  }
+};
+
+// Iniciar
+onMounted(() => {
+  const dataExtracted = extractTrackingData();
+  if (dataExtracted && !error.value) {
+    fetchTrackingInfo(trackingData.value.guide, route.query.phone);
+  }
+});
+</script>
   
   <style scoped>
+      .timeline-marker {
+      /* ... estilos existentes ... */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .marker-number {
+      color: var(--elsalvador-blue, #0047AB);
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    .timeline-item:first-child .timeline-marker .marker-number {
+      color: white;
+    }
+
     .tracking-results-view {
       max-width: 800px;
       margin: 20px auto; /* Añadido margen superior/inferior */

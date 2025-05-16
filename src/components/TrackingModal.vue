@@ -18,7 +18,16 @@
             
             <div class="modal-body">
               <div class="form-group">
-                <label for="guideNumber">Número de Guía</label>
+                <div class="label-container">
+                  <label for="guideNumber">Número de Guía</label>
+                  <button 
+                    class="guide-help-button" 
+                    @click="showGuideHelp"
+                    aria-label="Ayuda para número de guía"
+                  >
+                    ¿No sabes cuál es tu número de guía?
+                  </button>
+                </div>
                 <input 
                   id="guideNumber"
                   v-model="trackingData.guideNumber" 
@@ -70,7 +79,6 @@
               </button>
             </div>
             
-            <!-- Espacio para el logo -->
             <div class="modal-footer">
               <img 
                 src="/images/logo-light.png" 
@@ -82,6 +90,51 @@
         </Transition>
       </div>
     </Transition>
+
+    <!-- Modal de ayuda para número de guía -->
+    <Transition name="modal-fade">
+      <div 
+        v-if="showGuideHelpModal" 
+        class="guide-help-overlay"
+        @click.self="hideGuideHelp"
+      >
+        <div class="guide-help-content">
+          <button 
+            class="guide-help-close" 
+            @click="hideGuideHelp"
+            aria-label="Cerrar ayuda"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+          
+          <div class="guide-help-image-container">
+            <img 
+              src="/images/guide-number-example.jpg" 
+              alt="Ejemplo de número de guía"
+              class="guide-help-image"
+            >
+          </div>
+          
+          <div class="guide-help-text">
+            <h3>¿Dónde encuentro mi número de guía?</h3>
+            <p>El número de guía es un código único que se te proporcionó al momento de realizar tu envío. Normalmente lo puedes encontrar en:</p>
+            <ul>
+              <li>El recibo o comprobante de envío que te llega mediante WhatsApp(cómo el de la imagen)</li>
+              <li>La etiqueta pegada en tu paquete</li>
+            </ul>
+            <p>El número de guía suele tener entre 10 y 15 caracteres, combinando letras y números.</p>
+                        <p>Recuerda también ingresar el primer número de telefono registrado en la guía.</p>
+          </div>
+          
+          <button 
+            class="guide-help-understood" 
+            @click="hideGuideHelp"
+          >
+            Entendido, gracias
+          </button>
+        </div>
+      </div>
+    </Transition>
   </Teleport>
 </template>
 
@@ -91,6 +144,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const isVisible = ref(false);
+const showGuideHelpModal = ref(false);
 
 const trackingData = ref({
   guideNumber: '',
@@ -121,6 +175,14 @@ const closeModal = () => {
   isVisible.value = false;
 };
 
+const showGuideHelp = () => {
+  showGuideHelpModal.value = true;
+};
+
+const hideGuideHelp = () => {
+  showGuideHelpModal.value = false;
+};
+
 const submitTracking = () => {
   if (!trackingData.value.guideNumber) {
     alert('Por favor ingresa el número de guía');
@@ -147,6 +209,162 @@ defineExpose({ showModal, closeModal });
 </script>
 
 <style scoped>
+/* Nuevos estilos para la ayuda de guía */
+.label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.guide-help-button {
+  background: none;
+  border: none;
+  color: #3a7bd5;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.guide-help-button:hover {
+  color: #2e6ab8;
+}
+
+.guide-help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+  backdrop-filter: blur(5px);
+  padding: 20px;
+}
+
+.guide-help-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 30px;
+}
+
+.guide-help-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.guide-help-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+  transform: rotate(90deg);
+}
+
+.guide-help-image-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.guide-help-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.guide-help-text {
+  margin: 20px 0;
+}
+
+.guide-help-text h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.guide-help-text p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.guide-help-text ul {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.guide-help-text li {
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.guide-help-understood {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: #3a7bd5;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.guide-help-understood:hover {
+  background: #2e6ab8;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .guide-help-content {
+    padding: 20px;
+  }
+  
+  .label-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .guide-help-button {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .guide-help-content {
+    padding: 15px;
+  }
+  
+  .guide-help-text h3 {
+    font-size: 1.1rem;
+  }
+}
 /* Transiciones */
 .modal-fade-enter-active,
 .modal-fade-leave-active {
