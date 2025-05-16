@@ -381,7 +381,7 @@ export default {
       { name: 'Carlos Mendoza', location: 'Charlotte NC a El Salvador', text: 'Excelente comunicación y seguimiento. Muy profesionales.', rating: 5 },
       { name: 'Laura Ramírez', location: 'Raleigh NC a Nicaragua', text: 'Precios justos y entrega antes de lo esperado. Muy satisfecha.', rating: 4 },
       { name: 'Roberto Sánchez', location: 'Virginia a el Salvador', text: 'Un aliado clave para nuestro negocio. Siempre cumplen.', rating: 5 },
-      { name: 'Felipe Velez', location: 'NC a Mexico', text: 'Súper confiable y a tiempo.', rating: 6 }
+      { name: 'Felipe Velez', location: 'Concord NC a Mexico', text: 'Súper confiable y a tiempo.', rating: 6 }
     ]);
     
     // Funciones auxiliares
