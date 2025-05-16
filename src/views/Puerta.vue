@@ -375,7 +375,7 @@ export default {
       { title: 'Transporte seguro', description: 'Movemos tu mercancía con los más altos estándares de seguridad.' },
       { title: 'Entrega en destino', description: 'Llevamos tu paquete hasta la puerta de tu destinatario.' }
     ]);
-    
+  
     const testimonials = ref([
       { name: 'María González', location: 'Morristown TN a Guatemala', text: 'Servicio excepcional, rápido y confiable. Mi paquete llegó perfecto.', rating: 5 },
       { name: 'Carlos Mendoza', location: 'Charlotte NC a El Salvador', text: 'Excelente comunicación y seguimiento. Muy profesionales.', rating: 5 },
@@ -403,6 +403,7 @@ export default {
         isSubmitting.value = false;
       }, 1500);
     };
+    
     
     const onImageError = (event) => {
       console.warn("Error al cargar ilustración:", event.target.src);

@@ -18,7 +18,7 @@
             ></iframe>
           </div>
   
-          <!-- ✉️ Formulario -->
+          <!-- ✉️ Formulario de aqui -->
           <div class="col-lg-7">
             <h6 class="text-danger text-uppercase fw-bold">Contáctanos</h6>
             <h1 class="mb-4">Escríbenos cualquier pregunta</h1>

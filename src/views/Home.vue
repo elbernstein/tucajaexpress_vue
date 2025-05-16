@@ -98,7 +98,7 @@
           <!-- Evita fotos genéricas de apretones de manos si es posible. -->
           <!-- Ejemplo: /images/agents/logistics-hub.jpg -->
           <img src="/images/PLAN2.jpg"
-               alt="Conviértete en Agente Autorizado para envíos a México y Centroamérica"
+               alt="Conviértete ahora en Agente Autorizado para envíos a México y Centroamérica"
                class="agent-image">
            <div class="image-overlay-shape agent-shape-primary"></div> <!-- Elemento decorativo -->
         </div>
