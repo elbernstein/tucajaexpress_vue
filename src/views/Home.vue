@@ -131,7 +131,9 @@
       </div>
     </div>
   </section>
+  <div id ="cotizar">
   <QuoteForm/>
+  </div>
 </template>
 
 <style setup>
