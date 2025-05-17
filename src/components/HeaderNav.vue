@@ -23,18 +23,21 @@
                 <span class="d-inline d-sm-none">Ingresar</span>
               </a>
               
-              <!-- Redes sociales -->
-              <div class="d-inline-flex">
-                <a class="text-white px-2" href="https://www.facebook.com/tucajaexpress/?locale=es_LA" target="_blank">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-                <a class="text-white px-2" href="https://twitter.com/TUCajaExpress" target="_blank">
-                  <i class="fab fa-twitter"></i>
-                </a>
-                <a class="text-white px-2" href="https://www.instagram.com/tucajaexpress/?hl=es" target="_blank">
-                  <i class="fab fa-instagram"></i>
-                </a>
-              </div>
+<!-- Redes sociales -->
+<div class="d-inline-flex">
+  <a class="text-white px-2" href="https://www.facebook.com/tucajaexpress/?locale=es_LA" target="_blank">
+    <i class="fab fa-facebook-f"></i>
+  </a>
+  <a class="text-white px-2" href="https://twitter.com/TUCajaExpress" target="_blank">
+    <i class="fab fa-twitter"></i>
+  </a>
+  <a class="text-white px-2" href="https://www.instagram.com/tucajaexpress/?hl=es" target="_blank">
+    <i class="fab fa-instagram"></i>
+  </a>
+  <a class="text-white px-2" href="https://www.tiktok.com/@tucajaexpress" target="_blank">
+    <i class="fab fa-tiktok"></i>
+  </a>
+</div>
               
               <!-- Botón Gana Dinero -->
               <RouterLink to="/gana" class="btn btn-primary py-1 px-3 ml-3">
