@@ -86,9 +86,14 @@
   
         <div v-else class="no-results">
           <i class="fas fa-box-open"></i>
-          <h3>No se encontraron resultados</h3>
-          <p>No hay información disponible para la guía <strong v-if="trackingData.guide">{{ trackingData.guide }}</strong> y el teléfono proporcionado.</p>
-          <p>Verifica los datos e intenta nuevamente.</p>
+          <h3>No se encontró la guía</h3>
+          <p>La guía <strong>{{ trackingData.guide }}</strong> no fue encontrada en nuestro sistema.</p>
+          <p>Por favor verifica:</p>
+          <ul class="verification-list">
+            <li>El número de guía ingresado</li>
+            <li>El número de teléfono asociado</li>
+            <li>Que la guía no sea muy reciente (puede tardar hasta 24 horas en aparecer)</li>
+          </ul>
           <button @click="goBack" class="back-button">
             <i class="fas fa-arrow-left"></i> Volver
           </button>
@@ -219,9 +224,14 @@ const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
     
     if (response.data && response.data.success) {
       const apiData = response.data;
-      const history = [];
       
-      if (apiData.movimientos && typeof apiData.movimientos === 'object') {
+      // Verificar si realmente hay datos de guía
+      if (!apiData.movimientos || Object.keys(apiData.movimientos).length === 0) {
+        // No hay movimientos, consideramos que la guía no existe
+        trackingInfo.value = null;
+      } else {
+        const history = [];
+        
         // Convertir a array y ordenar por índice (orden lógico)
         const movementsArray = Object.entries(apiData.movimientos).map(([key, value]) => ({
           type: key,
@@ -237,34 +247,38 @@ const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
             index: mov.indice
           });
         }
+
+        // Determinar estado actual (primer elemento del historial invertido)
+        const currentStatus = history[0] || null;
+        // Usar fecha del primer elemento o fecha general
+        const lastUpdate = currentStatus ? currentStatus.date : apiData.fecha;
+
+        trackingInfo.value = {
+          status: currentStatus ? currentStatus.description : 'Información Recibida',
+          location: currentStatus ? currentStatus.description : 'No hay detalles de ubicación',
+          lastUpdate: lastUpdate,
+          estimatedDelivery: null,
+          history: history
+        };
       }
-
-      // Determinar estado actual (primer elemento del historial invertido)
-      const currentStatus = history[0] || null;
-      // Usar fecha del primer elemento o fecha general
-      const lastUpdate = currentStatus ? currentStatus.date : apiData.fecha;
-
-      trackingInfo.value = {
-        status: currentStatus ? currentStatus.description : 'Información Recibida',
-        location: currentStatus ? currentStatus.description : 'No hay detalles de ubicación',
-        lastUpdate: lastUpdate,
-        estimatedDelivery: null,
-        history: history
-      };
-
     } else {
+      // Respuesta sin success:true, consideramos que la guía no existe
       trackingInfo.value = null;
     }
   } catch (err) {
     console.error('Error al obtener Guia:', err);
     if (err.response) {
-      error.value = `Error del servidor (${err.response.status}). Intenta más tarde.`;
+      if (err.response.status === 404) {
+        // Guía no encontrada específicamente
+        trackingInfo.value = null;
+      } else {
+        error.value = `Error del servidor (${err.response.status}). Intenta más tarde.`;
+      }
     } else if (err.request) {
       error.value = 'No se pudo conectar con el servidor de rastreo. Verifica tu conexión.';
     } else {
       error.value = 'Ocurrió un error inesperado al procesar la solicitud.';
     }
-    trackingInfo.value = null;
   } finally {
     loading.value = false;
   }
@@ -297,8 +311,8 @@ onMounted(() => {
 });
 </script>
   
-  <style scoped>
-      .timeline-marker {
+<style scoped>
+    .timeline-marker {
       /* ... estilos existentes ... */
       display: flex;
       align-items: center;
@@ -317,28 +331,28 @@ onMounted(() => {
 
     .tracking-results-view {
       max-width: 800px;
-      margin: 20px auto; /* Añadido margen superior/inferior */
+      margin: 20px auto;
       padding: 20px;
-      font-family: 'Poppins', sans-serif; /* Asegura consistencia fuente */
+      font-family: 'Poppins', sans-serif;
       color: #333;
-      background-color: #f4f7f6; /* Fondo general suave */
+      background-color: #f4f7f6;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
   
     .header-section {
-      background: linear-gradient(to right, #ffffff, #e9f0f3); /* Gradiente suave */
+      background: linear-gradient(to right, #ffffff, #e9f0f3);
       border-radius: 10px;
       padding: 25px;
       margin-bottom: 30px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      border-bottom: 3px solid var(--elsalvador-blue, #0047AB); /* Usa variable si está disponible */
+      border-bottom: 3px solid var(--elsalvador-blue, #0047AB);
     }
   
     .title {
       color: var(--dark-color, #2c3e50);
       margin-bottom: 25px;
-      font-size: 2rem; /* Más grande */
+      font-size: 2rem;
       font-weight: 700;
       text-align: center;
     }
@@ -346,21 +360,21 @@ onMounted(() => {
     .tracking-info {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px; /* Espacio reducido */
+      gap: 15px;
       justify-content: center;
-      align-items: center; /* Alineación vertical */
+      align-items: center;
     }
   
     .info-item {
       background: white;
-      padding: 10px 18px; /* Ajuste padding */
-      border-radius: 20px; /* Más redondeado */
+      padding: 10px 18px;
+      border-radius: 20px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
       display: flex;
       align-items: center;
       gap: 10px;
       border: 1px solid #e0e0e0;
-      font-size: 0.95rem; /* Ligeramente más pequeño */
+      font-size: 0.95rem;
     }
   
     .label {
@@ -372,19 +386,19 @@ onMounted(() => {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #333; /* Color de valor */
+      color: #333;
     }
   
     .flag-icon {
-      width: 22px; /* Ajuste tamaño */
+      width: 22px;
       height: 15px;
-      border-radius: 3px; /* Más redondeado */
+      border-radius: 3px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-      object-fit: cover; /* Asegura que la bandera se vea bien */
+      object-fit: cover;
     }
   
     .content-section {
-        padding: 10px; /* Añade padding interno */
+        padding: 10px;
     }
   
     /* Estados */
@@ -395,10 +409,10 @@ onMounted(() => {
     }
   
     .spinner {
-      width: 45px; /* Más pequeño */
+      width: 45px;
       height: 45px;
-      border: 4px solid #e0e0e0; /* Borde más claro */
-      border-top: 4px solid var(--elsalvador-blue, #0047AB); /* Color primario */
+      border: 4px solid #e0e0e0;
+      border-top: 4px solid var(--elsalvador-blue, #0047AB);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto 20px;
@@ -412,21 +426,21 @@ onMounted(() => {
     .error-state {
       text-align: center;
       padding: 35px 25px;
-      background: #fff2f2; /* Fondo error más suave */
+      background: #fff2f2;
       border-radius: 10px;
-      border: 1px solid #ffcccc; /* Borde error */
-      border-left: 5px solid #e74c3c; /* Barra lateral error */
-      color: #5c2c2c; /* Texto oscuro para contraste */
+      border: 1px solid #ffcccc;
+      border-left: 5px solid #e74c3c;
+      color: #5c2c2c;
     }
   
     .error-state i {
       color: #e74c3c;
-      font-size: 2.5rem; /* Icono más grande */
+      font-size: 2.5rem;
       margin-bottom: 15px;
     }
   
     .error-state h3 {
-      color: #c0392b; /* Título error más oscuro */
+      color: #c0392b;
       margin-bottom: 10px;
       font-size: 1.3rem;
     }
@@ -438,29 +452,29 @@ onMounted(() => {
   
     .retry-button, .back-button {
       margin-top: 15px;
-      padding: 12px 25px; /* Botones más grandes */
+      padding: 12px 25px;
       color: white;
       border: none;
-      border-radius: 25px; /* Botones redondeados */
+      border-radius: 25px;
       cursor: pointer;
       font-weight: 600;
       font-size: 0.95rem;
       transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-      display: inline-flex; /* Para alinear icono */
+      display: inline-flex;
       align-items: center;
-      gap: 8px; /* Espacio icono-texto */
+      gap: 8px;
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     }
     .retry-button {
         background-color: var(--elsalvador-blue, #0047AB);
     }
     .retry-button:hover {
-      background-color: #003a8c; /* Azul más oscuro */
+      background-color: #003a8c;
       transform: translateY(-2px);
       box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
     }
     .back-button {
-        background-color: #6c757d; /* Gris secundario */
+        background-color: #6c757d;
     }
      .back-button:hover {
       background-color: #5a6268;
@@ -480,42 +494,37 @@ onMounted(() => {
       margin-bottom: 30px;
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
       border: 1px solid #e5e5e5;
-      border-left-width: 6px; /* Borde izquierdo más grueso */
-      /* Colores por defecto (si no coincide clase) */
+      border-left-width: 6px;
       border-left-color: #6c757d;
     }
   
     /* Clases dinámicas para el borde */
     .status-card.en-transito,
-    .status-card.asignada-guia-a-chofer /* Ejemplo de clase generada */
-    {
-      border-left-color: #f39c12; /* Naranja para tránsito */
+    .status-card.asignada-guia-a-chofer {
+      border-left-color: #f39c12;
     }
     .status-card.entregado {
-      border-left-color: #2ecc71; /* Verde para entregado */
+      border-left-color: #2ecc71;
     }
     .status-card.recibido,
-    .status-card.paquete-recibido-en-centro-de-distribucion /* Ejemplo */
-     {
-       border-left-color: #3498db; /* Azul para recibido/inicio */
+    .status-card.paquete-recibido-en-centro-de-distribucion {
+       border-left-color: #3498db;
      }
     .status-card.problema, .status-card.error {
-      border-left-color: #e74c3c; /* Rojo para problemas */
+      border-left-color: #e74c3c;
     }
-     /* Añade más clases según los estados que genere tu API */
-    .status-card.en-proceso-de-clasificacion {
-         border-left-color: #9b59b6; /* Morado para clasificación */
+     .status-card.en-proceso-de-clasificacion {
+         border-left-color: #9b59b6;
      }
      .status-card.en-ruta-hacia-destino-final {
-         border-left-color: #1abc9c; /* Turquesa para en ruta */
+         border-left-color: #1abc9c;
      }
-  
   
     .status-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px; /* Más espacio */
+      margin-bottom: 20px;
       border-bottom: 1px solid #eee;
       padding-bottom: 15px;
     }
@@ -527,18 +536,17 @@ onMounted(() => {
      }
   
     .status-badge {
-      padding: 6px 18px; /* Padding ajustado */
+      padding: 6px 18px;
       border-radius: 20px;
-      font-size: 0.85rem; /* Ligeramente más pequeño */
-      font-weight: 700; /* Más bold */
-      text-transform: uppercase; /* Mayúsculas */
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
-      background: #6c757d; /* Gris por defecto */
+      background: #6c757d;
       color: white;
-      white-space: nowrap; /* Evita que se parta */
+      white-space: nowrap;
     }
   
-    /* Colores dinámicos para el badge */
     .status-card.en-transito .status-badge,
     .status-card.asignada-guia-a-chofer .status-badge
      { background: #f39c12; }
@@ -550,25 +558,24 @@ onMounted(() => {
      .status-card.en-proceso-de-clasificacion .status-badge { background: #9b59b6; }
      .status-card.en-ruta-hacia-destino-final .status-badge { background: #1abc9c; }
   
-  
     .status-details {
       display: grid;
       gap: 15px;
-      font-size: 1rem; /* Tamaño base */
+      font-size: 1rem;
     }
   
     .detail-item {
       display: flex;
       align-items: center;
-      gap: 12px; /* Más espacio */
+      gap: 12px;
       color: #555;
     }
   
     .detail-item i {
-      color: var(--elsalvador-blue, #0047AB); /* Color primario icono */
+      color: var(--elsalvador-blue, #0047AB);
       width: 20px;
       text-align: center;
-      font-size: 1.1rem; /* Icono más grande */
+      font-size: 1.1rem;
     }
   
     /* Timeline */
@@ -585,50 +592,50 @@ onMounted(() => {
         margin-bottom: 25px;
         font-size: 1.4rem;
         color: var(--dark-color, #2c3e50);
-        text-align: left; /* Alinear a la izquierda */
+        text-align: left;
         border-bottom: 1px solid #eee;
         padding-bottom: 10px;
     }
   
     .timeline {
       position: relative;
-      padding-left: 35px; /* Más espacio para el marcador */
+      padding-left: 35px;
       margin-top: 10px;
     }
   
     .timeline::before {
       content: '';
       position: absolute;
-      left: 10px; /* Posición de la línea */
-      top: 10px; /* Inicio de la línea */
-      bottom: 10px; /* Fin de la línea */
-      width: 3px; /* Línea más gruesa */
-      background: #e0e0e0; /* Color línea */
+      left: 10px;
+      top: 10px;
+      bottom: 10px;
+      width: 3px;
+      background: #e0e0e0;
       border-radius: 2px;
     }
   
     .timeline-item {
       position: relative;
-      margin-bottom: 30px; /* Más separación */
+      margin-bottom: 30px;
     }
-    /* Quitar margen inferior al último item */
+    
     .timeline-item:last-child {
         margin-bottom: 0;
     }
   
     .timeline-marker {
       position: absolute;
-      left: -35px; /* Ajustar a padding-left */
-      top: 5px; /* Alineación vertical */
-      width: 24px; /* Marcador más grande */
+      left: -35px;
+      top: 5px;
+      width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: white; /* Fondo blanco */
-      border: 3px solid var(--elsalvador-blue, #0047AB); /* Borde color primario */
-      z-index: 1; /* Sobre la línea */
-       box-shadow: 0 0 0 4px white; /* Efecto para separar de la línea */
+      background: white;
+      border: 3px solid var(--elsalvador-blue, #0047AB);
+      z-index: 1;
+       box-shadow: 0 0 0 4px white;
     }
-      /* Marcador diferente para el primer item (último evento) */
+      
     .timeline-item:first-child .timeline-marker {
         background-color: var(--elsalvador-blue, #0047AB);
          border-color: white;
@@ -636,42 +643,27 @@ onMounted(() => {
      }
   
     .timeline-content {
-      background: #f8f9fa; /* Fondo contenido suave */
-      padding: 18px 20px; /* Más padding */
+      background: #f8f9fa;
+      padding: 18px 20px;
       border-radius: 8px;
       border: 1px solid #eee;
-      position: relative; /* Para posible flecha */
+      position: relative;
     }
-      /* Flecha apuntando al marcador (opcional) */
-     /* .timeline-content::before {
-         content: "";
-         position: absolute;
-         left: -10px;
-         top: 10px;
-         border-style: solid;
-         border-width: 8px 10px 8px 0;
-         border-color: transparent #f8f9fa transparent transparent;
-     } */
   
     .timeline-date {
-      font-size: 0.8rem; /* Más pequeño */
-      color: #777; /* Más gris */
+      font-size: 0.8rem;
+      color: #777;
       margin-bottom: 8px;
-      font-weight: 600; /* Más bold */
+      font-weight: 600;
       letter-spacing: 0.5px;
     }
   
     .timeline-event {
       font-weight: 500;
       margin-bottom: 5px;
-      color: #333; /* Texto principal oscuro */
-      line-height: 1.5; /* Mejor lectura */
+      color: #333;
+      line-height: 1.5;
     }
-  
-    /* .timeline-location {  (Si tu API lo incluyera)
-      font-size: 0.85rem;
-      color: #666;
-    } */
   
     /* Sin resultados */
     .no-results {
@@ -681,8 +673,8 @@ onMounted(() => {
     }
   
     .no-results i {
-      font-size: 3.5rem; /* Icono más grande */
-      color: #bdc3c7; /* Color icono gris claro */
+      font-size: 3.5rem;
+      color: #bdc3c7;
       margin-bottom: 25px;
     }
   
@@ -693,11 +685,24 @@ onMounted(() => {
     }
   
     .no-results p {
-      margin-bottom: 25px;
+      margin-bottom: 15px;
       line-height: 1.6;
     }
+    
+    .verification-list {
+      text-align: left;
+      max-width: 400px;
+      margin: 15px auto;
+      padding-left: 20px;
+    }
+    
+    .verification-list li {
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    
      .no-results strong {
-         color: #333; /* Destacar la guía buscada */
+         color: #333;
      }
   
     /* Responsive */
@@ -709,10 +714,10 @@ onMounted(() => {
       .tracking-info {
         flex-direction: column;
         gap: 12px;
-        align-items: stretch; /* Ocupar ancho */
+        align-items: stretch;
       }
       .info-item {
-        justify-content: space-between; /* Alinear texto e icono */
+        justify-content: space-between;
       }
       .title {
         font-size: 1.6rem;
@@ -744,7 +749,7 @@ onMounted(() => {
         gap: 10px;
       }
       .status-badge {
-          align-self: flex-start; /* Alinear a la izquierda */
+          align-self: flex-start;
       }
       .detail-item { font-size: 0.9rem; gap: 8px; }
        .detail-item i { font-size: 1rem; }
@@ -759,7 +764,7 @@ onMounted(() => {
        .no-results i { font-size: 3rem; }
        .no-results h3 { font-size: 1.2rem; }
        .no-results p { font-size: 0.9rem; }
-       .retry-button, .back-button { width: 100%; justify-content: center; padding: 12px; } /* Botones ancho completo */
+       .retry-button, .back-button { width: 100%; justify-content: center; padding: 12px; }
        .error-state { padding: 20px 15px; }
        .error-state i { font-size: 2rem; }
        .error-state h3 { font-size: 1.1rem; }
@@ -767,4 +772,4 @@ onMounted(() => {
     .text-center {
         text-align: center;
     }
-  </style>
+</style>
