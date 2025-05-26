@@ -7,7 +7,7 @@
           <!-- Teléfono y correo (solo desktop) -->
           <div class="col-lg-5 text-center text-lg-left mb-2 mb-lg-0 d-none d-lg-block">
             <div class="d-inline-flex align-items-center">
-              <small><i class="fa fa-phone-alt mr-2"></i>+919-578-9105</small>
+              <small><i class="fa fa-phone-alt mr-2"></i>+1 (704) 820-6911</small>
               <small class="px-3">|</small>
               <small><i class="fa fa-envelope mr-2"></i>contacto@tucajaexpress.com</small>
             </div>

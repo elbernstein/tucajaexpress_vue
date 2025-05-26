@@ -5,6 +5,7 @@
 
         <!-- Menú móvil global -->
         <WhatsappButtom />
+        <ScrollToTop />
       <MenuMovil :isOpen="isOpen" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
       <PreguiaComp />
 
@@ -19,6 +20,7 @@ import MenuMovil from '@/components/MenuMovil.vue'
 import Footer from './components/Footer.vue'
 import PreguiaComp from './components/PreguiaComp.vue'
 import WhatsappButtom from './components/WhatsappButtom.vue'
+import ScrollToTop from './components/ScrollToTop.vue'
 
 const isOpen = ref(false)
 const toggleMenu = () => isOpen.value = !isOpen.value
