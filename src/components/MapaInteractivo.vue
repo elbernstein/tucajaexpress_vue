@@ -275,7 +275,7 @@ export default {
 }
 
 .map-title {
-  color: #e74c3c;
+  color: #ff0000;
   font-size: 2.5rem; /* Más grande */
   margin-bottom: 0.5rem;
 }

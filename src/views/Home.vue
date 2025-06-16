@@ -162,7 +162,7 @@
 }
 /* --- Variables (Asegúrate que coincidan o define localmente) --- */
 :root {
-  --primary-color: #e74c3c;
+  --primary-color: #ff0000;
   --secondary-color: #3498db;
   --dark-color: #2c3e50;
   --light-color: #f8f9fa;
@@ -333,7 +333,7 @@
 /*ESTILOS DE "GANA DINERO CON NOSOTROS" */
 /* --- Variables (Asegúrate que coincidan o define localmente) --- */
 :root {
-  --primary-color: #e74c3c; /* Rojo */
+  --primary-color: #ff0000; /* Rojo */
   --secondary-color: #3498db; /* Azul */
   --dark-color: #2c3e50;     /* Azul oscuro/gris */
   --light-color: #f8f9fa;

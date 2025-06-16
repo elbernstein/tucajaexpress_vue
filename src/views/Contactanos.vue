@@ -79,7 +79,7 @@
   
   form input:focus,
   form textarea:focus {
-    border-color: #dc3545;
+    border-color: #ff0000;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
   </style>

@@ -106,7 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 // --- Variables de Color (Tema Rojo) ---
-$primary-color: #EF4444; // Rojo principal (Tailwind Red-500)
+$primary-color: #ff0000; // Rojo principal (Tailwind Red-500)
 $primary-darker: #DC2626; // Rojo más oscuro (Tailwind Red-600)
 $primary-darkest: #B91C1C; // Rojo aún más oscuro (Tailwind Red-700)
 $text-color: #e2e8f0;
