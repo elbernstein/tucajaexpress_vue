@@ -1,513 +1,1529 @@
 <template>
   <div class="terms-conditions-container">
-    <header class="header">
-      <h1 class="main-title">TU CAJA EXPRESS TÉRMINOS Y CONDICIONES</h1>
-    </header>
+    <!-- Language Selector -->
+    <div class="language-selector">
+      <button 
+        @click="changeLanguage('es')" 
+        :class="{ active: currentLanguage === 'es' }"
+      >
+        Español
+      </button>
+      <button 
+        @click="changeLanguage('en')" 
+        :class="{ active: currentLanguage === 'en' }"
+      >
+        English
+      </button>
+    </div>
 
-    <main class="content-sections">
-      <section class="terms-section">
-        <h2 class="section-title">Acuerdo de Términos</h2>
-        <p class="section-content">
-          Al entregarnos su paquete para su destino, usted acepta todos los términos y condiciones presentes, así como los de cualquier tercera organización involucrada en el proceso de entrega de su envío. Estos términos están <strong class="highlight">sujetos a cambios sin previo aviso</strong>.
-        </p>
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="logo-container">
+        <img src="/images/logo-light.png" alt="Tu Caja Express Logo" class="logo">
+      </div>
+      <h1 class="main-title">
+        {{ currentLanguage === 'es' ? 'TÉRMINOS Y CONDICIONES' : 'TERMS AND CONDITIONS' }}
+      </h1>
+      <div class="decoration-line"></div>
+    </div>
+
+    <!-- Content Sections -->
+    <div class="content-wrapper">
+      <!-- Agreement Terms -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' ? 'Acuerdo de Términos' : 'Terms Agreement' }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <p>
+            {{ currentLanguage === 'es' 
+              ? 'Al entregarnos su paquete para su destino, usted acepta todos los términos y condiciones presentes, así como los de cualquier tercera organización involucrada en el proceso de entrega de su envío.' 
+              : 'By giving us your package for delivery, you agree to all the present terms and conditions, as well as those of any third-party organization involved in the delivery process of your shipment.' 
+            }}
+          </p>
+          <div class="notice-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>
+              {{ currentLanguage === 'es' 
+                ? 'Estos términos están sujetos a cambios sin previo aviso.' 
+                : 'These terms are subject to change without prior notice.' 
+              }}
+            </span>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Empaque Adecuado y Formulario de Declaración</h2>
-        <p class="section-content">
-          El cliente es responsable de <strong class="highlight">empacar adecuadamente</strong> sus pertenencias y de <strong class="highlight">completar el formulario</strong> de Tu Caja Express. Deberá proporcionar la información necesaria a un representante de servicio al cliente. Usted es responsable de la <strong class="highlight">información correcta</strong> proporcionada.
-        </p>
-        <p class="section-content">
-          Si se omite el número total de bultos y/o el peso por paquete, nuestra facturación se basará en nuestra mejor estimación. El remitente acepta que los artículos declarados son el <strong class="highlight">único contenido de la caja</strong>.
-        </p>
+      <!-- Packaging and Declaration -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Empaque Adecuado y Formulario de Declaración' 
+              : 'Proper Packaging and Declaration Form' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4"></path>
+                  <path d="m16.24 7.76 2.83-2.83"></path>
+                  <path d="M18 12h4"></path>
+                  <path d="m16.24 16.24 2.83 2.83"></path>
+                  <path d="M12 18v4"></path>
+                  <path d="m4.93 19.07 2.83-2.83"></path>
+                  <path d="M2 12h4"></path>
+                  <path d="m4.93 4.93 2.83 2.83"></path>
+                </svg>
+              </div>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'El cliente es responsable de empacar adecuadamente sus pertenencias.' 
+                  : 'The customer is responsible for properly packing their belongings.' 
+                }}
+              </p>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'Debe completar el formulario de Tu Caja Express con información correcta.' 
+                  : 'You must complete the Tu Caja Express form with correct information.' 
+                }}
+              </p>
+            </div>
+          </div>
+          <div class="warning-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>
+              {{ currentLanguage === 'es' 
+                ? 'Si se omite información, nuestra facturación se basará en nuestra mejor estimación.' 
+                : 'If information is omitted, our billing will be based on our best estimate.' 
+              }}
+            </span>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Responsabilidad de Pago</h2>
-        <p class="section-content">
-          El remitente es el <strong class="highlight">principal responsable</strong> de todos los gastos de envío. Tu Caja Express requiere el <strong class="highlight">pago completo</strong> al momento de recoger el paquete.
-        </p>
+      <!-- Payment Responsibility -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Responsabilidad de Pago' 
+              : 'Payment Responsibility' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="payment-info">
+            <div class="payment-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M8 8h.01"></path>
+                <path d="M8 16h.01"></path>
+              </svg>
+            </div>
+            <div class="payment-text">
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'El remitente es el principal responsable de todos los gastos de envío.' 
+                  : 'The sender is primarily responsible for all shipping costs.' 
+                }}
+              </p>
+              <p class="highlight-text">
+                {{ currentLanguage === 'es' 
+                  ? 'Tu Caja Express requiere el pago completo al momento de recoger el paquete.' 
+                  : 'Tu Caja Express requires full payment when picking up the package.' 
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Cajas Dirigidas a Sucursales y Devoluciones</h2>
-        <h3 class="subsection-title">Cajas a Sucursales ("Ocurre")</h3>
-        <p class="section-content">
-          Cuando una caja se redirige a una sucursal, el destinatario cuenta con <strong class="highlight">3 días</strong> para retirar el paquete. De lo contrario, Tu Caja Express no se hará responsable por pérdidas o reclamos.
-        </p>
-        <h3 class="subsection-title">Devolución o Re-expedición</h3>
-        <p class="section-content">
-          En caso de devolución o re-expedición, se deberá realizar un pago de <strong class="highlight">$100.00</strong> para que el paquete sea enviado nuevamente a la sucursal o punto de destino.
-        </p>
+      <!-- Branch and Returns -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Cajas Dirigidas a Sucursales y Devoluciones' 
+              : 'Packages Directed to Branches and Returns' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="branch-info">
+            <div class="branch-card">
+              <div class="branch-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+              </div>
+              <h3 class="subsection-title">
+                {{ currentLanguage === 'es' 
+                  ? 'Cajas a Sucursales ("Ocurre")' 
+                  : 'Packages to Branches ("Ocurre")' 
+                }}
+              </h3>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'Cuando una caja se redirige a una sucursal, el destinatario cuenta con 3 días para retirar el paquete.' 
+                  : 'When a package is redirected to a branch, the recipient has 3 days to pick it up.' 
+                }}
+              </p>
+              <div class="time-indicator">
+                <span>72 {{ currentLanguage === 'es' ? 'horas' : 'hours' }}</span>
+              </div>
+            </div>
+            
+            <div class="branch-card">
+              <div class="branch-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <h3 class="subsection-title">
+                {{ currentLanguage === 'es' 
+                  ? 'Devolución o Re-expedición' 
+                  : 'Return or Re-shipment' 
+                }}
+              </h3>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'En caso de devolución o re-expedición, se deberá realizar un pago de:' 
+                  : 'In case of return or re-shipment, a payment of:' 
+                }}
+              </p>
+              <div class="price-tag">
+                <span>$100.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Limitaciones de Peso (Únicamente para México)</h2>
-        <p class="section-content">
-          El <strong class="highlight">peso máximo</strong> para entrega a domicilio (si hay cobertura) es de <strong class="highlight">130 Lbs</strong>. Las cajas que excedan este límite tendrán <strong class="highlight">cargos adicionales</strong> y se entregarán en la sucursal más cercana.
-        </p>
+      <!-- Weight Limitations -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Limitaciones de Peso (Únicamente para México)' 
+              : 'Weight Limitations (Mexico Only)' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="weight-info">
+            <div class="weight-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div class="weight-text">
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'El peso máximo para entrega a domicilio (si hay cobertura) es de:' 
+                  : 'The maximum weight for home delivery (if available) is:' 
+                }}
+              </p>
+              <div class="weight-value">
+                <span>130 {{ currentLanguage === 'es' ? 'Lbs' : 'lbs' }}</span>
+              </div>
+              <p class="note">
+                {{ currentLanguage === 'es' 
+                  ? 'Las cajas que excedan este límite tendrán cargos adicionales y se entregarán en la sucursal más cercana.' 
+                  : 'Packages exceeding this limit will have additional charges and will be delivered to the nearest branch.' 
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Restricciones a Nuestras Responsabilidades</h2>
-        <p class="section-content">
-          La Empresa <strong class="highlight">no es responsable</strong> por:
-        </p>
-        <ul class="responsibility-list">
-          <li>Daños ocurridos en el paquete por <strong class="highlight">empaque inadecuado</strong> y/o insuficiente.</li>
-          <li>Pérdida o daño de <strong class="highlight">artículos prohibidos</strong> o no declarados.</li>
-          <li>Pérdida parcial, daño o retraso causado por hechos o situaciones que no podamos controlar, como las siguientes pero no limitadas a:
-            <ul class="nested-list">
-              <li>Condiciones meteorológicas</li>
-              <li>Huelgas</li>
-              <li>Asaltos</li>
-              <li>Actos gubernamentales</li>
-              <li>Atrasos aduanales</li>
-              <li>Cuarentenas</li>
-              <li>Detenciones de aduana</li>
-              <li>Fallas mecánicas</li>
-              <li>Fallas eléctricas</li>
-              <li>Cualquier otra situación fuera de nuestro alcance.</li>
-            </ul>
-          </li>
-        </ul>
-        <p class="section-content">
-          Tu Caja Express se reserva el derecho de privacidad de toda información sobre demoras o decomisos aduanales.
-        </p>
+      <!-- Responsibility Limitations -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Restricciones a Nuestras Responsabilidades' 
+              : 'Limitations of Our Responsibilities' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <p class="disclaimer">
+            {{ currentLanguage === 'es' 
+              ? 'La Empresa no es responsable por:' 
+              : 'The Company is not responsible for:' 
+            }}
+          </p>
+          
+          <div class="responsibility-grid">
+            <div class="responsibility-item">
+              <div class="responsibility-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                </svg>
+              </div>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'Daños por empaque inadecuado y/o insuficiente.' 
+                  : 'Damage due to inadequate and/or insufficient packaging.' 
+                }}
+              </p>
+            </div>
+            
+            <div class="responsibility-item">
+              <div class="responsibility-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                </svg>
+              </div>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'Pérdida o daño de artículos prohibidos o no declarados.' 
+                  : 'Loss or damage of prohibited or undeclared items.' 
+                }}
+              </p>
+            </div>
+            
+            <div class="responsibility-item">
+              <div class="responsibility-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </div>
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'Pérdida parcial, daño o retraso por eventos fuera de nuestro control.' 
+                  : 'Partial loss, damage or delay caused by events beyond our control.' 
+                }}
+              </p>
+            </div>
+          </div>
+          
+          <div class="external-factors">
+            <h4>
+              {{ currentLanguage === 'es' 
+                ? 'Incluyendo pero no limitado a:' 
+                : 'Including but not limited to:' 
+              }}
+            </h4>
+            <div class="factors-tags">
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Condiciones meteorológicas' : 'Weather conditions' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Huelgas' : 'Strikes' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Asaltos' : 'Robberies' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Actos gubernamentales' : 'Government acts' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Atrasos aduanales' : 'Customs delays' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Cuarentenas' : 'Quarantines' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Detenciones de aduana' : 'Customs detentions' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Fallas mecánicas' : 'Mechanical failures' }}</span>
+              <span class="factor-tag">{{ currentLanguage === 'es' ? 'Fallas eléctricas' : 'Electrical failures' }}</span>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Seguro</h2>
-        <p class="section-content">
-          El cliente puede proteger su envío con la compra de un seguro:
-        </p>
-        <table class="insurance-table">
-          <thead>
-            <tr>
-              <th>Destino/Tipo de Carga</th>
-              <th>Porcentaje</th>
-              <th>Declaración Mínima</th>
-              <th>Declaración Máxima</th>
-              <th>Cobertura</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td data-label="Destino/Carga">México, Centroamérica, Colombia (Carga Regular)</td>
-              <td data-label="Porcentaje">5%</td>
-              <td data-label="Decl. Mínima">$100.00</td>
-              <td data-label="Decl. Máxima">$500.00</td>
-              <td data-label="Cobertura">Pérdida total de <strong class="highlight">ropa y zapatos</strong></td>
-            </tr>
-            <tr>
-              <td data-label="Destino/Carga">México, Centroamérica, Colombia (Carga Mixta)</td>
-              <td data-label="Porcentaje">15%</td>
-              <td data-label="Decl. Mínima">$100.00</td>
-              <td data-label="Decl. Máxima">$500.00</td>
-              <td data-label="Cobertura">Pérdida total de <strong class="highlight">ropa, zapatos, electrónicos, herramientas</strong></td>
-            </tr>
-            <tr>
-              <td data-label="Destino/Carga">México, Centroamérica, Colombia (Carga Comercial)</td>
-              <td data-label="Porcentaje">20%</td>
-              <td data-label="Decl. Mínima">$100.00</td>
-              <td data-label="Decl. Máxima">$500.00</td>
-              <td data-label="Cobertura">Pérdida total de <strong class="highlight">herramientas, electrónicos, TVs, línea blanca, llantas, rines y carga comercial</strong></td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="section-content">
-          El seguro cubre <strong class="highlight">pérdida total, no parcial</strong>. Si el envío no cuenta con seguro, la Empresa responderá simbólicamente con <strong class="highlight">CIEN DÓLARES ($100.00)</strong> por paquete en caso de pérdida total.
-        </p>
+      <!-- Insurance Section -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' ? 'Seguro' : 'Insurance' }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <p class="insurance-intro">
+            {{ currentLanguage === 'es' 
+              ? 'El cliente puede proteger su envío con la compra de un seguro:' 
+              : 'The customer can protect their shipment by purchasing insurance:' 
+            }}
+          </p>
+          
+          <div class="insurance-cards">
+            <div class="insurance-card">
+              <div class="insurance-header">
+                <h3>{{ currentLanguage === 'es' ? 'Carga Regular' : 'Regular Load' }}</h3>
+                <div class="insurance-percent">5%</div>
+              </div>
+              <div class="insurance-details">
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Declaración Mínima:' : 'Minimum Declaration:' }}</span>
+                  <span class="detail-value">$100.00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Declaración Máxima:' : 'Maximum Declaration:' }}</span>
+                  <span class="detail-value">$500.00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Cobertura:' : 'Coverage:' }}</span>
+                  <span class="detail-value">
+                    {{ currentLanguage === 'es' 
+                      ? 'Pérdida total de ropa y zapatos' 
+                      : 'Total loss of clothing and shoes' 
+                    }}
+                  </span>
+                </div>
+              </div>
+              <div class="insurance-countries">
+                <span>{{ currentLanguage === 'es' ? 'México, Centroamérica, Colombia' : 'Mexico, Central America, Colombia' }}</span>
+              </div>
+            </div>
+            
+            <div class="insurance-card">
+              <div class="insurance-header">
+                <h3>{{ currentLanguage === 'es' ? 'Carga Mixta' : 'Mixed Load' }}</h3>
+                <div class="insurance-percent">15%</div>
+              </div>
+              <div class="insurance-details">
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Declaración Mínima:' : 'Minimum Declaration:' }}</span>
+                  <span class="detail-value">$100.00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Declaración Máxima:' : 'Maximum Declaration:' }}</span>
+                  <span class="detail-value">$500.00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Cobertura:' : 'Coverage:' }}</span>
+                  <span class="detail-value">
+                    {{ currentLanguage === 'es' 
+                      ? 'Pérdida total de ropa, zapatos, electrónicos, herramientas' 
+                      : 'Total loss of clothing, shoes, electronics, tools' 
+                    }}
+                  </span>
+                </div>
+              </div>
+              <div class="insurance-countries">
+                <span>{{ currentLanguage === 'es' ? 'México, Centroamérica, Colombia' : 'Mexico, Central America, Colombia' }}</span>
+              </div>
+            </div>
+            
+            <div class="insurance-card">
+              <div class="insurance-header">
+                <h3>{{ currentLanguage === 'es' ? 'Carga Comercial' : 'Commercial Load' }}</h3>
+                <div class="insurance-percent">20%</div>
+              </div>
+              <div class="insurance-details">
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Declaración Mínima:' : 'Minimum Declaration:' }}</span>
+                  <span class="detail-value">$100.00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Declaración Máxima:' : 'Maximum Declaration:' }}</span>
+                  <span class="detail-value">$500.00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">{{ currentLanguage === 'es' ? 'Cobertura:' : 'Coverage:' }}</span>
+                  <span class="detail-value">
+                    {{ currentLanguage === 'es' 
+                      ? 'Pérdida total de herramientas, electrónicos, TVs, línea blanca, llantas, rines y carga comercial' 
+                      : 'Total loss of tools, electronics, TVs, appliances, tires, rims and commercial cargo' 
+                    }}
+                  </span>
+                </div>
+              </div>
+              <div class="insurance-countries">
+                <span>{{ currentLanguage === 'es' ? 'México, Centroamérica, Colombia' : 'Mexico, Central America, Colombia' }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="insurance-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p>
+              {{ currentLanguage === 'es' 
+                ? 'El seguro cubre pérdida total, no parcial. Sin seguro, la Empresa responderá con CIEN DÓLARES ($100.00) por paquete en caso de pérdida total.' 
+                : 'Insurance covers total loss, not partial. Without insurance, the Company will respond with ONE HUNDRED DOLLARS ($100.00) per package in case of total loss.' 
+              }}
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Impuestos</h2>
-        <ul class="tax-list">
-          <li><strong class="highlight">México</strong>: Cualquier herramienta o electrodoméstico nuevo o usado debe pagar el <strong class="highlight">20% de impuesto aduanal</strong> sobre el valor declarado.</li>
-          <li><strong class="highlight">Colombia</strong>: Se debe pagar el <strong class="highlight">30% de impuesto</strong> sobre el valor declarado en ropa, zapatos y electrodomésticos.</li>
-          <li><strong class="highlight">Centroamérica</strong>: El envío de electrónicos dentro de las cajas va bajo <strong class="highlight">responsabilidad del remitente</strong>.</li>
-        </ul>
+      <!-- Taxes Section -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' ? 'Impuestos' : 'Taxes' }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="tax-cards">
+            <div class="tax-card">
+              <div class="tax-country">{{ currentLanguage === 'es' ? 'México' : 'Mexico' }}</div>
+              <div class="tax-rate">20%</div>
+              <p class="tax-description">
+                {{ currentLanguage === 'es' 
+                  ? 'Cualquier herramienta o electrodoméstico nuevo o usado debe pagar el 20% de impuesto aduanal sobre el valor declarado.' 
+                  : 'Any new or used tool or appliance must pay 20% customs tax on the declared value.' 
+                }}
+              </p>
+            </div>
+            
+            <div class="tax-card">
+              <div class="tax-country">{{ currentLanguage === 'es' ? 'Colombia' : 'Colombia' }}</div>
+              <div class="tax-rate">30%</div>
+              <p class="tax-description">
+                {{ currentLanguage === 'es' 
+                  ? 'Se debe pagar el 30% de impuesto sobre el valor declarado en ropa, zapatos y electrodomésticos.' 
+                  : 'You must pay 30% tax on the declared value of clothing, shoes and appliances.' 
+                }}
+              </p>
+            </div>
+            
+            <div class="tax-card">
+              <div class="tax-country">{{ currentLanguage === 'es' ? 'Centroamérica' : 'Central America' }}</div>
+              <div class="tax-rate">-</div>
+              <p class="tax-description">
+                {{ currentLanguage === 'es' 
+                  ? 'El envío de electrónicos dentro de las cajas va bajo responsabilidad del remitente.' 
+                  : 'Shipping electronics in boxes is under the sender\'s responsibility.' 
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Tiempo de Entrega</h2>
-        <table class="delivery-table">
-          <thead>
-            <tr>
-              <th>Destino</th>
-              <th>Tiempo Estimado de Entrega</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td data-label="Destino">México, Guatemala, Honduras</td>
-              <td data-label="Tiempo Estimado de Entrega">20 a 30 días hábiles</td>
-            </tr>
-            <tr>
-              <td data-label="Destino">Nicaragua</td>
-              <td data-label="Tiempo Estimado de Entrega">4 a 8 semanas</td>
-            </tr>
-            <tr>
-              <td data-label="Destino">Colombia</td>
-              <td data-label="Tiempo Estimado de Entrega">7 a 15 días hábiles</td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="section-content">
-          El servicio a domicilio (Puerta-Puerta) <strong class="highlight">no se garantiza al 100%</strong> (*Aplican Restricciones).
-        </p>
+      <!-- Delivery Time Section -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Tiempo de Entrega' 
+              : 'Delivery Time' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="delivery-timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>{{ currentLanguage === 'es' ? 'México, Guatemala, Honduras' : 'Mexico, Guatemala, Honduras' }}</h4>
+                <p>{{ currentLanguage === 'es' ? '20 a 30 días hábiles' : '20 to 30 business days' }}</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>{{ currentLanguage === 'es' ? 'Nicaragua' : 'Nicaragua' }}</h4>
+                <p>{{ currentLanguage === 'es' ? '4 a 8 semanas' : '4 to 8 weeks' }}</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>{{ currentLanguage === 'es' ? 'Colombia' : 'Colombia' }}</h4>
+                <p>{{ currentLanguage === 'es' ? '7 a 15 días hábiles' : '7 to 15 business days' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="delivery-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <p>
+              {{ currentLanguage === 'es' 
+                ? 'El servicio a domicilio (Puerta-Puerta) no se garantiza al 100% (*Aplican Restricciones).' 
+                : 'Home delivery service (Door-to-Door) is not 100% guaranteed (*Restrictions apply).' 
+              }}
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Artículos Prohibidos</h2>
-        <p class="section-content">
-          El remitente declara que no está enviando:
-        </p>
-        <ul class="prohibited-items-list">
-          <li>Dinero en efectivo</li>
-          <li>Armas</li>
-          <li>Drogas</li>
-          <li>Explosivos</li>
-          <li>Líquidos</li>
-          <li>Químicos</li>
-          <li>Inflamables</li>
-          <li>Joyas</li>
-          <li>Pornografía</li>
-          <li>No más de 5 perfumes</li>
-          <li>Medicamentos recetados</li>
-          <li>Documentos legales</li>
-          <li>Mercadería con propósito comercial</li>
-          <li>Mercancía comercial no declarada</li>
-          <li>Cualquier otro artículo prohibido por el país de destino.</li>
-        </ul>
+      <!-- Prohibited Items Section -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'Artículos Prohibidos' 
+              : 'Prohibited Items' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <p class="prohibited-intro">
+            {{ currentLanguage === 'es' 
+              ? 'El remitente declara que no está enviando:' 
+              : 'The sender declares they are not shipping:' 
+            }}
+          </p>
+          
+          <div class="prohibited-grid">
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Dinero en efectivo' : 'Cash' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Armas' : 'Weapons' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Drogas' : 'Drugs' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Explosivos' : 'Explosives' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Líquidos' : 'Liquids' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Químicos' : 'Chemicals' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Inflamables' : 'Flammables' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Joyas' : 'Jewelry' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Pornografía' : 'Pornography' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'No más de 5 perfumes' : 'No more than 5 perfumes' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Medicamentos recetados' : 'Prescription drugs' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Documentos legales' : 'Legal documents' }}</span>
+            </div>
+            <div class="prohibited-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+              <span>{{ currentLanguage === 'es' ? 'Mercadería comercial' : 'Commercial merchandise' }}</span>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">En Caso de Pérdida Total del Paquete</h2>
-        <p class="section-content">
-          Tu Caja Express le reembolsará únicamente la cantidad del <strong class="highlight">monto asegurado</strong>. El pago del envío <strong class="highlight">no es reembolsable</strong>.
-        </p>
+      <!-- Total Loss Section -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' 
+              ? 'En Caso de Pérdida Total del Paquete' 
+              : 'In Case of Total Package Loss' 
+            }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="refund-info">
+            <div class="refund-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v4"></path>
+                <path d="m16.24 7.76 2.83-2.83"></path>
+                <path d="M18 12h4"></path>
+                <path d="m16.24 16.24 2.83 2.83"></path>
+                <path d="M12 18v4"></path>
+                <path d="m4.93 19.07 2.83-2.83"></path>
+                <path d="M2 12h4"></path>
+                <path d="m4.93 4.93 2.83 2.83"></path>
+              </svg>
+            </div>
+            <div class="refund-text">
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'Tu Caja Express le reembolsará únicamente la cantidad del monto asegurado.' 
+                  : 'Tu Caja Express will only refund the insured amount.' 
+                }}
+              </p>
+              <div class="warning-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>
+                  {{ currentLanguage === 'es' 
+                    ? 'El pago del envío no es reembolsable.' 
+                    : 'The shipping payment is not refundable.' 
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="terms-section">
-        <h2 class="section-title">Reclamos</h2>
-        <p class="section-content">
-          El remitente cuenta con <strong class="highlight">3 días</strong> después de haber recibido el paquete en el destino final para realizar cualquier notificación.
-        </p>
+      <!-- Claims Section -->
+      <section class="terms-section card">
+        <div class="section-header">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h2 class="section-title">
+            {{ currentLanguage === 'es' ? 'Reclamos' : 'Claims' }}
+          </h2>
+        </div>
+        <div class="section-content">
+          <div class="claim-info">
+            <div class="claim-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="claim-text">
+              <p>
+                {{ currentLanguage === 'es' 
+                  ? 'El remitente cuenta con 3 días después de haber recibido el paquete en el destino final para realizar cualquier notificación.' 
+                  : 'The sender has 3 days after receiving the package at the final destination to make any notification.' 
+                }}
+              </p>
+              <div class="time-indicator">
+                <span>72 {{ currentLanguage === 'es' ? 'horas' : 'hours' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
-    </main>
+    </div>
   </div>
 </template>
 
 <script setup>
-// No script logic needed for this static content component
+import { ref } from 'vue';
+
+const currentLanguage = ref('es');
+
+const changeLanguage = (lang) => {
+  currentLanguage.value = lang;
+};
 </script>
 
 <style scoped>
-/* Define your brand red */
+.language-selector {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem 0;
+  gap: 0.5rem;
+}
+
+.language-selector button {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #e9ecef;
+  color: #495057;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.language-selector button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.language-selector button.active {
+  background: linear-gradient(135deg, #0056b3, #007bff);
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
+}
+
+.language-selector button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.3);
+}
+
+/* Efecto para pantallas pequeñas */
+@media (max-width: 768px) {
+  .language-selector {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .language-selector button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+/* Base Styles */
 :root {
-  --tu-caja-express-red: #ff0000;
-  --text-dark: #333;
-  --text-light: #fefefe;
-  --background-light: #ffffff;
-  --background-gray: #f2f2f2;
-  --border-light-gray: #e0e0e0;
+  --primary-color: #0056b3;
+  --secondary-color: #007bff;
+  --accent-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --gray-color: #6c757d;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
 
-/* General Container Styling */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container Styles */
 .terms-conditions-container {
-  font-family: 'Montserrat', sans-serif; /* A more modern, geometric font */
+  font-family: 'Roboto', sans-serif;
   line-height: 1.6;
-  color: var(--text-dark);
-  max-width: 950px; /* Slightly wider */
-  margin: 40px auto;
-  background-color: var(--background-light);
-  border-radius: 15px; /* Softer rounded corners */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
-  overflow: hidden; /* Ensures rounded corners apply to content */
+  color: #333;
+  background-color: #f5f7fa;
+  padding: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
-/* Header Styling */
-.header {
-  background-color: var(--tu-caja-express-red);
-  padding: 30px 20px;
+.header-section {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 2rem 1.5rem;
   text-align: center;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.logo-container {
+  margin-bottom: 1rem;
+}
+
+.logo {
+  height: 50px;
+  width: auto;
 }
 
 .main-title {
-  font-size: 2.8em; /* Larger main title */
-  color: var(--text-light); /* White text on red background */
-  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 800; /* Extra bold */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
 }
 
-/* Content Sections */
-.content-sections {
-  padding: 30px;
+.decoration-line {
+  height: 4px;
+  width: 80px;
+  background-color: white;
+  margin: 0 auto;
+  border-radius: 2px;
 }
 
+.content-wrapper {
+  padding: 0 1.5rem 2rem;
+}
+
+/* Card Styles */
+.card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Section Styles */
 .terms-section {
-  margin-bottom: 35px;
-  padding-bottom: 25px;
-  border-bottom: 1px dashed var(--border-light-gray); /* Dashed subtle separator */
+  position: relative;
 }
 
-.terms-section:last-of-type {
-  border-bottom: none; /* No border for the last section */
-  margin-bottom: 0;
-  padding-bottom: 0;
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: var(--light-color);
+  border-bottom: 1px solid #eee;
+}
+
+.icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.icon-box svg {
+  color: white;
+  width: 24px;
+  height: 24px;
 }
 
 .section-title {
-  font-size: 2em; /* Larger section titles */
-  color: var(--tu-caja-express-red); /* Your brand red for section titles */
-  margin-top: 0; /* Remove top margin */
-  margin-bottom: 20px;
-  position: relative;
-  padding-left: 20px;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0;
 }
 
-.section-title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 8px; /* Prominent red bar */
-  height: 80%;
-  background-color: var(--tu-caja-express-red);
-  border-radius: 4px;
+.section-content {
+  padding: 1.5rem;
 }
 
 .subsection-title {
-  font-size: 1.5em;
-  color: #555; /* A darker gray for sub-sections */
-  margin-top: 25px;
-  margin-bottom: 15px;
+  font-size: 1.2rem;
   font-weight: 600;
-  border-left: 3px solid #ccc; /* Subtle gray bar */
-  padding-left: 10px;
+  color: var(--accent-color);
+  margin: 1rem 0 0.5rem;
 }
 
-/* Paragraphs and Text */
-.section-content {
-  font-size: 1em;
-  margin-bottom: 15px;
-  text-align: justify;
-  color: var(--text-dark);
+/* Notice and Warning Boxes */
+.notice-box, .warning-box {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+  font-size: 0.9rem;
 }
 
-.highlight {
-  font-weight: 800; /* Even bolder for highlights */
-  color: var(--tu-caja-express-red); /* Using brand red for key highlights */
+.notice-box {
+  background-color: #e7f5ff;
+  color: var(--primary-color);
+  border-left: 4px solid var(--primary-color);
 }
 
-/* Lists */
-.responsibility-list,
-.tax-list,
-.prohibited-items-list {
-  list-style: none; /* Remove default bullets */
-  margin-left: 0;
-  padding-left: 20px; /* Add custom padding for list items */
-  margin-bottom: 15px;
-  font-size: 1em;
+.warning-box {
+  background-color: #fff3bf;
+  color: #856404;
+  border-left: 4px solid var(--warning-color);
 }
 
-.responsibility-list li::before,
-.tax-list li::before,
-.prohibited-items-list li::before {
-  content: '➤'; /* Custom bullet point */
-  color: var(--tu-caja-express-red);
-  font-size: 0.8em;
-  margin-right: 8px;
+.notice-box svg, .warning-box svg {
+  margin-right: 0.5rem;
+  flex-shrink: 0;
 }
 
-.nested-list {
-  list-style: none;
-  margin-left: 0;
-  padding-left: 30px;
-  margin-top: 10px;
-  font-size: 0.95em;
+/* Info Grid Layout */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
-.nested-list li::before {
-  content: '•'; /* Smaller bullet for nested list */
-  color: #777;
-  font-size: 0.7em;
-  margin-right: 5px;
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius);
 }
 
-
-/* Tables */
-.insurance-table,
-.delivery-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 25px;
-  margin-bottom: 30px;
-  background-color: var(--background-light);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow for tables */
+.info-icon {
+  margin-right: 0.75rem;
+  color: var(--primary-color);
 }
 
-.insurance-table th,
-.delivery-table th {
-  background-color: var(--tu-caja-express-red); /* Red header for tables */
-  color: var(--text-light);
-  padding: 15px 20px;
-  text-align: left;
-  border-bottom: 2px solid var(--text-light);
+/* Payment Info Styles */
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.payment-icon {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
+.payment-text {
+  flex-grow: 1;
+}
+
+.highlight-text {
+  color: var(--danger-color);
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Branch Info Styles */
+.branch-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.branch-card {
+  padding: 1.25rem;
+  border-radius: var(--border-radius);
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  transition: var(--transition);
+}
+
+.branch-card:hover {
+  border-color: var(--primary-color);
+}
+
+.branch-icon {
+  margin-bottom: 0.75rem;
+  color: var(--primary-color);
+}
+
+.time-indicator, .price-tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.time-indicator {
+  background-color: #e3f2fd;
+  color: var(--primary-color);
+}
+
+.price-tag {
+  background-color: #e8f5e9;
+  color: var(--accent-color);
+}
+
+/* Weight Info Styles */
+.weight-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.weight-icon {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
+.weight-text {
+  flex-grow: 1;
+}
+
+.weight-value {
+  font-size: 1.5rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--primary-color);
+  margin: 0.5rem 0;
 }
 
-.insurance-table td,
-.delivery-table td {
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--border-light-gray);
-  vertical-align: top;
-  font-size: 0.95em;
+.note {
+  font-size: 0.9rem;
+  color: var(--gray-color);
 }
 
-.insurance-table tbody tr:nth-child(even),
-.delivery-table tbody tr:nth-child(even) {
-  background-color: var(--background-gray); /* Light gray for even rows */
+/* Responsibility Grid */
+.responsibility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.insurance-table tbody tr:hover,
-.delivery-table tbody tr:hover {
-  background-color: #ffe0e0; /* Light red hover effect */
-  cursor: pointer;
+.responsibility-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--danger-color);
 }
 
-/* Responsive Design for Tables */
+.responsibility-icon {
+  margin-right: 0.75rem;
+  color: var(--danger-color);
+}
+
+.disclaimer {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* External Factors Tags */
+.external-factors {
+  margin-top: 1.5rem;
+}
+
+.external-factors h4 {
+  margin-bottom: 0.75rem;
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.factors-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.factor-tag {
+  background-color: #e9ecef;
+  color: var(--dark-color);
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+/* Insurance Cards */
+.insurance-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.insurance-card {
+  border: 1px solid #eee;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.insurance-card:hover {
+  border-color: var(--primary-color);
+}
+
+.insurance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: var(--light-color);
+  border-bottom: 1px solid #eee;
+}
+
+.insurance-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--dark-color);
+}
+
+.insurance-percent {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.insurance-details {
+  padding: 1.25rem;
+}
+
+.detail-item {
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  text-align: right;
+  flex-grow: 1;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+}
+
+.insurance-countries {
+  padding: 0.75rem 1.25rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #eee;
+  font-size: 0.8rem;
+  color: var(--gray-color);
+  text-align: center;
+}
+
+.insurance-note {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+.insurance-note svg {
+  margin-right: 0.5rem;
+  color: var(--gray-color);
+  flex-shrink: 0;
+}
+
+/* Tax Cards */
+.tax-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.tax-card {
+  padding: 1.25rem;
+  border-radius: var(--border-radius);
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.tax-card:hover {
+  border-color: var(--primary-color);
+}
+
+.tax-country {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.tax-rate {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0.5rem 0;
+}
+
+.tax-description {
+  font-size: 0.9rem;
+  color: var(--gray-color);
+}
+
+/* Delivery Timeline */
+.delivery-timeline {
+  position: relative;
+  padding-left: 30px;
+  margin: 1.5rem 0;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -30px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  border: 3px solid white;
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.timeline-content h4 {
+  font-size: 1.1rem;
+  color: var(--dark-color);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-content p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.delivery-note {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #fff3bf;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  color: #856404;
+}
+
+.delivery-note svg {
+  margin-right: 0.5rem;
+  color: #856404;
+  flex-shrink: 0;
+}
+
+/* Prohibited Items Grid */
+.prohibited-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.prohibited-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+.prohibited-item svg {
+  margin-right: 0.5rem;
+  color: var(--danger-color);
+  flex-shrink: 0;
+}
+
+.prohibited-intro {
+  margin-bottom: 1rem;
+}
+
+/* Refund Info Styles */
+.refund-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.refund-icon {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
+.refund-text {
+  flex-grow: 1;
+}
+
+/* Claim Info Styles */
+.claim-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.claim-icon {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
+.claim-text {
+  flex-grow: 1;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .terms-conditions-container {
-    margin: 20px 10px;
-    padding: 0; /* Remove overall padding to use inner section padding */
-    border-radius: 10px;
-  }
-
-  .header {
-    padding: 20px 15px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-
   .main-title {
-    font-size: 2em;
-    letter-spacing: 1px;
+    font-size: 1.5rem;
   }
-
-  .content-sections {
-    padding: 20px 15px;
-  }
-
+  
   .section-title {
-    font-size: 1.6em;
-    padding-left: 15px;
+    font-size: 1.3rem;
   }
-
-  .section-title::before {
-    width: 6px;
-    height: 70%;
+  
+  .payment-info, .weight-info, .refund-info, .claim-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
-
-  .subsection-title {
-    font-size: 1.3em;
+  
+  .info-grid, .responsibility-grid {
+    grid-template-columns: 1fr;
   }
-
-  .section-content,
-  .responsibility-list,
-  .tax-list,
-  .prohibited-items-list,
-  .nested-list {
-    font-size: 0.9em;
+  
+  .insurance-cards, .tax-cards {
+    grid-template-columns: 1fr;
   }
-
-  /* Table specific responsive styles */
-  .insurance-table,
-  .delivery-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap; /* Keep content on one line for horizontal scroll */
-    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
-    box-shadow: none; /* Remove table shadow on small screens */
-    border: 1px solid var(--border-light-gray); /* Add a border to the table */
-    border-radius: 10px;
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-
-  .insurance-table thead,
-  .delivery-table thead {
-    display: none; /* Hide table headers on small screens for vertical stack */
+  
+  .icon-box {
+    margin-bottom: 1rem;
   }
-
-  .insurance-table tr,
-  .delivery-table tr {
-    display: block;
-    margin-bottom: 10px;
-    border-bottom: 2px solid var(--tu-caja-express-red); /* Stronger separator for rows */
-    background-color: var(--background-light); /* Ensure row background is consistent */
-  }
-
-  .insurance-table td,
-  .delivery-table td {
-    display: block;
-    text-align: right;
-    padding-left: 50%; /* Make space for pseudo-element label */
-    position: relative;
-    border-bottom: 1px dotted var(--border-light-gray); /* Dotted separator between cells */
-    white-space: normal; /* Allow text to wrap within the cell */
-  }
-
-  .insurance-table td::before,
-  .delivery-table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 15px;
-    width: calc(50% - 30px);
-    padding-right: 15px;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: 700;
-    color: var(--tu-caja-express-red); /* Red labels for tables */
-    font-size: 0.9em;
-  }
-
-  /* Specific labels for responsive tables */
-  .insurance-table td:nth-of-type(1)::before { content: "Destino/Carga"; }
-  .insurance-table td:nth-of-type(2)::before { content: "Porcentaje"; }
-  .insurance-table td:nth-of-type(3)::before { content: "Decl. Mínima"; }
-  .insurance-table td:nth-of-type(4)::before { content: "Decl. Máxima"; }
-  .insurance-table td:nth-of-type(5)::before { content: "Cobertura"; }
-
-  .delivery-table td:nth-of-type(1)::before { content: "Destino"; }
-  .delivery-table td:nth-of-type(2)::before { content: "Tiempo de Entrega"; }
 }
 
-/* Optional: Add a subtle scrollbar for horizontally scrollable tables on webkit browsers */
-.insurance-table::-webkit-scrollbar,
-.delivery-table::-webkit-scrollbar {
-  height: 8px;
-}
-
-.insurance-table::-webkit-scrollbar-track,
-.delivery-table::-webkit-scrollbar-track {
-  background: var(--background-gray);
-  border-radius: 10px;
-}
-
-.insurance-table::-webkit-scrollbar-thumb,
-.delivery-table::-webkit-scrollbar-thumb {
-  background: var(--tu-caja-express-red);
-  border-radius: 10px;
+@media (max-width: 480px) {
+  .header-section {
+    padding: 1.5rem 1rem;
+  }
+  
+  .content-wrapper {
+    padding: 0 1rem 1.5rem;
+  }
+  
+  .section-header {
+    padding: 1rem;
+  }
+  
+  .section-content {
+    padding: 1rem;
+  }
+  
+  .prohibited-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
