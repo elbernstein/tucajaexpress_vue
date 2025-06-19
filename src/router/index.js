@@ -16,6 +16,7 @@ import QuoteView from '@/views/QuoteView.vue'
 import QuoteForm from '@/components/QuoteForm.vue'
 import Gana from '@/views/Gana.vue'
 import Calificanos from '@/views/Calificanos.vue'
+import Politicas from '@/views/Politicas.vue'
 
 const routes = [
   { path: '/', name: 'inicio', component: InicioView },
@@ -25,6 +26,7 @@ const routes = [
   { path: '/rutas', name: 'Rutas en EEUU', component: Rutas },
   { path: '/gana', name: 'Gana Dinero Con Nosotros', component: Gana },
   { path: '/calificanos', name: 'Calificanos', component: Calificanos },
+  { path: '/politicas', name: 'Politicas', component: Politicas },
 
   {
     path: '/cotizar-form',
