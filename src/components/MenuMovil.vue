@@ -1,40 +1,54 @@
 <template>
   <div class="menu-mobile-container">
-    <!-- El botón ahora usará la clase 'is-active' para ocultarse -->
+    <!-- El botón se oculta al abrir el menú -->
     <button @click="toggleMenu" class="menu-toggle-button" :class="{ 'is-active': isMenuOpen }">
       <span v-if="!isMenuOpen" class="icon-hamburger">☰</span>
-      <!-- Aunque el botón se oculte, el span de la 'X' se intercambia correctamente -->
       <span v-else class="icon-close">×</span>
     </button>
 
     <!-- Fondo oscuro -->
     <div v-if="isMenuOpen" class="menu-overlay" @click="toggleMenu"></div>
 
-    <!-- El menú moderno con iconos SVG -->
+    <!-- Menú moderno con la lista de enlaces definitiva -->
     <nav class="mobile-nav" :class="{ 'is-open': isMenuOpen }">
       <ul class="nav-list">
+        <!-- ============================================ -->
+        <!-- ===== LISTA DE ENLACES DEFINITIVA AQUÍ ===== -->
+        <!-- ============================================ -->
         <li class="nav-item">
           <RouterLink to="/" @click="closeMenu">
-            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8h5z"></path></svg>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"></path></svg>
             <span>Inicio</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink to="/nosotros" @click="closeMenu">
+          <RouterLink to="/conocenos" @click="closeMenu">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
             <span>Conócenos</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-            <RouterLink to="/rutas" @click="closeMenu">
-              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4c-.37 0-.7.15-.95.38L5.57 10H4c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h.57l6.48 4.62c.25.23.58.38.95.38h4c1.1 0 2-.9 2-2v-4h1.5c.83 0 1.5-.67 1.5-1.5v-1c0-.83-.67-1.5-1.5-1.5zM12 13.53l-5-3.57V12H7v-1.47l5-3.57v8.07zM18 19h-4V7h4v12z"></path></svg>
-              <span>Rutas en EEUU</span>
-            </RouterLink>
+          <RouterLink to="/calificanos" @click="closeMenu">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path></svg>
+            <span>Calificanos</span>
+          </RouterLink>
         </li>
         <li class="nav-item">
-            <RouterLink to="/cotizar-form" @click="closeMenu">
-              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg>
-              <span>Cotiza</span>
+          <RouterLink to="/paises" @click="closeMenu">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM11 19.93c-3.95-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c3.95.49 7 3.85 7 7.93s-3.05 7.44-7 7.93V4.07z"></path></svg>
+            <span>Paises</span>
+          </RouterLink>
+        </li>
+        <li class="nav-item">
+          <RouterLink to="/puerta-puerta" @click="closeMenu">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21.99 8c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V8zm-2-3H4c-1.1 0-2 .9-2 2v.5l10 6.25L20 7.5V7c0-1.1-.9-2-2-2z"></path></svg>
+            <span>Puerta a Puerta</span>
+          </RouterLink>
+        </li>
+        <li class="nav-item">
+            <RouterLink to="/rutas" @click="closeMenu">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13C19 5.13 15.87 2 12 2zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>
+              <span>Zonas de Recolección</span>
             </RouterLink>
         </li>
          <li class="nav-item">
@@ -55,7 +69,7 @@
 </template>
 
 <script>
-// El script sigue siendo el mismo. Es robusto y funcional.
+// El script está perfecto y no requiere cambios
 export default {
   data() {
     return {
@@ -83,10 +97,6 @@ export default {
 </script>
 
 <style scoped>
-/* ========================================= */
-/* ESTILOS FINALES CON BOTÓN OCULTO          */
-/* ========================================= */
-
 /* Contenedor principal y variables de color */
 .menu-mobile-container {
   --primary-red: #ff0000;
@@ -122,7 +132,6 @@ export default {
   left: 7px;
   z-index: 1001;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  /* AJUSTE AQUÍ: Se añade 'opacity' y 'transform' a la transición */
   transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.4s ease;
 }
 
@@ -130,11 +139,10 @@ export default {
   background: var(--hover-red);
 }
 
-/* AJUSTE AQUÍ: Regla para ocultar el botón cuando el menú está abierto */
 .menu-toggle-button.is-active {
   opacity: 0;
   transform: scale(0.8);
-  pointer-events: none; /* Importante para que no se pueda hacer clic en el botón invisible */
+  pointer-events: none;
 }
 
 .icon-hamburger {
@@ -148,7 +156,6 @@ export default {
 }
 
 /* --- ESTILOS PARA EL MENÚ MODERNO --- */
-
 .menu-overlay {
   position: fixed;
   inset: 0;
@@ -178,24 +185,29 @@ export default {
   transform: translateY(0);
 }
 
-/* Resto de estilos del menú moderno (sin cambios) */
 .nav-list { list-style: none; padding: 0; margin: 0; }
 .nav-item { transform: translateX(-100%); opacity: 0; animation: slide-in 0.5s forwards; }
+/* Animación escalonada para todos los ítems */
 .mobile-nav.is-open .nav-item:nth-child(1) { animation-delay: 0.1s; }
 .mobile-nav.is-open .nav-item:nth-child(2) { animation-delay: 0.15s; }
 .mobile-nav.is-open .nav-item:nth-child(3) { animation-delay: 0.2s; }
 .mobile-nav.is-open .nav-item:nth-child(4) { animation-delay: 0.25s; }
 .mobile-nav.is-open .nav-item:nth-child(5) { animation-delay: 0.3s; }
-.mobile-nav.is-open .nav-item-highlight { animation-delay: 0.35s; }
+.mobile-nav.is-open .nav-item:nth-child(6) { animation-delay: 0.35s; }
+.mobile-nav.is-open .nav-item:nth-child(7) { animation-delay: 0.4s; }
+.mobile-nav.is-open .nav-item-highlight { animation-delay: 0.45s; }
+
+
 @keyframes slide-in { to { transform: translateX(0); opacity: 1; } }
 .nav-item a { display: flex; align-items: center; padding: 16px 30px; text-decoration: none; color: var(--light-text); font-size: 1.1rem; font-weight: 500; transition: background-color 0.2s ease, color 0.2s ease; }
 .nav-item a:hover { background-color: rgba(255, 255, 255, 0.05); }
 .nav-item a:active { background-color: rgba(255, 255, 255, 0.1); }
 .nav-icon { width: 24px; height: 24px; margin-right: 20px; fill: currentColor; transition: transform 0.3s; }
 .nav-item a:hover .nav-icon { transform: scale(1.1); fill: var(--primary-red); }
+
+/* Estilos para el botón de Rastreo destacado */
 .nav-item-highlight { margin: 20px 20px 0; transform: translateX(-100%); opacity: 0; animation: slide-in 0.5s forwards; }
 .nav-item-highlight a { background-color: var(--primary-red); color: var(--light-text); border-radius: 12px; padding: 18px 25px; font-weight: 700; justify-content: center; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3); transition: background-color 0.3s, transform 0.2s; }
 .nav-item-highlight a:hover { background-color: var(--hover-red); transform: translateY(-2px); }
 .nav-item-highlight a .nav-icon { margin-right: 15px; fill: var(--light-text); }
-
 </style>
