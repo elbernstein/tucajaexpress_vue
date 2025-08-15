@@ -17,6 +17,7 @@ import QuoteForm from '@/components/QuoteForm.vue'
 import Gana from '@/views/Gana.vue'
 import Calificanos from '@/views/Calificanos.vue'
 import Politicas from '@/views/Politicas.vue'
+import PromotionsView from '@/views/PromotionsView.vue'
 
 const routes = [
   { path: '/', name: 'inicio', component: InicioView },
@@ -32,6 +33,11 @@ const routes = [
     path: '/cotizar-form',
     name: 'QuoteForm',
     component: QuoteForm
+  },
+    {
+    path: '/promociones', 
+    name: 'Promociones',
+    component: PromotionsView
   },
   {
     path: '/cotizar',
