@@ -38,7 +38,7 @@ const activeTab = ref('dashboard');
 </script>
 <style scoped>
 .admin-panel { color: #fff; }
-.admin-title { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
+.admin-title { color: white; :center; margin-bottom: 1.5rem; font-size: 1.5rem; }
 .admin-layout { display: flex; flex-direction: column; gap: 1.5rem; min-height: 70vh; }
 .admin-nav { display: flex; flex-direction: row; gap: 0.5rem; overflow-x: auto; padding-bottom: 1rem; border-bottom: 1px solid #444; }
 .admin-nav::-webkit-scrollbar { height: 4px; }

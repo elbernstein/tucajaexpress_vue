@@ -142,7 +142,7 @@ const endCallback = (prize) => {
 // --- CONFIGURACIÓN Y CICLO DE VIDA ---
 const updateWheelSize = () => { if (rouletteContainerRef.value) wheelSize.value = `${rouletteContainerRef.value.offsetWidth}px`; };
 const blocks = ref([ { padding: '10px', background: '#1a1a1a' } ]);
-const buttons = ref([ { radius: '45%', background: '#000000' }, { radius: '42%', background: '#ffffff' }, { radius: '38%', background: '#1a1a1a' }, { radius: '32%', background: '#fff', imgs: [{ src: '/images/logo-light.png', width: '65%', top: '-50%' }] } ]);
+const buttons = ref([ { radius: '45%', background: '#000000' }, { radius: '42%', background: '#ffffff' }, { radius: '38%', background: '#1a1a1a' }, { radius: '32%', background: '#fff', imgs: [{ src: '/images/logo-light.png', width: '95%', top: '-40%' }] } ]);
 const defaultConfig = ref({ pointer: true });
 const defaultStyle = ref({ pointerStyle: { fillStyle: '#ff0000' } });
 
