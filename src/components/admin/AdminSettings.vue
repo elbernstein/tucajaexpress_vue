@@ -1,14 +1,58 @@
 <template><div class="tab-content"><div class="tab-header"><h2>Ajustes Generales</h2></div><div v-if="isLoading" class="loader">Cargando ajustes...</div><div v-else class="settings-form-container"><form @submit.prevent="saveSettings"><div class="setting-item"><div class="setting-info"><h3>Activar Ruleta</h3><p>Permite a los usuarios ver y jugar. Si se desactiva, no podrán acceder a la promoción.</p></div><div class="setting-control"><label class="switch"><input type="checkbox" v-model="settings.isRouletteActive"><span class="slider round"></span></label></div></div><div class="setting-item"><div class="setting-info"><h3>Giros por Defecto al Registrarse</h3><p>Número de giros que un usuario nuevo recibirá automáticamente.</p></div><div class="setting-control"><input type="number" class="spins-input" v-model.number="settings.defaultSpins" min="0"></div></div><div class="form-actions"><button type="submit" class="save-btn" :disabled="isSaving">{{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}</button></div></form></div></div></template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+// Paso 1: Cambiamos el import
+import apiClient from '@/api/axios';
 import Swal from 'sweetalert2';
+
+// Referencias reactivas
 const isLoading = ref(true);
 const isSaving = ref(false);
-const settings = ref({ isRouletteActive: true, defaultSpins: 1 });
-const getAuthToken = () => JSON.parse(localStorage.getItem('userInfo'))?.token || null;
-const fetchSettings = async () => { isLoading.value = true; try { const { data } = await axios.get('http://localhost:5000/api/admin/settings'); settings.value = data; } catch (e) { console.error("Error:", e); Swal.fire('Error', 'No se pudieron cargar los ajustes.', 'error'); } finally { isLoading.value = false; } };
-const saveSettings = async () => { const token = getAuthToken(); if (!token) return; isSaving.value = true; try { const config = { headers: { Authorization: `Bearer ${token}` } }; await axios.put('http://localhost:5000/api/admin/settings', settings.value, config); Swal.fire({ icon: 'success', title: '¡Ajustes Guardados!', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); } catch (e) { Swal.fire('Error', 'No se pudieron guardar los cambios.', 'error'); } finally { isSaving.value = false; } };
+const settings = ref({
+  isRouletteActive: true,
+  defaultSpins: 1,
+});
+
+// Ya no necesitamos la función getAuthToken
+
+// Carga los ajustes actuales desde la API
+const fetchSettings = async () => {
+  isLoading.value = true;
+  try {
+    // Usamos apiClient y la URL relativa
+    const { data } = await apiClient.get('/admin/settings');
+    settings.value = data;
+  } catch (error) {
+    console.error("Error al cargar los ajustes:", error);
+    Swal.fire('Error', 'No se pudieron cargar los ajustes.', 'error');
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Guarda los nuevos ajustes en la API
+const saveSettings = async () => {
+  isSaving.value = true;
+  try {
+    // Usamos apiClient y la URL relativa. El token se añade automáticamente.
+    await apiClient.put('/admin/settings', settings.value);
+    
+    Swal.fire({
+      icon: 'success',
+      title: '¡Ajustes Guardados!',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+  } catch (error) {
+    console.error("Error al guardar los ajustes:", error);
+    Swal.fire('Error', 'No se pudieron guardar los cambios.', 'error');
+  } finally {
+    isSaving.value = false;
+  }
+};
+
 onMounted(fetchSettings);
 </script>
 <style scoped>

@@ -70,12 +70,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'; // Añadimos 'computed'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { LuckyWheel } from '@lucky-canvas/vue';
 import Swal from 'sweetalert2';
-import axios from 'axios';
+// Paso 1: Cambiamos el import a nuestro nuevo archivo centralizado
+import apiClient from '@/api/axios';
 
-// --- PROPS Y EMITS ---
+// --- PROPS Y EMITS (Sin cambios) ---
 const props = defineProps({
   user: { type: Object, default: null },
   isActive: { type: Boolean, default: true }
@@ -83,7 +84,7 @@ const props = defineProps({
 const emit = defineEmits(['requestLogin', 'logout', 'openAdminPanel']);
 
 
-// --- REFERENCIAS REACTIVAS ---
+// --- REFERENCIAS REACTIVAS (Sin cambios) ---
 const myLucky = ref(null);
 const rouletteContainerRef = ref(null);
 const wheelSize = ref('300px');
@@ -92,7 +93,7 @@ const isLoadingPrize = ref(false);
 const lastPrize = ref(null);
 
 
-// --- PROPIEDAD COMPUTADA PARA EL TEXTO DEL BOTÓN ---
+// --- PROPIEDAD COMPUTADA PARA EL TEXTO DEL BOTÓN (Sin cambios) ---
 const spinButtonText = computed(() => {
   if (!props.isActive) return 'RULETA DESACTIVADA';
   if (isLoadingPrize.value) return 'GIRANDO...';
@@ -100,30 +101,31 @@ const spinButtonText = computed(() => {
 });
 
 
-// --- LÓGICA DE GIRO ---
+// --- LÓGICA DE GIRO (CORREGIDA) ---
 const startCallback = async () => {
   if (!props.isActive) {
     Swal.fire({ title: '¡No disponible!', text: 'La ruleta está desactivada.', icon: 'info' });
     return;
   }
   if (!props.user || !props.user.token) {
-    emit('requestLogin'); // Pedimos al padre que abra el modal
+    emit('requestLogin');
     return;
   }
   lastPrize.value = null;
   isLoadingPrize.value = true;
   try {
     myLucky.value.play();
-    const token = props.user.token;
-    const config = { headers: { Authorization: `Bearer ${token}` } };
-    const { data: prizeResult } = await axios.post('http://localhost:5000/api/game/spin', {}, config);
+    
+    // Paso 2: Usamos apiClient y la URL relativa. Ya no necesitamos configurar los headers.
+    const { data: prizeResult } = await apiClient.post('/game/spin', {});
+    
     const prizeIndex = prizes.value.findIndex(p => p.id === prizeResult.id);
     if (prizeIndex === -1) throw new Error('Premio inválido del servidor.');
     setTimeout(() => { myLucky.value.stop(prizeIndex); }, 2500);
   } catch (error) {
     myLucky.value.stop(0);
     isLoadingPrize.value = false;
-    Swal.fire({ title: '¡Oops!', text: error.response?.data?.message || 'Ocurrió un error.', icon: 'error' });
+    Swal.fire({ title: '¡Oops!', text: error.response?.data?.message || 'Ocurrió un error.', icon: 'error', confirmButtonColor: '#ff0000' });
   }
 };
 
@@ -139,7 +141,7 @@ const endCallback = (prize) => {
 };
 
 
-// --- CONFIGURACIÓN Y CICLO DE VIDA ---
+// --- CONFIGURACIÓN Y CICLO DE VIDA (CORREGIDO) ---
 const updateWheelSize = () => { if (rouletteContainerRef.value) wheelSize.value = `${rouletteContainerRef.value.offsetWidth}px`; };
 const blocks = ref([ { padding: '10px', background: '#1a1a1a' } ]);
 const buttons = ref([ { radius: '45%', background: '#000000' }, { radius: '42%', background: '#ffffff' }, { radius: '38%', background: '#1a1a1a' }, { radius: '32%', background: '#fff', imgs: [{ src: '/images/logo-light.png', width: '95%', top: '-40%' }] } ]);
@@ -148,11 +150,14 @@ const defaultStyle = ref({ pointerStyle: { fillStyle: '#ff0000' } });
 
 const fetchPrizes = async () => {
   try {
-    const { data: apiData } = await axios.get('http://localhost:5000/api/admin/prizes');
+    // Paso 3: Usamos apiClient y la URL relativa
+    const { data: apiData } = await apiClient.get('/admin/prizes');
+
     if (!apiData || apiData.length === 0) { prizes.value = [{ name: 'Sin Premios', coupon: 'N/A' }]; return; }
     const backgroundColors = ['#f5f5f5', '#e0e0e0'];
     prizes.value = apiData.map((item, index) => ({ id: item._id, name: item.name, coupon: item.coupon, isPrize: item.isPrize, background: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0', fonts: [{ text: item.name.replace(' ', '\n'), top: '25%', fontColor: '#1a1a1a', fontSize: '14px', fontWeight: '600' }]}));
   } catch (error) {
+    console.error("Error al cargar los premios:", error); // Añadimos un log más descriptivo
     prizes.value = [{ name: 'Error al\nCargar', coupon: 'N/A' }];
   }
 };

@@ -1,11 +1,32 @@
 <template><div class="tab-content"><div class="tab-header"><h2>Dashboard</h2></div><div class="stats-grid"><div class="stat-card"><div class="card-icon icon-users"><i class="fas fa-users"></i></div><div class="card-content"><p class="card-value">{{ stats.totalUsers }}</p><p class="card-label">Usuarios Registrados</p></div></div><div class="stat-card"><div class="card-icon icon-spins"><i class="fas fa-sync-alt"></i></div><div class="card-content"><p class="card-value">{{ stats.totalSpins }}</p><p class="card-label">Giros Realizados</p></div></div><div class="stat-card"><div class="card-icon icon-conversion"><i class="fas fa-chart-pie"></i></div><div class="card-content"><p class="card-value">N/A</p><p class="card-label">Tasa de Conversión</p></div></div></div><div class="top-prizes-section"><h3>Top 5 - Premios Más Ganados</h3><ul v-if="stats.mostWonPrizes.length > 0" class="top-prizes-list"><li v-for="(prize, index) in stats.mostWonPrizes" :key="index"><span class="prize-rank">{{ index + 1 }}</span><span class="prize-name">{{ prize._id }}</span><span class="prize-count">{{ prize.count }} veces</span></li></ul><p v-else class="no-data">Aún no hay suficientes datos para mostrar.</p></div></div></template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+// Paso 1: Cambiamos el import
+import apiClient from '@/api/axios';
 import Swal from 'sweetalert2';
-const stats = ref({ totalUsers: 0, totalSpins: 0, mostWonPrizes: [] });
-const getAuthToken = () => JSON.parse(localStorage.getItem('userInfo'))?.token || null;
-const fetchStats = async () => { const token = getAuthToken(); if (!token) { Swal.fire('Error', 'No autorizado.', 'error'); return; } try { const config = { headers: { Authorization: `Bearer ${token}` } }; const { data } = await axios.get('http://localhost:5000/api/admin/stats', config); stats.value = data; } catch (e) { console.error("Error:", e); Swal.fire('Error', 'No se pudieron cargar las estadísticas.', 'error'); }};
+
+const stats = ref({
+  totalUsers: 0,
+  totalSpins: 0,
+  mostWonPrizes: [],
+});
+
+const fetchStats = async () => {
+  try {
+    // Paso 2: Usamos apiClient y la URL relativa.
+    // El interceptor añade el token automáticamente, así que no necesitamos 'config'.
+    const { data } = await apiClient.get('/admin/stats');
+    stats.value = data;
+  } catch (error) {
+    console.error("Error al cargar las estadísticas:", error);
+    Swal.fire({
+        icon: 'error',
+        title: 'Error de Conexión',
+        text: 'No se pudieron cargar las estadísticas del dashboard. Verifica tu conexión a la API.'
+    });
+  }
+};
+
 onMounted(fetchStats);
 </script>
 <style scoped>

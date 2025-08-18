@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import apiClient from '@/api/axios'; // <-- NUEVO IMPORT
 import BaseModal from './BaseModal.vue';
 
 defineProps({ show: Boolean });
@@ -36,7 +36,7 @@ const handleRegister = async () => {
   if (password.value !== confirmPassword.value) { errorMessage.value = 'Las contraseñas no coinciden.'; return; }
   isLoading.value = true; errorMessage.value = null;
   try {
-    await axios.post('http://localhost:5000/api/auth/register', { name: name.value, email: email.value, password: password.value });
+    await apiClient.post('/auth/register', { name: name.value, email: email.value, password: password.value });
     emit('registered');
     emit('close');
   } catch (error) {

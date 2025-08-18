@@ -25,23 +25,26 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+// Paso 1: Cambiamos el import
+import apiClient from '@/api/axios';
 import PromotionalRoulette from '@/components/PromotionalRoulette.vue';
 import LoginModal from '@/components/LoginModal.vue';
 import RegisterModal from '@/components/RegisterModal.vue';
 import AdminPanel from '@/components/AdminPanel.vue';
 import Swal from 'sweetalert2';
 
+// Referencias reactivas
 const currentUser = ref(null);
 const showLoginModal = ref(false);
 const showRegisterModal = ref(false);
 const showAdminPanel = ref(false);
-
 const rouletteSettings = ref({ isRouletteActive: true });
 
+// Función para obtener los ajustes
 const fetchSettings = async () => {
     try {
-        const { data } = await axios.get('http://localhost:5000/api/admin/settings');
+        // Usamos apiClient y la URL relativa
+        const { data } = await apiClient.get('/admin/settings');
         rouletteSettings.value = data;
     } catch (error) {
         console.error("No se pudieron cargar los ajustes de la ruleta:", error);
@@ -49,6 +52,7 @@ const fetchSettings = async () => {
     }
 };
 
+// Lógica de montaje (sin cambios)
 onMounted(() => {
   const userInfo = localStorage.getItem('userInfo');
   if (userInfo) {
@@ -57,6 +61,7 @@ onMounted(() => {
   fetchSettings();
 });
 
+// Resto de las funciones (sin cambios)
 const openLoginModal = () => { showRegisterModal.value = false; showLoginModal.value = true; };
 const openRegisterModal = () => { showLoginModal.value = false; showRegisterModal.value = true; };
 const onLoggedIn = (userData) => { currentUser.value = userData; Swal.fire({ icon: 'success', title: `¡Bienvenido, ${userData.name}!`, text: '¡Ya puedes jugar!', timer: 2000, showConfirmButton: false }); };

@@ -27,9 +27,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import apiClient from '@/api/axios'; // <-- NUEVO IMPORT
 import BaseModal from './BaseModal.vue';
-import Swal from 'sweetalert2';
 
 defineProps({ show: Boolean });
 const emit = defineEmits(['close', 'openRegister', 'loggedIn']);
@@ -42,9 +41,9 @@ const errorMessage = ref(null);
 const handleLogin = async () => {
   isLoading.value = true; errorMessage.value = null;
   try {
-    const { data } = await axios.post('http://localhost:5000/api/auth/login', { email: email.value, password: password.value });
+    const { data } = await apiClient.post('/auth/login', { email: email.value, password: password.value });
     localStorage.setItem('userInfo', JSON.stringify(data));
-    emit('loggedIn', data); // Notificamos al componente padre que el login fue exitoso
+    emit('loggedIn', data);
     emit('close');
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'Error al iniciar sesión.';
