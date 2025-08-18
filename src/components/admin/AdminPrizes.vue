@@ -1,80 +1,74 @@
 <template><div class="tab-content"><div class="tab-header"><h2 class="tab-title">Gestionar Premios</h2><button class="add-new-btn" @click="togglePrizeForm"><i :class="showPrizeForm ? 'fas fa-times' : 'fas fa-plus'"></i>{{ showPrizeForm ? 'Cancelar' : 'Añadir Premio' }}</button></div><Transition name="fade"><div v-if="showPrizeForm" class="prize-form-container"><h3 class="form-title">{{ editingPrize ? 'Editar Premio' : 'Nuevo Premio' }}</h3><form @submit.prevent="submitPrize"><input class="form-input" type="text" v-model="form.name" p="Nombre (Ej: 10% DTO)" required><input class="form-input" type="text" v-model="form.coupon" p="Código del Cupón" required><input class="form-input" type="number" v-model="form.probability" p="Probabilidad (Ej: 10)" required min="1"><div class="checkbox-group"><input type="checkbox" id="isPrize" v-model="form.isPrize"><label for="isPrize">¿Es un premio real?</label></div><div class="form-actions"><button type="submit" class="save-btn">{{ editingPrize ? 'Guardar Cambios' : 'Crear Premio' }}</button></div></form></div></Transition><div v-if="prizes.length > 0" class="prizes-table-wrapper"><table class="prizes-table"><thead><tr><th>Nombre</th><th>Cupón</th><th>Probabilidad</th><th>Acciones</th></tr></thead><tbody><tr v-for="prize in prizes" :key="prize._id"><td data-label="Nombre">{{ prize.name }}</td><td data-label="Cupón">{{ prize.coupon }}</td><td data-label="Probabilidad">{{ prize.probability }}</td><td data-label="Acciones" class="action-buttons"><button @click="editPrize(prize)" class="edit-btn" title="Editar"><i class="fas fa-pen"></i></button><button @click="confirmDeletePrize(prize._id)" class="delete-btn" title="Eliminar"><i class="fas fa-trash"></i></button></td></tr></tbody></table></div><div v-else class="no-data"><p>No hay premios configurados. ¡Añade uno para empezar!</p></div></div></template>
 <script setup>
 import { ref, onMounted } from 'vue';
-// Paso 1: Cambiamos el import
 import apiClient from '@/api/axios';
 import Swal from 'sweetalert2';
 
-// Referencias reactivas
 const prizes = ref([]);
 const showPrizeForm = ref(false);
 const editingPrize = ref(null);
-const form = ref({ name: '', coupon: '', probability: 10, isPrize: true });
+const isLoading = ref(true);
 
-// Ya no necesitamos getAuthToken()
+const defaultFormState = { name: '', coupon: '', probability: 10, isPrize: true };
+const form = ref({ ...defaultFormState });
 
-// Carga los premios al montar el componente
 const fetchPrizes = async () => {
+  isLoading.value = true;
   try {
-    // Usamos la URL relativa
-    const { data } = await apiClient.get('/admin/prizes');
+    const { data } = await apiClient.get('/api/admin/prizes');
     prizes.value = data;
   } catch (error) {
-      console.error("Error al cargar premios:", error);
-      Swal.fire('Error', 'No se pudieron cargar los premios.', 'error');
+    Swal.fire('Error', 'No se pudieron cargar los premios.', 'error');
+  } finally {
+    isLoading.value = false;
   }
 };
 
-// Limpia el formulario y lo oculta
 const clearForm = () => {
   editingPrize.value = null;
-  form.value = { name: '', coupon: '', probability: 10, isPrize: true };
-  showPrizeForm.value = false;
+  form.value = { ...defaultFormState };
 };
 
-// Muestra/oculta el formulario
 const togglePrizeForm = () => {
-  showPrizeForm.value ? clearForm() : showPrizeForm.value = true;
+  showPrizeForm.value = !showPrizeForm.value;
+  if (!showPrizeForm.value) {
+    clearForm();
+  }
 };
 
-// Envía el formulario (para crear o actualizar)
 const submitPrize = async () => {
   try {
     if (editingPrize.value) {
       // Petición PUT para actualizar
-      await apiClient.put(`/admin/prizes/${editingPrize.value._id}`, form.value);
+      await apiClient.put(`/api/admin/prizes/${editingPrize.value._id}`, form.value);
     } else {
       // Petición POST para crear
-      await apiClient.post('/admin/prizes', form.value);
+      await apiClient.post('/api/admin/prizes', form.value);
     }
     await fetchPrizes(); // Recarga la lista de premios
     clearForm();
+    showPrizeForm.value = false; // Cierra el formulario
     Swal.fire('¡Éxito!', `Premio ${editingPrize.value ? 'actualizado' : 'creado'} correctamente.`, 'success');
   } catch (error) {
     Swal.fire('Error', error.response?.data?.message || 'No se pudo guardar el premio.', 'error');
   }
 };
 
-// Prepara el formulario para editar un premio
 const editPrize = (prize) => {
   editingPrize.value = prize;
   form.value = { ...prize };
   showPrizeForm.value = true;
-  // Opcional: desplazar la vista al formulario si es muy largo
-  // window.scrollTo(0,0);
 };
 
-// Confirma y elimina un premio
 const confirmDeletePrize = (id) => {
   Swal.fire({
-    title: '¿Estás seguro?', text: "¡No podrás revertir esto!",
+    title: '¿Estás seguro?', text: "Esta acción no se puede deshacer.",
     icon: 'warning', showCancelButton: true,
     confirmButtonColor: '#ff0000', cancelButtonColor: '#555',
     confirmButtonText: 'Sí, ¡eliminar!', cancelButtonText: 'Cancelar'
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        // Petición DELETE
         await apiClient.delete(`/admin/prizes/${id}`);
         await fetchPrizes();
         Swal.fire('¡Eliminado!', 'El premio ha sido eliminado.', 'success');

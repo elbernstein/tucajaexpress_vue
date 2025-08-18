@@ -27,27 +27,54 @@
 
 <script setup>
 import { ref } from 'vue';
-import apiClient from '@/api/axios'; // <-- NUEVO IMPORT
+// Importamos nuestra instancia centralizada de axios
+import apiClient from '@/api/axios';
 import BaseModal from './BaseModal.vue';
 
-defineProps({ show: Boolean });
+// Definición de las props que el componente puede recibir del padre
+defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  }
+});
+
+// Definición de los eventos que este componente puede emitir hacia el padre
 const emit = defineEmits(['close', 'openRegister', 'loggedIn']);
 
+// Referencias reactivas para los campos del formulario y el estado de carga
 const email = ref('');
 const password = ref('');
 const isLoading = ref(false);
 const errorMessage = ref(null);
 
+// Función que se ejecuta al enviar el formulario
 const handleLogin = async () => {
-  isLoading.value = true; errorMessage.value = null;
+  // Validaciones básicas del lado del cliente
+  if (!email.value || !password.value) {
+      errorMessage.value = "Por favor, completa todos los campos.";
+      return;
+  }
+  
+  isLoading.value = true;
+  errorMessage.value = null; // Limpia errores anteriores
+
   try {
-    const { data } = await apiClient.post('/auth/login', { email: email.value, password: password.value });
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    // Usamos apiClient para enviar los datos de login a la URL relativa
+    const { data } = await apiClient.post('/api/auth/login', {
+      email: email.value,
+      password: password.value
+    });
+
+    // ¡Éxito! Emitimos el evento 'loggedIn' y pasamos los datos del usuario al componente padre
     emit('loggedIn', data);
-    emit('close');
+    // Nota: El modal ya no se cierra a sí mismo. El padre (PromotionsView) decidirá cuándo cerrarlo.
+
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'Error al iniciar sesión.';
+    // Si la API devuelve un error (ej. credenciales inválidas), lo mostramos
+    errorMessage.value = error.response?.data?.message || 'Ocurrió un error al iniciar sesión.';
   } finally {
+    // Se ejecuta siempre, tanto si hay éxito como si hay error
     isLoading.value = false;
   }
 };

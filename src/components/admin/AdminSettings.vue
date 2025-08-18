@@ -20,7 +20,7 @@ const fetchSettings = async () => {
   isLoading.value = true;
   try {
     // Usamos apiClient y la URL relativa
-    const { data } = await apiClient.get('/admin/settings');
+    const { data } = await apiClient.get('/api/admin/settings');
     settings.value = data;
   } catch (error) {
     console.error("Error al cargar los ajustes:", error);
@@ -35,7 +35,7 @@ const saveSettings = async () => {
   isSaving.value = true;
   try {
     // Usamos apiClient y la URL relativa. El token se añade automáticamente.
-    await apiClient.put('/admin/settings', settings.value);
+    await apiClient.put('/api/admin/settings', settings.value);
     
     Swal.fire({
       icon: 'success',

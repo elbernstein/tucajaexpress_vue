@@ -36,7 +36,7 @@ const handleRegister = async () => {
   if (password.value !== confirmPassword.value) { errorMessage.value = 'Las contraseñas no coinciden.'; return; }
   isLoading.value = true; errorMessage.value = null;
   try {
-    await apiClient.post('/auth/register', { name: name.value, email: email.value, password: password.value });
+    await apiClient.post('/api/auth/register', { name: name.value, email: email.value, password: password.value });
     emit('registered');
     emit('close');
   } catch (error) {

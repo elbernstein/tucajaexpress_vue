@@ -15,7 +15,7 @@ const fetchStats = async () => {
   try {
     // Paso 2: Usamos apiClient y la URL relativa.
     // El interceptor añade el token automáticamente, así que no necesitamos 'config'.
-    const { data } = await apiClient.get('/admin/stats');
+    const { data } = await apiClient.get('/api/admin/stats');
     stats.value = data;
   } catch (error) {
     console.error("Error al cargar las estadísticas:", error);
