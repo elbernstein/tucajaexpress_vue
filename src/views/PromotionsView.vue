@@ -25,7 +25,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-// Paso 1: Cambiamos el import
 import apiClient from '@/api/axios';
 import PromotionalRoulette from '@/components/PromotionalRoulette.vue';
 import LoginModal from '@/components/LoginModal.vue';
@@ -33,17 +32,28 @@ import RegisterModal from '@/components/RegisterModal.vue';
 import AdminPanel from '@/components/AdminPanel.vue';
 import Swal from 'sweetalert2';
 
-// Referencias reactivas
+// Referencias de estado
 const currentUser = ref(null);
 const showLoginModal = ref(false);
 const showRegisterModal = ref(false);
 const showAdminPanel = ref(false);
 const rouletteSettings = ref({ isRouletteActive: true });
 
-// Función para obtener los ajustes
+// Sincronización al cargar el componente
+onMounted(() => {
+  // 1. Busca la información del usuario en el localStorage
+  const userInfo = localStorage.getItem('userInfo');
+  if (userInfo) {
+    // 2. Si la encuentra, actualiza la variable reactiva 'currentUser'
+    currentUser.value = JSON.parse(userInfo);
+  }
+  
+  // 3. Carga los ajustes de la ruleta
+  fetchSettings();
+});
+
 const fetchSettings = async () => {
     try {
-        // Usamos apiClient y la URL relativa
         const { data } = await apiClient.get('/admin/settings');
         rouletteSettings.value = data;
     } catch (error) {
@@ -52,23 +62,44 @@ const fetchSettings = async () => {
     }
 };
 
-// Lógica de montaje (sin cambios)
-onMounted(() => {
-  const userInfo = localStorage.getItem('userInfo');
-  if (userInfo) {
-    currentUser.value = JSON.parse(userInfo);
-  }
-  fetchSettings();
-});
-
-// Resto de las funciones (sin cambios)
+// Abre y cierra los modales
 const openLoginModal = () => { showRegisterModal.value = false; showLoginModal.value = true; };
 const openRegisterModal = () => { showLoginModal.value = false; showRegisterModal.value = true; };
-const onLoggedIn = (userData) => { currentUser.value = userData; Swal.fire({ icon: 'success', title: `¡Bienvenido, ${userData.name}!`, text: '¡Ya puedes jugar!', timer: 2000, showConfirmButton: false }); };
-const onRegistered = () => { Swal.fire({ icon: 'success', title: '¡Registro Completo!', text: 'Ahora, por favor inicia sesión.', confirmButtonColor: '#ff0000' }).then(() => { openLoginModal(); }); };
-const handleLogout = () => { localStorage.removeItem('userInfo'); currentUser.value = null; };
-</script>
 
+// Cuando el 'LoginModal' emite 'loggedIn'
+const onLoggedIn = (userData) => {
+  currentUser.value = userData;
+  Swal.fire({
+    icon: 'success', title: `¡Bienvenido, ${userData.name}!`,
+    text: '¡Ya puedes jugar!', timer: 2000, showConfirmButton: false
+  });
+};
+
+// Cuando el 'RegisterModal' emite 'registered'
+const onRegistered = () => {
+  Swal.fire({
+    icon: 'success', title: '¡Registro Completo!',
+    text: 'Ahora, por favor inicia sesión para continuar.',
+    confirmButtonColor: '#ff0000'
+  }).then(() => {
+    openLoginModal();
+  });
+};
+
+// Cuando el 'PromotionalRoulette' emite 'logout'
+const handleLogout = () => {
+    localStorage.removeItem('userInfo');
+    currentUser.value = null; // Actualiza el estado reactivo
+    Swal.fire({
+      icon: 'info',
+      title: 'Sesión Cerrada',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000
+    });
+};
+</script>
 <style scoped>
 .promotions-page{background-color:#121212;color:#fff;position:relative;overflow-x:hidden}.aurora-background{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}.aurora-shape{position:absolute;border-radius:50%;filter:blur(120px);opacity:.15}.shape1{width:300px;height:300px;background-color:red;top:-100px;left:-100px}.shape2{width:250px;height:250px;background-color:#4a0e0e;bottom:-80px;right:-80px}.promo-content{position:relative;z-index:2}.container{max-width:1140px;margin:0 auto;padding:0 1.5rem}.text-center{text-align:center}.promo-header{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4rem 0}.tagline{color:red;font-weight:700;letter-spacing:1.5px;margin-bottom:1rem}.main-title{color: white;:clamp(2.2rem,10vw,3rem);font-weight:800;margin-bottom:1rem;text-shadow:0 0 20px rgba(0,0,0,.5)}.main-description{font-size:clamp(1rem,4vw,1.1rem);color:hsla(0,0%,100%,.8);max-width:650px;margin:0 auto 2rem;line-height:1.7}@media (min-width:768px){.promo-header{min-height:80vh}.main-title{font-size:clamp(3rem,8vw,5rem)}}@media (min-width:992px){.aurora-shape{filter:blur(150px);opacity:.2}.shape1{width:500px;height:500px}.shape2{width:400px;height:400px}}
 </style>
