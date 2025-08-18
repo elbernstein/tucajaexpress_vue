@@ -10,6 +10,9 @@ const gameRoutes = require('./routes/gameRoutes');
 
 const app = express();
 
+
+app.set('trust proxy', 1); // Confía en la primera cabecera de proxy (la de Apache)
+
 // Middlewares
 app.use(cors());
 app.use(express.json());
