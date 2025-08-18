@@ -41,7 +41,7 @@
               </button>
             </div>
             <div v-else class="content-body">
-              <h3 class="welcome-title">Hola, {{ user.name.split(' ')[0] }}</h3>
+            <h3 class="welcome-title">Hola, {{ user && user.name ? user.name.split(' ')[0] : 'Usuario' }}</h3>
               <p class="welcome-subtitle">¡Mucha suerte!</p>
               <div class="prize-display-area">
                   <div v-if="!lastPrize" class="prize-display-placeholder">
@@ -73,10 +73,9 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { LuckyWheel } from '@lucky-canvas/vue';
 import Swal from 'sweetalert2';
-// Paso 1: Cambiamos el import a nuestro nuevo archivo centralizado
-import apiClient from '@/api/axios';
+import apiClient from '@/api/axios'; // Importamos la instancia centralizada
 
-// --- PROPS Y EMITS (Sin cambios) ---
+// --- PROPS Y EMITS ---
 const props = defineProps({
   user: { type: Object, default: null },
   isActive: { type: Boolean, default: true }
@@ -84,7 +83,7 @@ const props = defineProps({
 const emit = defineEmits(['requestLogin', 'logout', 'openAdminPanel']);
 
 
-// --- REFERENCIAS REACTIVAS (Sin cambios) ---
+// --- REFERENCIAS REACTIVAS ---
 const myLucky = ref(null);
 const rouletteContainerRef = ref(null);
 const wheelSize = ref('300px');
@@ -93,7 +92,7 @@ const isLoadingPrize = ref(false);
 const lastPrize = ref(null);
 
 
-// --- PROPIEDAD COMPUTADA PARA EL TEXTO DEL BOTÓN (Sin cambios) ---
+// --- PROPIEDAD COMPUTADA PARA EL TEXTO DEL BOTÓN ---
 const spinButtonText = computed(() => {
   if (!props.isActive) return 'RULETA DESACTIVADA';
   if (isLoadingPrize.value) return 'GIRANDO...';
@@ -101,31 +100,22 @@ const spinButtonText = computed(() => {
 });
 
 
-// --- LÓGICA DE GIRO (CORREGIDA) ---
+// --- LÓGICA DE GIRO ---
 const startCallback = async () => {
-  if (!props.isActive) {
-    Swal.fire({ title: '¡No disponible!', text: 'La ruleta está desactivada.', icon: 'info' });
-    return;
-  }
-  if (!props.user || !props.user.token) {
-    emit('requestLogin');
-    return;
-  }
+  if (!props.isActive) { Swal.fire({ title: '¡No disponible!', text: 'La ruleta está desactivada.', icon: 'info' }); return; }
+  if (!props.user || !props.user.token) { emit('requestLogin'); return; }
   lastPrize.value = null;
   isLoadingPrize.value = true;
   try {
     myLucky.value.play();
-    
-    // Paso 2: Usamos apiClient y la URL relativa. Ya no necesitamos configurar los headers.
     const { data: prizeResult } = await apiClient.post('/game/spin', {});
-    
     const prizeIndex = prizes.value.findIndex(p => p.id === prizeResult.id);
     if (prizeIndex === -1) throw new Error('Premio inválido del servidor.');
     setTimeout(() => { myLucky.value.stop(prizeIndex); }, 2500);
   } catch (error) {
     myLucky.value.stop(0);
     isLoadingPrize.value = false;
-    Swal.fire({ title: '¡Oops!', text: error.response?.data?.message || 'Ocurrió un error.', icon: 'error', confirmButtonColor: '#ff0000' });
+    Swal.fire({ title: '¡Oops!', text: error.response?.data?.message || 'Ocurrió un error al girar.', icon: 'error', confirmButtonColor: '#ff0000' });
   }
 };
 
@@ -141,23 +131,35 @@ const endCallback = (prize) => {
 };
 
 
-// --- CONFIGURACIÓN Y CICLO DE VIDA (CORREGIDO) ---
+// --- CONFIGURACIÓN Y CICLO DE VIDA ---
 const updateWheelSize = () => { if (rouletteContainerRef.value) wheelSize.value = `${rouletteContainerRef.value.offsetWidth}px`; };
 const blocks = ref([ { padding: '10px', background: '#1a1a1a' } ]);
 const buttons = ref([ { radius: '45%', background: '#000000' }, { radius: '42%', background: '#ffffff' }, { radius: '38%', background: '#1a1a1a' }, { radius: '32%', background: '#fff', imgs: [{ src: '/images/logo-light.png', width: '95%', top: '-40%' }] } ]);
 const defaultConfig = ref({ pointer: true });
 const defaultStyle = ref({ pointerStyle: { fillStyle: '#ff0000' } });
 
+// FUNCIÓN 'fetchPrizes' CORREGIDA PARA EL ERROR ".map is not a function"
 const fetchPrizes = async () => {
   try {
-    // Paso 3: Usamos apiClient y la URL relativa
-    const { data: apiData } = await apiClient.get('/admin/prizes');
+    const { data } = await apiClient.get('/admin/prizes');
+    
+    // Verificamos si 'data' ya es un array. Si tu API devuelve {prizes: [...]}, cámbialo a data.prizes
+    const apiData = Array.isArray(data) ? data : (data.prizes || []);
 
-    if (!apiData || apiData.length === 0) { prizes.value = [{ name: 'Sin Premios', coupon: 'N/A' }]; return; }
+    if (!Array.isArray(apiData) || apiData.length === 0) {
+      console.warn("No se encontraron premios en la base de datos o la respuesta no es un array.");
+      prizes.value = [{ name: 'Sin Premios', coupon: 'N/A' }];
+      return;
+    }
+
     const backgroundColors = ['#f5f5f5', '#e0e0e0'];
-    prizes.value = apiData.map((item, index) => ({ id: item._id, name: item.name, coupon: item.coupon, isPrize: item.isPrize, background: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0', fonts: [{ text: item.name.replace(' ', '\n'), top: '25%', fontColor: '#1a1a1a', fontSize: '14px', fontWeight: '600' }]}));
+    prizes.value = apiData.map((item, index) => ({
+      id: item._id, name: item.name, coupon: item.coupon, isPrize: item.isPrize,
+      background: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0',
+      fonts: [{ text: item.name.replace(' ', '\n'), top: '25%', fontColor: '#1a1a1a', fontSize: '14px', fontWeight: '600' }]
+    }));
   } catch (error) {
-    console.error("Error al cargar los premios:", error); // Añadimos un log más descriptivo
+    console.error("Error crítico al cargar los premios:", error);
     prizes.value = [{ name: 'Error al\nCargar', coupon: 'N/A' }];
   }
 };
