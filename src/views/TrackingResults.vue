@@ -7,18 +7,7 @@
             <span class="label">Guía:</span>
             <span class="value">{{ trackingData.guide }}</span>
           </div>
-          <div class="info-item">
-            <span class="label">Teléfono:</span>
-            <span class="value">
-              <img
-                :src="`/images/flags/${currentCountry.flag}`"
-                :alt="currentCountry.name"
-                class="flag-icon"
-                v-if="currentCountry.flag"
-              />
-              {{ route.query.phone || 'N/A' }}
-            </span>
-          </div>
+          <!-- La sección del teléfono que estaba aquí ha sido eliminada -->
         </div>
         <div v-else class="tracking-info">
           <p>Cargando datos de búsqueda...</p>
@@ -60,9 +49,6 @@
               </div>
           </div>
 
-          <!-- =============================================================== -->
-          <!-- NUEVO: Sección del Mapa de Viaje Interactivo                    -->
-          <!-- =============================================================== -->
           <div class="interactive-journey-section">
             <h3>Progreso del Envío</h3>
             <div class="journey-map">
@@ -82,9 +68,6 @@
                 </div>
             </div>
           </div>
-          <!-- =============================================================== -->
-          <!-- FIN DE LA NUEVA SECCIÓN                                         -->
-          <!-- =============================================================== -->
   
           <div class="timeline-section">
             <h3>Historial de Eventos</h3>
@@ -110,14 +93,14 @@
           </div>
         </div>
   
+        <!-- La sección de "No se encontró la guía" ha sido actualizada -->
         <div v-else class="no-results">
           <i class="fas fa-box-open"></i>
           <h3>No se encontró la guía</h3>
           <p>La guía <strong>{{ trackingData.guide }}</strong> no fue encontrada en nuestro sistema.</p>
           <p>Por favor verifica:</p>
           <ul class="verification-list">
-            <li>El número de guía ingresado</li>
-            <li>El número de teléfono asociado</li>
+            <li>Que el número de guía sea correcto</li>
             <li>Que la guía no sea muy reciente (puede tardar hasta 24 horas en aparecer)</li>
           </ul>
           <button @click="goBack" class="back-button">
@@ -144,19 +127,10 @@ const trackingInfo = ref(null);
 // Datos de rastreo
 const trackingData = ref({
   guide: '',
-  phone: '',
-  countryCode: ''
 });
 
 // Mapeo de países
-const countries = {
-  '52': { name: 'México', flag: 'mexico.png' },
-  '1': { name: 'Estados Unidos', flag: 'usa.png' },
-  '502': { name: 'Guatemala', flag: 'guatemala.png' },
-  '503': { name: 'El Salvador', flag: 'el-salvador.png' },
-  '504': { name: 'Honduras', flag: 'honduras.png' },
-  '505': { name: 'Nicaragua', flag: 'nicaragua.png' }
-};
+
 
 // ===============================================================
 // === AJUSTE DE ICONO APLICADO EN ESTA SECCIÓN ==================
@@ -173,9 +147,6 @@ const journeyStages = ref([
 // ===============================================================
 
 // Computados
-const currentCountry = computed(() => {
-  return countries[trackingData.value.countryCode] || {};
-});
 
 const statusClass = computed(() => {
   if (!trackingInfo.value || !trackingInfo.value.status) return 'desconocido';
@@ -249,38 +220,21 @@ const formatDateTime = (dateString) => {
 };
 
 const extractTrackingData = () => {
-  const { guide, phone: fullPhone } = route.query;
+  const { guide } = route.query;
 
-  if (!guide || !fullPhone) {
-    error.value = 'Faltan parámetros de búsqueda (guía o teléfono) en la URL.';
+  if (!guide) {
+    error.value = 'No se encontró un número de guía en la URL.';
     loading.value = false;
     return false;
   }
 
   trackingData.value.guide = guide;
-
-  const possibleCodes = Object.keys(countries).sort((a, b) => b.length - a.length);
-  let foundCode = false;
-  for (const code of possibleCodes) {
-    if (fullPhone.startsWith(code)) {
-      trackingData.value.phone = fullPhone.substring(code.length);
-      trackingData.value.countryCode = code;
-      foundCode = true;
-      break;
-    }
-  }
-
-  if (!foundCode) {
-    trackingData.value.phone = fullPhone;
-    trackingData.value.countryCode = '';
-  }
-
   return true;
 };
 
-const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
-  if (!guideToFetch || !phoneToFetch) {
-    error.value = "No se proporcionó número de guía o teléfono para la búsqueda.";
+const fetchTrackingInfo = async (guideToFetch) => {
+  if (!guideToFetch) {
+    error.value = "No se proporcionó número de guía para la búsqueda.";
     loading.value = false;
     return;
   }
@@ -289,10 +243,13 @@ const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
   error.value = null;
   trackingInfo.value = null;
 
-  const apiUrl = `https://sistematce.com/api/obtener_info_guia_web?nroGuia=${encodeURIComponent(guideToFetch)}&celular=${encodeURIComponent(phoneToFetch)}`;
+  // CAMBIO: La URL ahora no incluye el celular
+  const apiUrl = `https://sistematce.com/api/obtener_info_guia_web?nroGuia=${encodeURIComponent(guideToFetch)}`;
 
   try {
-    const response = await axios.post(apiUrl);
+    // CAMBIO: La llamada ahora es un GET en lugar de un POST
+    const response = await axios.get(apiUrl); 
+    
     
     if (response.data && response.data.success) {
       const apiData = response.data;
@@ -347,11 +304,11 @@ const fetchTrackingInfo = async (guideToFetch, phoneToFetch) => {
 
 const retrySearch = () => {
   const guide = trackingData.value.guide;
-  const fullPhone = route.query.phone;
-  if (guide && fullPhone) {
-    fetchTrackingInfo(guide, fullPhone);
+  if (guide) {
+    // CAMBIO: Solo se pasa la guía
+    fetchTrackingInfo(guide);
   } else {
-    error.value = "No hay datos válidos para reintentar la búsqueda.";
+    error.value = "No hay un número de guía para reintentar la búsqueda.";
   }
 };
 
@@ -367,7 +324,8 @@ const goBack = () => {
 onMounted(() => {
   const dataExtracted = extractTrackingData();
   if (dataExtracted && !error.value) {
-    fetchTrackingInfo(trackingData.value.guide, route.query.phone);
+    // CAMBIO: Solo se pasa la guía
+    fetchTrackingInfo(trackingData.value.guide);
   }
 });
 </script>

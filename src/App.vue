@@ -3,13 +3,13 @@
     <HeaderNav />
     <router-view />
 
-        <!-- Menú móvil global -->
-        <WhatsappButtom />
-        <ScrollToTop />
-      <MenuMovil :isOpen="isOpen" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
-      <PreguiaComp />
+    <!-- Componentes globales -->
+    <ScrollToTop />
+    <MenuMovil :isOpen="isOpen" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
+    <PreguiaComp />
+    <ChatbotWidget /> <!-- <= AÑADE ESTA LÍNEA AQUÍ -->
 
-      <Footer />
+    <Footer />
   </div>
 </template>
 
@@ -21,6 +21,7 @@ import Footer from './components/Footer.vue'
 import PreguiaComp from './components/PreguiaComp.vue'
 import WhatsappButtom from './components/WhatsappButtom.vue'
 import ScrollToTop from './components/ScrollToTop.vue'
+import ChatbotWidget from './components/ChatbotWidget.vue' // <= AÑADE ESTA LÍNEA AQUÍ
 
 const isOpen = ref(false)
 const toggleMenu = () => isOpen.value = !isOpen.value

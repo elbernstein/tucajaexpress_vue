@@ -146,6 +146,7 @@
                           type="number" 
                           placeholder="Ej: 10"
                           min="1"
+                          class="form-input"
                           @input="calculateCustomBoxPrice">
                       </div>
                       <div class="form-group">
@@ -155,6 +156,7 @@
                           type="number" 
                           placeholder="Ej: 12"
                           min="1"
+                          class="form-input"
                           @input="calculateCustomBoxPrice">
                       </div>
                       <div class="form-group">
@@ -164,6 +166,7 @@
                           type="number" 
                           placeholder="Ej: 8"
                           min="1"
+                          class="form-input"
                           @input="calculateCustomBoxPrice">
                       </div>
                     </div>
@@ -244,6 +247,20 @@
                       placeholder="Ej: Calle Principal #123, Ciudad, Estado"
                       required></textarea>
                   </div>
+
+                  <!-- CAMPO ZIP AÑADIDO -->
+                  <div class="form-group">
+                    <label for="zip">Código Postal (ZIP)</label>
+                    <input 
+                      v-model="quoteData.zip" 
+                      type="text" 
+                      id="zip" 
+                      class="form-input" 
+                      placeholder="Ej: 90210"
+                      maxlength="5"
+                      required>
+                  </div>
+                  
                   <div class="location-actions">
                     <button type="button" @click="getLocation" class="location-button">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -367,19 +384,19 @@
                   <span class="detail-label">Ruta:</span>
                   <span class="detail-value">Estados Unidos → {{ getCountryName(quoteData.destination) }}</span>
                 </div>
-                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
+                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox && getSelectedBox()) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
                   <span class="detail-label">Tamaño de caja:</span>
                   <span class="detail-value">
                     {{ quoteData.boxType === 'standard' ? 
-                       getSelectedBox().medida : 
+                       (getSelectedBox() ? getSelectedBox().medida : '') : 
                        getCustomBoxDimensions() }}
                   </span>
                 </div>
-                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
+                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox && getSelectedBox()) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
                   <span class="detail-label">Pies cúbicos:</span>
                   <span class="detail-value">
                     {{ quoteData.boxType === 'standard' ? 
-                       parseFloat(getSelectedBox().pie_cubic).toFixed(4) : 
+                       (getSelectedBox() ? parseFloat(getSelectedBox().pie_cubic).toFixed(4) : '') : 
                        calculatedCubicFeet.toFixed(4) }}
                   </span>
                 </div>
@@ -387,11 +404,11 @@
                   <span class="detail-label">Valor declarado:</span>
                   <span class="detail-value">${{ quoteData.declaredValue.toFixed(2) }}</span>
                 </div>
-                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
+                <div v-if="(quoteData.boxType === 'standard' && quoteData.selectedStandardBox && getSelectedBox()) || (quoteData.boxType === 'custom' && validateCustomBox())" class="detail-row">
                   <span class="detail-label">Precio envío:</span>
                   <span class="detail-value">
                     {{ quoteData.boxType === 'standard' ? 
-                       formatPrice(getSelectedBox().precio_p_c) : 
+                       (getSelectedBox() ? formatPrice(getSelectedBox().precio_p_c) : '') : 
                        formatPrice(customBoxPrice) }}
                   </span>
                 </div>
@@ -404,12 +421,17 @@
                   <span class="detail-value total-price">{{ calculateTotalPrice() }}</span>
                 </div>
               </div>
+              
+              <!-- BOTÓN ACTUALIZADO -->
               <button 
                 @click="requestPickup" 
                 class="request-button" 
-                :disabled="!isFormValid">
-                Solicitar recogida
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                :disabled="!isFormValid || loading">
+                
+                <span v-if="!loading">Solicitar recogida</span>
+                <span v-else>Procesando...</span>
+
+                <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="10" cy="20.5" r="1"></circle>
                   <circle cx="18" cy="20.5" r="1"></circle>
                   <path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6l1.6-8.4H7.1"></path>
@@ -453,12 +475,14 @@ const quoteData = ref({
   declaredValue: null,
   includeInsurance: false,
   address: '',
+  zip: '',
   location: null,
   lat: null,
   lng: null
 })
 
 // Estados de la aplicación
+const loading = ref(false)
 const declaredValueError = ref(null)
 const availableBoxes = ref([])
 const tabuladores = ref([])
@@ -467,60 +491,42 @@ const calculatedCubicFeet = ref(0)
 const location = ref(null)
 const lat = ref(null)
 const lng = ref(null)
-const loading = ref(false)
 const error = ref(null)
 
-// Obtener países únicos de los tabuladores (excluyendo Estados Unidos como destino)
 const availableCountries = computed(() => {
   const uniqueCountries = []
   const seen = new Set()
-  
   tabuladores.value.forEach(item => {
     if (!seen.has(item.codpais) && item.pais_destino !== 'Estados Unidos') {
-      seen.add(item.codpais)
-      uniqueCountries.push({
-        codpais: item.codpais,
-        pais_destino: item.pais_destino
-      })
+      seen.add(item.codpais);
+      uniqueCountries.push({ codpais: item.codpais, pais_destino: item.pais_destino })
     }
   })
-  
   return uniqueCountries
 })
 
-// Obtener nombre del país por código
 const getCountryName = (codpais) => {
-  const country = availableCountries.value.find(c => c.codpais === codpais)
-  return country ? country.pais_destino : ''
+  const country = availableCountries.value.find(c => c.codpais === codpais);
+  return country ? country.pais_destino : '';
 }
 
-// Formatear precio
 const formatPrice = (price) => {
-  if (!price) return '$0.00'
-  return `$${parseFloat(price).toFixed(2)}`
+  if (!price) return '$0.00';
+  return `$${parseFloat(price).toFixed(2)}`;
 }
 
-// Obtener tabuladores de la API
 const fetchTabuladores = async () => {
   loading.value = true
   error.value = null
-  
   try {
     const response = await fetch('https://sistematce.com/api/obtener_tabulado')
     if (!response.ok) {
       throw new Error('Error al obtener los tabuladores')
     }
-    
     const data = await response.json()
     tabuladores.value = data.tabuladores
-    
-    // Filtrar cajas disponibles para el país seleccionado
     if (quoteData.value.destination) {
-      availableBoxes.value = tabuladores.value.filter(
-        item => item.codpais === quoteData.value.destination
-      )
-      
-      // Ordenar por pies cúbicos
+      availableBoxes.value = tabuladores.value.filter(item => item.codpais === quoteData.value.destination)
       availableBoxes.value.sort((a, b) => parseFloat(a.pie_cubic) - parseFloat(b.pie_cubic))
     }
   } catch (err) {
@@ -531,297 +537,145 @@ const fetchTabuladores = async () => {
   }
 }
 
-// Imagenes cajas
-// Método para obtener la imagen de la caja basada en sus dimensiones
 const getBoxImage = (dimensions) => {
-  // Normaliza el string de dimensiones para crear el nombre del archivo
-  const normalized = dimensions.toLowerCase()
-    .replace(/\s+/g, '') // Elimina espacios
-    .replace(/x/g, 'x')  // Asegura que las x sean minúsculas
-    .replace(/"/g, '')   // Elimina comillas si las hay
-    .replace(/'/g, '')   // Elimina apóstrofes si los hay
-  
-  // Ejemplo: "16 x 16 x 16" se convierte en "16x16x16.png"
-  return `/images/${normalized}.png`
-}
+  const normalized = dimensions.toLowerCase().replace(/\s+/g, '').replace(/x/g, 'x').replace(/"/g, '').replace(/'/g, '');
+  return `/images/${normalized}.png`;
+};
 
-// Validar valor declarado
 const validateDeclaredValue = () => {
-  if (quoteData.value.declaredValue === null || quoteData.value.declaredValue === '') {
-    declaredValueError.value = null
-    return
-  }
-  
-  const value = parseFloat(quoteData.value.declaredValue)
-  
-  if (isNaN(value)) {
-    declaredValueError.value = 'Por favor ingresa un valor numérico válido'
-    return
-  }
-  
-  if (value < 0) {
-    declaredValueError.value = 'El valor no puede ser negativo'
-    return
-  }
-  
-  if (value > 500) {
-    quoteData.value.declaredValue = 500
-    declaredValueError.value = 'El valor máximo permitido es $500'
-    return
-  }
-  
-  declaredValueError.value = null
-}
+  if (quoteData.value.declaredValue === null || quoteData.value.declaredValue === '') { declaredValueError.value = null; return; }
+  const value = parseFloat(quoteData.value.declaredValue);
+  if (isNaN(value)) { declaredValueError.value = 'Por favor ingresa un valor numérico válido'; return; }
+  if (value < 0) { declaredValueError.value = 'El valor no puede ser negativo'; return; }
+  if (value > 500) { quoteData.value.declaredValue = 500; declaredValueError.value = 'El valor máximo permitido es $500'; return; }
+  declaredValueError.value = null;
+};
 
-// Resetear selección de caja estándar
-const resetStandardBoxSelection = () => {
-  quoteData.value.selectedStandardBox = null
-}
-
-// Resetear dimensiones personalizadas
-const resetCustomDimensions = () => {
-  quoteData.value.customDimensions = { height: null, length: null, width: null }
-  customBoxPrice.value = null
-  calculatedCubicFeet.value = 0
-}
-
-// Seleccionar caja estándar
-const selectStandardBox = (box) => {
-  quoteData.value.selectedStandardBox = box.id_local
-}
-
-// Validar caja personalizada
-const validateCustomBox = () => {
-  const { height, length, width } = quoteData.value.customDimensions
-  return height > 0 && length > 0 && width > 0
-}
-
-// Obtener caja seleccionada
-const getSelectedBox = () => {
-  return availableBoxes.value.find(box => box.id_local === quoteData.value.selectedStandardBox)
-}
-
-// Obtener dimensiones de caja personalizada
-const getCustomBoxDimensions = () => {
-  const { height, length, width } = quoteData.value.customDimensions
-  return `${height}x${length}x${width} pulgadas`
-}
-
-// Calcular precio para caja personalizada según la nueva función
+const resetStandardBoxSelection = () => { quoteData.value.selectedStandardBox = null; };
+const resetCustomDimensions = () => { quoteData.value.customDimensions = { height: null, length: null, width: null }; customBoxPrice.value = null; calculatedCubicFeet.value = 0; };
+const selectStandardBox = (box) => { quoteData.value.selectedStandardBox = box.id_local; };
+const validateCustomBox = () => { const { height, length, width } = quoteData.value.customDimensions; return height > 0 && length > 0 && width > 0; };
+const getSelectedBox = () => availableBoxes.value.find(box => box.id_local === quoteData.value.selectedStandardBox);
+const getCustomBoxDimensions = () => { const { height, length, width } = quoteData.value.customDimensions; return `${height}x${length}x${width} pulgadas`; };
 const calculateCustomBoxPrice = () => {
-  if (!validateCustomBox() || !quoteData.value.destination) {
-    customBoxPrice.value = null
-    return
-  }
-  
-  const { height, length, width } = quoteData.value.customDimensions
-  const numAlto = parseFloat(height)
-  const numLargo = parseFloat(length)
-  const numAncho = parseFloat(width)
-
-  if (isNaN(numAlto) || isNaN(numLargo) || isNaN(numAncho) ||
-      numAlto <= 0 || numLargo <= 0 || numAncho <= 0) {
-    customBoxPrice.value = null
-    return
-  }
-
-  // 1. Calcular pies cúbicos según la nueva fórmula
-  const constante_cubico = 1728
-  const pre_valor_cubico = (numAlto * numLargo * numAncho) / constante_cubico
-  let valor_cubico_ajustado = (Math.floor(pre_valor_cubico * 100) / 100) - 0.01
-  const valor_cubico = Math.max(0.001, valor_cubico_ajustado)
-  calculatedCubicFeet.value = parseFloat(valor_cubico.toFixed(4))
-
-  // 2. Filtrar tabuladores para el país seleccionado
-  const itemsDelPais = tabuladores.value
-    .filter(item => item.codpais === quoteData.value.destination)
-    .map(item => ({
-      ...item,
-      pie_cubic_num: parseFloat(item.pie_cubic),
-      precio_p_c_num: parseFloat(item.precio_p_c)
-    }))
-    .filter(item =>
-      !isNaN(item.pie_cubic_num) && item.pie_cubic_num > 0 &&
-      !isNaN(item.precio_p_c_num) && item.precio_p_c_num >= 0
-    )
-    .sort((a, b) => a.pie_cubic_num - b.pie_cubic_num)
-
-  if (itemsDelPais.length === 0) {
-    customBoxPrice.value = null
-    return
-  }
-
-  // 3. Buscar coincidencia exacta
-  const tolerancia = 0.0001
-  for (const item of itemsDelPais) {
-    if (Math.abs(item.pie_cubic_num - valor_cubico) < tolerancia) {
-      customBoxPrice.value = Math.ceil(item.precio_p_c_num)
-      return
-    }
-  }
-
-  // 4. Manejar casos donde el valor es menor que la caja más pequeña
-  const cajaMasPequena = itemsDelPais[0]
-  const cajaMasGrande = itemsDelPais[itemsDelPais.length - 1]
-
-  if (valor_cubico < cajaMasPequena.pie_cubic_num) {
-    if (cajaMasPequena.pie_cubic_num > 0) {
-      customBoxPrice.value = Math.ceil((cajaMasPequena.precio_p_c_num / cajaMasPequena.pie_cubic_num) * valor_cubico)
-    } else {
-      customBoxPrice.value = Math.ceil(cajaMasPequena.precio_p_c_num)
-    }
-    return
-  }
-
-  // 5. Manejar casos donde el valor es mayor que la caja más grande
-  if (valor_cubico > cajaMasGrande.pie_cubic_num) {
-    if (cajaMasGrande.pie_cubic_num > 0) {
-      customBoxPrice.value = Math.ceil((cajaMasGrande.precio_p_c_num / cajaMasGrande.pie_cubic_num) * valor_cubico)
-    } else {
-      customBoxPrice.value = Math.ceil(cajaMasGrande.precio_p_c_num)
-    }
-    return
-  }
-
-  // 6. Interpolación lineal para valores intermedios
-  let caja_inferior = null
-  let caja_superior = null
-
-  for (let i = 0; i < itemsDelPais.length - 1; i++) {
-    if (itemsDelPais[i].pie_cubic_num < valor_cubico && itemsDelPais[i+1].pie_cubic_num > valor_cubico) {
-      caja_inferior = itemsDelPais[i]
-      caja_superior = itemsDelPais[i+1]
-      break
-    }
-  }
-
+  if (!validateCustomBox() || !quoteData.value.destination) { customBoxPrice.value = null; return; }
+  const { height, length, width } = quoteData.value.customDimensions;
+  const numAlto = parseFloat(height), numLargo = parseFloat(length), numAncho = parseFloat(width);
+  if (isNaN(numAlto) || isNaN(numLargo) || isNaN(numAncho) || numAlto <= 0 || numLargo <= 0 || numAncho <= 0) { customBoxPrice.value = null; return; }
+  const constante_cubico = 1728;
+  const pre_valor_cubico = (numAlto * numLargo * numAncho) / constante_cubico;
+  let valor_cubico_ajustado = (Math.floor(pre_valor_cubico * 100) / 100) - 0.01;
+  const valor_cubico = Math.max(0.001, valor_cubico_ajustado);
+  calculatedCubicFeet.value = parseFloat(valor_cubico.toFixed(4));
+  const itemsDelPais = tabuladores.value.filter(item => item.codpais === quoteData.value.destination).map(item => ({ ...item, pie_cubic_num: parseFloat(item.pie_cubic), precio_p_c_num: parseFloat(item.precio_p_c) })).filter(item => !isNaN(item.pie_cubic_num) && item.pie_cubic_num > 0 && !isNaN(item.precio_p_c_num) && item.precio_p_c_num >= 0).sort((a, b) => a.pie_cubic_num - b.pie_cubic_num);
+  if (itemsDelPais.length === 0) { customBoxPrice.value = null; return; }
+  const tolerancia = 0.0001;
+  for (const item of itemsDelPais) { if (Math.abs(item.pie_cubic_num - valor_cubico) < tolerancia) { customBoxPrice.value = Math.ceil(item.precio_p_c_num); return; } }
+  const cajaMasPequena = itemsDelPais[0], cajaMasGrande = itemsDelPais[itemsDelPais.length - 1];
+  if (valor_cubico < cajaMasPequena.pie_cubic_num) { if (cajaMasPequena.pie_cubic_num > 0) { customBoxPrice.value = Math.ceil((cajaMasPequena.precio_p_c_num / cajaMasPequena.pie_cubic_num) * valor_cubico); } else { customBoxPrice.value = Math.ceil(cajaMasPequena.precio_p_c_num); } return; }
+  if (valor_cubico > cajaMasGrande.pie_cubic_num) { if (cajaMasGrande.pie_cubic_num > 0) { customBoxPrice.value = Math.ceil((cajaMasGrande.precio_p_c_num / cajaMasGrande.pie_cubic_num) * valor_cubico); } else { customBoxPrice.value = Math.ceil(cajaMasGrande.precio_p_c_num); } return; }
+  let caja_inferior = null, caja_superior = null;
+  for (let i = 0; i < itemsDelPais.length - 1; i++) { if (itemsDelPais[i].pie_cubic_num < valor_cubico && itemsDelPais[i + 1].pie_cubic_num > valor_cubico) { caja_inferior = itemsDelPais[i]; caja_superior = itemsDelPais[i + 1]; break; } }
   if (caja_inferior && caja_superior) {
-    const x1 = caja_inferior.pie_cubic_num
-    const y1 = caja_inferior.precio_p_c_num
-    const x2 = caja_superior.pie_cubic_num
-    const y2 = caja_superior.precio_p_c_num
-
-    if (x2 - x1 === 0) {
-      customBoxPrice.value = Math.ceil(y1)
-    } else {
-      const precioCalculado = y1 + (valor_cubico - x1) * (y2 - y1) / (x2 - x1)
-      customBoxPrice.value = Math.ceil(precioCalculado)
-    }
-  } else {
-    customBoxPrice.value = null
-  }
-}
-
-// Calcular costo del seguro
+    const x1 = caja_inferior.pie_cubic_num, y1 = caja_inferior.precio_p_c_num, x2 = caja_superior.pie_cubic_num, y2 = caja_superior.precio_p_c_num;
+    if (x2 - x1 === 0) { customBoxPrice.value = Math.ceil(y1); } else { const precioCalculado = y1 + (valor_cubico - x1) * (y2 - y1) / (x2 - x1); customBoxPrice.value = Math.ceil(precioCalculado); }
+  } else { customBoxPrice.value = null; }
+};
 const calculateInsuranceCost = () => {
-  if (!quoteData.value.declaredValue || quoteData.value.declaredValue <= 0) {
-    return '$0.00'
-  }
-
-  // Calculamos el 5% del valor declarado
-  let insuranceCost = quoteData.value.declaredValue * 0.05
-
-  // Aplicamos mínimo y máximo
-  insuranceCost = Math.max(insuranceCost, 10) // Mínimo $10
-  insuranceCost = Math.min(insuranceCost, 25) // Máximo $25
-
-  return `$${insuranceCost.toFixed(2)}`
-}
-
-// Calcular precio total
+  if (!quoteData.value.declaredValue || quoteData.value.declaredValue <= 0) return '$0.00';
+  let insuranceCost = quoteData.value.declaredValue * 0.05;
+  insuranceCost = Math.max(insuranceCost, 10);
+  insuranceCost = Math.min(insuranceCost, 25);
+  return `$${insuranceCost.toFixed(2)}`;
+};
 const calculateTotalPrice = () => {
-  let basePrice = 0
-  
+  let basePrice = 0;
   if (quoteData.value.boxType === 'standard' && quoteData.value.selectedStandardBox) {
-    const box = getSelectedBox()
-    basePrice = parseFloat(box.precio_p_c)
-  } else if (quoteData.value.boxType === 'custom' && validateCustomBox() && customBoxPrice.value) {
-    basePrice = customBoxPrice.value
-  } else {
-    return '$0.00'
-  }
-  
-  let insuranceCost = 0
-  if (quoteData.value.includeInsurance && quoteData.value.declaredValue && quoteData.value.declaredValue > 0) {
-    insuranceCost = quoteData.value.declaredValue * 0.05
-    insuranceCost = Math.max(insuranceCost, 10)
-    insuranceCost = Math.min(insuranceCost, 25)
-  }
-  
-  const total = basePrice + insuranceCost
-  return `$${total.toFixed(2)}`
-}
-
-// Obtener ubicación del usuario
-const getLocation = () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        lat.value = position.coords.latitude
-        lng.value = position.coords.longitude
-        location.value = `Ubicación: ${lat.value.toFixed(4)}, ${lng.value.toFixed(4)}`
-      },
-      (error) => {
-        console.error("Error getting location:", error)
-        alert("No se pudo obtener la ubicación. Asegúrate de haber permitido el acceso.")
-      }
-    )
-  } else {
-    alert("La geolocalización no es soportada por este navegador.")
-  }
-}
-
-// Link a Google Maps
-const googleMapsLink = computed(() => {
-  if (lat.value && lng.value) {
-    return `https://www.google.com/maps?q=${lat.value},${lng.value}`
-  }
-  return '#'
-})
-
-// Validar si el formulario está completo
+    const box = getSelectedBox(); if (box) basePrice = parseFloat(box.precio_p_c);
+  } else if (quoteData.value.boxType === 'custom' && validateCustomBox() && customBoxPrice.value) { basePrice = customBoxPrice.value; } else { return '$0.00'; }
+  let insuranceCost = 0;
+  if (quoteData.value.includeInsurance && quoteData.value.declaredValue > 0) { insuranceCost = quoteData.value.declaredValue * 0.05; insuranceCost = Math.max(insuranceCost, 10); insuranceCost = Math.min(insuranceCost, 25); }
+  const total = basePrice + insuranceCost;
+  return `$${total.toFixed(2)}`;
+};
+const getLocation = () => { if (navigator.geolocation) { navigator.geolocation.getCurrentPosition( (position) => { lat.value = position.coords.latitude; lng.value = position.coords.longitude; location.value = `Ubicación: ${lat.value.toFixed(4)}, ${lng.value.toFixed(4)}`; }, (error) => { console.error("Error getting location:", error); alert("No se pudo obtener la ubicación."); } ); } else { alert("La geolocalización no es soportada."); } };
+const googleMapsLink = computed(() => { if (lat.value && lng.value) { return `https://www.google.com/maps?q=${lat.value},${lng.value}`; } return '#'; });
 const isFormValid = computed(() => {
-  if (!quoteData.value.destination || !quoteData.value.address) return false
-  
-  if (quoteData.value.boxType === 'standard') {
-    return !!quoteData.value.selectedStandardBox
-  } else {
-    return validateCustomBox()
-  }
-})
+  if (!quoteData.value.destination || !quoteData.value.address || !quoteData.value.zip) return false;
+  if (quoteData.value.boxType === 'standard') { return !!quoteData.value.selectedStandardBox; } 
+  else { return validateCustomBox(); }
+});
+onMounted(() => { fetchTabuladores(); });
 
-// Solicitar recogida
-const requestPickup = () => {
+
+// ======================= FUNCIÓN requestPickup AJUSTADA A LAS NUEVAS REGLAS =======================
+const requestPickup = async () => {
   if (!isFormValid.value) {
-    alert("Por favor completa todos los campos requeridos.")
-    return
+    alert("Por favor completa todos los campos requeridos.");
+    return;
   }
-  
-  const pickupRequest = {
-    customer: customerData.value,
-    quote: quoteData.value,
-    selectedBox: quoteData.value.boxType === 'standard' ? getSelectedBox() : {
-      medida: getCustomBoxDimensions(),
-      precio_p_c: customBoxPrice.value,
-      pie_cubic: calculatedCubicFeet.value
-    },
-    insurance: quoteData.value.includeInsurance ? calculateInsuranceCost() : 'No incluido',
-    price: calculateTotalPrice(),
-    location: location.value,
-    coordinates: { lat: lat.value, lng: lng.value },
-    timestamp: new Date().toISOString()
-  }
-  
-  console.log("Solicitud de recogida:", pickupRequest)
-  
-  // Aquí iría la lógica para enviar la solicitud al backend
-  alert('Solicitud de recogida enviada correctamente')
-}
+  if (loading.value) return;
 
-// Cargar tabuladores al montar el componente
-onMounted(() => {
-  fetchTabuladores()
-})
+  loading.value = true;
+  
+  const AGENCIA_ID = '67479d8a1f62426613df176a';
+  let tipoCajaPayload;
+  
+  // APLICANDO LA REGLA INDICADA POR TU COMPAÑERO
+  if (quoteData.value.boxType === 'standard') {
+    const selectedBox = getSelectedBox();
+    // Para cajas estándar, enviamos el ID.
+    // Usamos el `_id` que debería venir de la API como prioridad.
+    tipoCajaPayload = selectedBox?._id || selectedBox?.id_local; 
+  } else {
+    // Para cajas personalizadas, enviamos un string VACÍO.
+    tipoCajaPayload = ''; 
+  }
+
+  // Limpiamos el número de teléfono para que no tenga símbolos, solo dígitos.
+  const celularLimpio = customerData.value.phone.replace(/[^\d]/g, '');
+  
+  const payload = {
+    agencia: AGENCIA_ID,
+    nom_cliente: customerData.value.name,
+    correoelectronico: customerData.value.email,
+    celular: celularLimpio,
+    zip: quoteData.value.zip,
+    tipo_caja: tipoCajaPayload,
+  };
+
+  console.log("Payload final que se enviará a la API:", payload);
+
+  try {
+    const response = await fetch('https://sistematce.com/api/preguia2/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Respuesta de error del servidor:", errorText);
+        throw new Error(`Error del servidor: ${response.status}. Respuesta: ${errorText}`);
+    }
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert('¡Solicitud enviada con éxito! Hemos generado tu preguía y te contactaremos a la brevedad.');
+    } else {
+      throw new Error(result.message || 'La API indicó que la solicitud no fue exitosa.');
+    }
+    
+  } catch (error) {
+    console.error("Error detallado al solicitar la recogida:", error);
+    alert(`Hubo un problema al enviar tu solicitud. Revisa la consola para más detalles.`);
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <style scoped>

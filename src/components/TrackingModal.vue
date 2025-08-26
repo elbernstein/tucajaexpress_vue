@@ -38,36 +38,6 @@
                 >
               </div>
               
-              <div class="form-group">
-                <label for="phoneNumber">Número de Teléfono</label>
-                <div class="phone-input-group">
-                  <select 
-                    v-model="trackingData.countryCode"
-                    class="country-select"
-                  >
-                    <option 
-                      v-for="country in countries" 
-                      :key="country.code"
-                      :value="country.code"
-                    >
-                      <img 
-                        :src="`/images/flags/${country.flag}`" 
-                        :alt="country.name"
-                        class="flag-icon"
-                      >
-                      {{ country.name }} (+{{ country.code }})
-                    </option>
-                  </select>
-                  <input 
-                    id="phoneNumber"
-                    v-model="trackingData.phoneNumber" 
-                    type="tel" 
-                    placeholder="Ej: 5512345678"
-                    class="phone-input"
-                    @keyup.enter="submitTracking"
-                  >
-                </div>
-              </div>
             </div>
             
             <div class="modal-actions">
@@ -123,7 +93,6 @@
               <li>La etiqueta pegada en tu paquete</li>
             </ul>
             <p>El número de guía suele tener entre 10 y 15 caracteres, combinando letras y números.</p>
-                        <p>Recuerda también ingresar el primer número de telefono registrado en la guía.</p>
           </div>
           
           <button 
@@ -148,27 +117,13 @@ const showGuideHelpModal = ref(false);
 
 const trackingData = ref({
   guideNumber: '',
-  phoneNumber: '',
-  countryCode: '1' // México por defecto
 });
 
-const countries = [
-  { name: 'Estados Unidos', code: '1', flag: 'usa.png' },
-  { name: 'México', code: '52', flag: 'mexico.png' },
-  { name: 'Guatemala', code: '502', flag: 'guatemala.png' },
-  { name: 'El Salvador', code: '503', flag: 'el-salvador.png' },
-  { name: 'Honduras', code: '504', flag: 'honduras.png' },
-  { name: 'Nicaragua', code: '505', flag: 'nicaragua.png' }
-];
 
 const showModal = () => {
   isVisible.value = true;
-  // Resetear datos al abrir
-  trackingData.value = {
-    guideNumber: '',
-    phoneNumber: '',
-    countryCode: '1'
-  };
+  // CAMBIO: Resetear solo el número de guía
+  trackingData.value.guideNumber = '';
 };
 
 const closeModal = () => {
@@ -189,16 +144,13 @@ const submitTracking = () => {
     return;
   }
   
-  if (!trackingData.value.phoneNumber) {
-    alert('Por favor ingresa tu número de teléfono');
-    return;
-  }
+  // CAMBIO: Eliminada la validación del número de teléfono
 
+  // CAMBIO: Se navega a la página de resultados enviando solo la guía
   router.push({
     path: '/tracking-results',
     query: {
       guide: trackingData.value.guideNumber.trim(),
-      phone: `${trackingData.value.countryCode}${trackingData.value.phoneNumber.trim()}`
     }
   });
   
