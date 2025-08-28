@@ -27,48 +27,27 @@
 
 <script setup>
 import { ref } from 'vue';
-// Importamos nuestra instancia centralizada de axios
-import apiClient from '@/api/axios';
 import BaseModal from './BaseModal.vue';
+// NO importamos apiClient ni Swal aquí, el padre los maneja
 
-// Definición de las props que el componente puede recibir del padre
-defineProps({
-  show: {
-    type: Boolean,
-    default: false,
-  }
-});
+defineProps({ show: Boolean });
+const emit = defineEmits(['close', 'openRegister']);
 
-// Definición de los eventos que este componente puede emitir hacia el padre
-const emit = defineEmits(['close', 'openRegister', 'loggedIn']);
-
-// Referencias reactivas para los campos del formulario y el estado de carga
 const email = ref('');
 const password = ref('');
-const isLoading = ref(false);
 const errorMessage = ref(null);
 
-// Función que se ejecuta al enviar el formulario
-const handleLogin = async () => {
-  isLoading.value = true; errorMessage.value = null;
-  try {
-    const { data } = await apiClient.post('/api/auth/login', { email: email.value, password: password.value });
-    
-    // ================== DEBUGGING LOG #1 ==================
-    // Esto nos mostrará en la consola del NAVEGADOR el objeto exacto
-    // que el backend ha devuelto.
-    console.log("Respuesta CRUDA de /api/auth/login:", data);
-    // ======================================================
-
-    emit('loggedIn', data);
-    // Nota: El modal ya no se cierra a sí mismo. El padre (PromotionsView) decidirá cuándo cerrarlo.
-
-  } catch (error) {
-    // Si la API devuelve un error (ej. credenciales inválidas), lo mostramos
-    errorMessage.value = error.response?.data?.message || 'Ocurrió un error al iniciar sesión.';
-  } finally {
-    // Se ejecuta siempre, tanto si hay éxito como si hay error
-    isLoading.value = false;
+const handleLogin = () => {
+  errorMessage.value = null;
+  const storedUsers = JSON.parse(localStorage.getItem('rouletteUsers')) || [];
+  const foundUser = storedUsers.find(u => u.email === email.value && u.password === password.value);
+  
+  if (foundUser) {
+    // Éxito: Guardamos el usuario actual y cerramos
+    localStorage.setItem('currentUser', JSON.stringify(foundUser));
+    window.location.reload(); // La forma más simple de refrescar toda la app
+  } else {
+    errorMessage.value = "Email o contraseña incorrectos.";
   }
 };
 </script>

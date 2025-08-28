@@ -1,0 +1,35 @@
+{
+  "settings": { "isRouletteActive": true },
+  "prizes": [
+    {
+      "id": "premio01",
+      "name": "10%  Descuento",  
+      "coupon": "DTO10WIN", "isPrize": true
+    },
+    {
+      "id": "premio02",
+      "name": "Sigue Intentando",
+      "coupon": "N/A", "isPrize": false
+    },
+    {
+      "id": "premio03",
+      "name": "Envío  Gratis",
+      "coupon": "FREE2025", "isPrize": true
+    },
+    {
+      "id": "premio04",
+      "name": "Caja  Extra",
+      "coupon": "CAJAEXTRA", "isPrize": true
+    },
+    {
+      "id": "premio05",
+      "name": "15%  Descuento",
+      "coupon": "DTO15PRO", "isPrize": true
+    },
+    {
+      "id": "premio06",
+      "name": "Sigue Intentando",
+      "coupon": "N/A", "isPrize": false
+    }
+  ]
+}

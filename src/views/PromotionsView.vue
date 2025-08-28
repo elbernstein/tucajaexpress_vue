@@ -49,101 +49,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted, provide } from 'vue';
-import apiClient from '@/api/axios';
+import { ref, onMounted } from 'vue';
 import PromotionalRoulette from '@/components/PromotionalRoulette.vue';
 import LoginModal from '@/components/LoginModal.vue';
 import RegisterModal from '@/components/RegisterModal.vue';
-import AdminPanel from '@/components/AdminPanel.vue';
 import Swal from 'sweetalert2';
 
-// --- ESTADO CENTRALIZADO ---
-// currentUser es la única fuente de la verdad para el estado de sesión
-const currentUser = ref(null);
-const rouletteSettings = ref({ isRouletteActive: true });
-// Con 'provide', hacemos que 'currentUser' esté disponible para todos los componentes hijos
-provide('currentUser', currentUser);
-// ----------------------------
-
-// Referencias para controlar la visibilidad de los modales
 const showLoginModal = ref(false);
 const showRegisterModal = ref(false);
-const showAdminPanel = ref(false);
+const rouletteSettings = ref({ isRouletteActive: true });
 
-// Sincronización de estado al cargar el componente
-onMounted(() => {
-  const userInfo = localStorage.getItem('userInfo');
-  if (userInfo) {
-    currentUser.value = JSON.parse(userInfo);
-  }
-  fetchSettings();
-});
-
+// Carga los ajustes desde el archivo local
 const fetchSettings = async () => {
     try {
-        const { data } = await apiClient.get('/api/admin/settings');
-        rouletteSettings.value = data;
+        const response = await fetch('/config.json');
+        const configData = await response.json();
+        rouletteSettings.value = configData.settings;
     } catch (error) {
-        console.error("No se pudieron cargar los ajustes de la ruleta:", error);
+        console.error("No se pudo cargar config.json:", error);
         rouletteSettings.value.isRouletteActive = false;
     }
 };
 
-// Funciones para intercambiar entre modales de login/registro
+onMounted(fetchSettings);
+
+// Funciones para intercambiar entre modales
 const openLoginModal = () => { showRegisterModal.value = false; showLoginModal.value = true; };
 const openRegisterModal = () => { showLoginModal.value = false; showRegisterModal.value = true; };
-
-// Manejador del evento 'loggedIn' emitido por LoginModal
-const onLoggedIn = (userData) => {
-    
-    // ================== DEBUGGING LOG #1 ==================
-    // Esto mostrará en la consola del navegador EXACTAMENTE qué objeto
-    // está recibiendo este componente padre desde el LoginModal.
-    console.log("Datos recibidos en PromotionsView (onLoggedIn):", userData);
-    if (userData) {
-        console.log("Propiedades de userData:", Object.keys(userData));
-        console.log("Valor de userData.name:", userData.name);
-    }
-    // ======================================================
-
-    localStorage.setItem('userInfo', JSON.stringify(userData));
-    currentUser.value = userData;
-    showLoginModal.value = false;
-    
-    // Hemos añadido una verificación para evitar el error 'undefined' en el saludo.
-    const welcomeName = userData && userData.name ? userData.name : 'Usuario';
-    Swal.fire({
-        icon: 'success',
-        title: `¡Bienvenido, ${welcomeName}!`,
-        text: '¡Ya puedes jugar!',
-        timer: 2000,
-        showConfirmButton: false
-    });
-};
-// Manejador del evento 'registered' emitido por RegisterModal
-const onRegistered = () => {
-  Swal.fire({
-    icon: 'success', title: '¡Registro Completo!',
-    text: 'Ahora, por favor inicia sesión para continuar.',
-    confirmButtonColor: '#ff0000'
-  }).then(() => {
-    openLoginModal(); // Llevamos al usuario al modal de login después del registro
-  });
-};
-
-// Manejador del evento 'logout' emitido por PromotionalRoulette
-const handleLogout = () => {
-    localStorage.removeItem('userInfo');
-    currentUser.value = null;
-    Swal.fire({
-      icon: 'info',
-      title: 'Sesión Cerrada',
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 2000
-    });
-};
+const onRegistered = () => { Swal.fire({ icon: 'success', title: '¡Registro Completo!', text: 'Ahora puedes iniciar sesión.' }).then(() => { openLoginModal(); }); };
 </script>
 
 <style scoped>
