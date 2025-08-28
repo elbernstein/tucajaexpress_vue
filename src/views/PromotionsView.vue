@@ -95,15 +95,31 @@ const openRegisterModal = () => { showLoginModal.value = false; showRegisterModa
 
 // Manejador del evento 'loggedIn' emitido por LoginModal
 const onLoggedIn = (userData) => {
-  localStorage.setItem('userInfo', JSON.stringify(userData)); // El padre gestiona el localStorage
-  currentUser.value = userData; // Actualiza el estado reactivo central
-  showLoginModal.value = false; // Cierra el modal de login
-  Swal.fire({
-    icon: 'success', title: `¡Bienvenido, ${userData.name}!`,
-    text: '¡Ya puedes jugar!', timer: 2000, showConfirmButton: false
-  });
-};
+    
+    // ================== DEBUGGING LOG #1 ==================
+    // Esto mostrará en la consola del navegador EXACTAMENTE qué objeto
+    // está recibiendo este componente padre desde el LoginModal.
+    console.log("Datos recibidos en PromotionsView (onLoggedIn):", userData);
+    if (userData) {
+        console.log("Propiedades de userData:", Object.keys(userData));
+        console.log("Valor de userData.name:", userData.name);
+    }
+    // ======================================================
 
+    localStorage.setItem('userInfo', JSON.stringify(userData));
+    currentUser.value = userData;
+    showLoginModal.value = false;
+    
+    // Hemos añadido una verificación para evitar el error 'undefined' en el saludo.
+    const welcomeName = userData && userData.name ? userData.name : 'Usuario';
+    Swal.fire({
+        icon: 'success',
+        title: `¡Bienvenido, ${welcomeName}!`,
+        text: '¡Ya puedes jugar!',
+        timer: 2000,
+        showConfirmButton: false
+    });
+};
 // Manejador del evento 'registered' emitido por RegisterModal
 const onRegistered = () => {
   Swal.fire({

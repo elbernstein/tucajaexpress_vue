@@ -50,23 +50,16 @@ const errorMessage = ref(null);
 
 // Función que se ejecuta al enviar el formulario
 const handleLogin = async () => {
-  // Validaciones básicas del lado del cliente
-  if (!email.value || !password.value) {
-      errorMessage.value = "Por favor, completa todos los campos.";
-      return;
-  }
-  
-  isLoading.value = true;
-  errorMessage.value = null; // Limpia errores anteriores
-
+  isLoading.value = true; errorMessage.value = null;
   try {
-    // Usamos apiClient para enviar los datos de login a la URL relativa
-    const { data } = await apiClient.post('/api/auth/login', {
-      email: email.value,
-      password: password.value
-    });
+    const { data } = await apiClient.post('/api/auth/login', { email: email.value, password: password.value });
+    
+    // ================== DEBUGGING LOG #1 ==================
+    // Esto nos mostrará en la consola del NAVEGADOR el objeto exacto
+    // que el backend ha devuelto.
+    console.log("Respuesta CRUDA de /api/auth/login:", data);
+    // ======================================================
 
-    // ¡Éxito! Emitimos el evento 'loggedIn' y pasamos los datos del usuario al componente padre
     emit('loggedIn', data);
     // Nota: El modal ya no se cierra a sí mismo. El padre (PromotionsView) decidirá cuándo cerrarlo.
 
