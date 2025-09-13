@@ -1,20 +1,26 @@
 <template>
   <div class="privacy-container">
-    <!-- Language Selector -->
-    <div class="language-selector">
-      <button 
-        @click="currentLanguage = 'es'"
-        :class="{ active: currentLanguage === 'es' }"
-        aria-label="Versión en español"
-      >
-        Español
-      </button>
-      <button 
-        @click="currentLanguage = 'en'"
-        :class="{ active: currentLanguage === 'en' }"
-        aria-label="English version"
-      >
-        English
+    <!-- Language Selector and Download Button -->
+    <div class="controls-bar">
+      <div class="language-selector">
+        <button 
+          @click="currentLanguage = 'es'"
+          :class="{ active: currentLanguage === 'es' }"
+          aria-label="Versión en español"
+        >
+          Español
+        </button>
+        <button 
+          @click="currentLanguage = 'en'"
+          :class="{ active: currentLanguage === 'en' }"
+          aria-label="English version"
+        >
+          English
+        </button>
+      </div>
+      <button @click="downloadPDF" class="download-btn">
+        <i class="fas fa-download"></i>
+        {{ currentLanguage === 'es' ? 'Descargar PDF' : 'Download PDF' }}
       </button>
     </div>
 
@@ -175,9 +181,9 @@
         </p>
         <div class="contact-info">
           <p><strong>{{ currentLanguage === 'es' ? 'Tu Caja Express INC' : 'Tu Caja Express INC' }}</strong></p>
-          <p>{{ currentLanguage === 'es' ? 'Correo electrónico:' : 'Email:' }} [tu correo]</p>
-          <p>{{ currentLanguage === 'es' ? 'Teléfono:' : 'Phone:' }} [tu teléfono]</p>
-          <p>{{ currentLanguage === 'es' ? 'Dirección:' : 'Address:' }} [tu dirección en EE. UU.]</p>
+          <p>{{ currentLanguage === 'es' ? 'Correo electrónico:' : 'Email:' }} contacto@tucajaexpress.com</p>
+          <p>{{ currentLanguage === 'es' ? 'Teléfono:' : 'Phone:' }} (704) 820-6911</p>
+          <p>{{ currentLanguage === 'es' ? 'Dirección:' : 'Address:' }} 701 Atando Ave T, Charlotte, NC 28206, Estados Unidos</p>
         </div>
       </section>
     </div>
@@ -185,11 +191,84 @@
 </template>
 
 <script>
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+
 export default {
   name: 'PrivacyPolicy',
   data() {
     return {
       currentLanguage: 'es'
+    }
+  },
+  methods: {
+    async downloadPDF() {
+      try {
+        // Mostrar indicador de carga
+        const button = document.querySelector('.download-btn')
+        const originalText = button.innerHTML
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...'
+        button.disabled = true
+
+        // Obtener el contenido a convertir
+        const element = document.querySelector('.legal-content')
+        
+        // Configurar html2canvas
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          width: element.scrollWidth,
+          height: element.scrollHeight
+        })
+
+        // Crear PDF
+        const imgData = canvas.toDataURL('image/png')
+        const pdf = new jsPDF('p', 'mm', 'a4')
+        
+        // Calcular dimensiones
+        const imgWidth = 210 // A4 width in mm
+        const pageHeight = 295 // A4 height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width
+        let heightLeft = imgHeight
+
+        let position = 0
+
+        // Agregar primera página
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+        heightLeft -= pageHeight
+
+        // Agregar páginas adicionales si es necesario
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight
+          pdf.addPage()
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+          heightLeft -= pageHeight
+        }
+
+        // Descargar el PDF
+        const fileName = this.currentLanguage === 'es' 
+          ? 'Politica_Privacidad_Tu_Caja_Express.pdf'
+          : 'Privacy_Policy_Tu_Caja_Express.pdf'
+        
+        pdf.save(fileName)
+
+        // Restaurar botón
+        button.innerHTML = originalText
+        button.disabled = false
+
+      } catch (error) {
+        console.error('Error generando PDF:', error)
+        alert('Error al generar el PDF. Por favor, inténtelo de nuevo.')
+        
+        // Restaurar botón en caso de error
+        const button = document.querySelector('.download-btn')
+        button.innerHTML = this.currentLanguage === 'es' 
+          ? '<i class="fas fa-download"></i> Descargar PDF'
+          : '<i class="fas fa-download"></i> Download PDF'
+        button.disabled = false
+      }
     }
   }
 }
@@ -205,11 +284,18 @@ export default {
   color: #333;
 }
 
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .language-selector {
   display: flex;
-  justify-content: flex-end;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .language-selector button {
@@ -234,6 +320,39 @@ export default {
 
 .language-selector button.active:hover {
   background: #004494;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.download-btn:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.download-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.download-btn i {
+  font-size: 1rem;
 }
 
 .policy-title {
@@ -313,8 +432,19 @@ export default {
     font-size: 1.5rem;
   }
   
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
   .language-selector {
     justify-content: center;
+  }
+  
+  .download-btn {
+    justify-content: center;
+    width: 100%;
   }
   
   .info-list {
