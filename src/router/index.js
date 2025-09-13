@@ -17,6 +17,7 @@ import QuoteForm from '@/components/QuoteForm.vue'
 import Gana from '@/views/Gana.vue'
 import Calificanos from '@/views/Calificanos.vue'
 import Politicas from '@/views/Politicas.vue'
+import Privacidad from '@/views/Privacidad.vue'
 import PromotionsView from '@/views/PromotionsView.vue'
 
 const routes = [
@@ -28,6 +29,7 @@ const routes = [
   { path: '/gana', name: 'Gana Dinero Con Nosotros', component: Gana },
   { path: '/calificanos', name: 'Calificanos', component: Calificanos },
   { path: '/politicas', name: 'Politicas', component: Politicas },
+  { path: '/privacidad', name: 'Privacidad', component: Privacidad },
 
   {
     path: '/cotizar-form',
