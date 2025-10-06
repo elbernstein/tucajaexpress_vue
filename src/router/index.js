@@ -19,6 +19,7 @@ import Calificanos from '@/views/Calificanos.vue'
 import Politicas from '@/views/Politicas.vue'
 import Privacidad from '@/views/Privacidad.vue'
 import PromotionsView from '@/views/PromotionsView.vue'
+import FormularioRecibo from '@/views/FormularioRecibo.vue'
 
 const routes = [
   { path: '/', name: 'inicio', component: InicioView },
@@ -40,6 +41,11 @@ const routes = [
     path: '/promociones', 
     name: 'Promociones',
     component: PromotionsView
+  },
+  {
+    path: '/formulario-recibo',
+    name: 'FormularioRecibo',
+    component: FormularioRecibo
   },
   {
     path: '/cotizar',
