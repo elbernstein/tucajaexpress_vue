@@ -140,7 +140,7 @@ const journeyStages = ref([
   { key: 'recolecta',     label: 'Recolectado',       icon: 'fas fa-truck-moving',   keywords: ['recolectada de origen', 'recolectado', 'agregado a cedis'] },
   { key: 'container',     label: 'En Contenedor',     icon: 'fas fa-ship',           keywords: ['agregado a container', 'en contenedor'] },
   { key: 'aduana',        label: 'Aduanas',           icon: 'fas fa-passport',       keywords: ['transito aduana', 'tramites aduanales', 'revision aduanal'] },
-  { key: 'bodega_destino',label: 'En Bodega Destino', icon: 'fas fa-boxes-stacked',  keywords: ['en bodega para su distribucion'] },
+  { key: 'bodega_destino',label: 'En Bodega Destino', icon: 'fas fa-boxes-stacked',  keywords: ['en bodega para su distribucion', 'agregado deposito destino'] },
   { key: 'reparto',       label: 'En Reparto',        icon: 'fas fa-truck-fast',     keywords: ['en proceso de entrega', 'asignada guia a chofer'] },
   { key: 'entregado',     label: 'Entregado',         icon: 'fas fa-house-user',     keywords: ['entregado'] }
 ]);

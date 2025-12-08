@@ -90,30 +90,6 @@
       </div>
     </section>
 
-    <!-- Sección Slider de Agencias (se mantiene igual) -->
-    <section class="agencies-slider-section section-padding-v2 bg-light-v2">
-      <div class="container">
-        <div class="section-header-v2">
-          <span class="section-tagline-v2">Nuestra Red en Crecimiento</span>
-          <h2 class="section-title-v2">Conoce Nuestras Agencias</h2>
-          <p class="section-subtitle-v2">Una muestra de los negocios que ya confían en nosotros.</p>
-        </div>
-
-        <div class="swiper agencies-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide agency-slide" v-for="agency in agencies" :key="agency.id">
-              <img :src="agency.imageUrl" :alt="agency.name">
-              <div class="agency-slide-caption">{{ agency.name }} - {{ agency.location }}</div>
-            </div>
-          </div>
-
-          <div class="swiper-button-prev agency-swiper-prev"></div>
-          <div class="swiper-button-next agency-swiper-next"></div>
-
-          <div class="swiper-pagination agency-swiper-pagination"></div>
-        </div>
-      </div>
-    </section>
 
     <!-- NUEVA SECCIÓN DE FORMULARIO MEJORADA -->
     <section id="application-form" class="application-form-section-v2 section-padding-v2">
