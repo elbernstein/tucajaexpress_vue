@@ -102,4 +102,57 @@ const router = createRouter({
   routes
 })
 
+// Función para rastrear y enviar la visita al servidor de TuCaja2
+async function rastrearVisitaWeb(toPath) {
+    try {
+        // 1. Detectar dispositivo (Móvil, Tablet o PC)
+        const ua = navigator.userAgent;
+        let dispositivo = 'Escritorio';
+        if (/mobile/i.test(ua)) dispositivo = 'Movil';
+        if (/tablet|ipad/i.test(ua)) dispositivo = 'Tablet';
+
+        // 2. Obtener la página que visitó y de dónde viene
+        const moduloVisitado = toPath || window.location.pathname; 
+        const referrer = document.referrer || 'Directo';
+
+        // 3. Obtener IP y Ubicación automáticamente (gratis y seguro)
+        const responseGeo = await fetch('https://ipapi.co/json/');
+        const geoData = await responseGeo.json();
+
+        // 4. Preparar todos los datos para enviarlos
+        const datosVisita = {
+            ip: geoData.ip || 'Desconocida',
+            ciudad: geoData.city || 'Desconocida',
+            pais: geoData.country_name || 'Desconocido',
+            modulo: moduloVisitado,
+            referrer: referrer,
+            dispositivo: dispositivo,
+            userAgent: ua
+        };
+
+        // 5. Enviar la señal silenciosa a tu servidor
+        // Apuntamos directo a producción como solicitaste
+        const URL_BACKEND = 'https://sistematce.com/api/visitas_web'; 
+        
+        await fetch(URL_BACKEND, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datosVisita)
+        });
+
+    } catch (error) {
+        console.error("Error silencioso al registrar la visita:", error);
+    }
+}
+
+// Disparar el rastreo automáticamente cada vez que el cliente cambia de página
+router.afterEach((to) => {
+    // Usamos setTimeout corto para no bloquear la navegación visual
+    setTimeout(() => {
+        rastrearVisitaWeb(to.path);
+    }, 100);
+});
+
 export default router
