@@ -7,7 +7,7 @@
     <ScrollToTop />
     <MenuMovil :isOpen="isOpen" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
     <PreguiaComp />
-    <ChatbotWidget /> <!-- <= AÑADE ESTA LÍNEA AQUÍ -->
+    <CustomChatbot />
 
     <Footer />
   </div>
@@ -21,7 +21,7 @@ import Footer from './components/Footer.vue'
 import PreguiaComp from './components/PreguiaComp.vue'
 import WhatsappButtom from './components/WhatsappButtom.vue'
 import ScrollToTop from './components/ScrollToTop.vue'
-import ChatbotWidget from './components/ChatbotWidget.vue' // <= AÑADE ESTA LÍNEA AQUÍ
+import CustomChatbot from './components/CustomChatbot.vue'
 
 const isOpen = ref(false)
 const toggleMenu = () => isOpen.value = !isOpen.value
