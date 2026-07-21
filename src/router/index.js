@@ -134,6 +134,8 @@ async function rastrearVisitaWeb(toPath) {
         // Apuntamos directo a producción como solicitaste
         const URL_BACKEND = 'https://sistematce.com/api/visitas_web'; 
         
+        console.log(`📡 [Visitas Web] Preparando envío del reporte para la ruta: ${moduloVisitado}`);
+        
         await fetch(URL_BACKEND, {
             method: 'POST',
             headers: {
@@ -141,6 +143,8 @@ async function rastrearVisitaWeb(toPath) {
             },
             body: JSON.stringify(datosVisita)
         });
+        
+        console.log(`✅ [Visitas Web] Reporte enviado con éxito para: ${moduloVisitado}`);
 
     } catch (error) {
         console.error("Error silencioso al registrar la visita:", error);
@@ -151,7 +155,8 @@ async function rastrearVisitaWeb(toPath) {
 router.afterEach((to) => {
     // Usamos setTimeout corto para no bloquear la navegación visual
     setTimeout(() => {
-        rastrearVisitaWeb(to.path);
+        // to.fullPath captura también si buscaron una guía (ej: /tracking-results?guide=12345)
+        rastrearVisitaWeb(to.fullPath);
     }, 100);
 });
 
