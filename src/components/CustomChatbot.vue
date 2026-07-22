@@ -268,7 +268,18 @@ const companyKnowledge = {
   seguro: '🛡️ **Seguro de Carga:**\n- **Regular:** 5% | **Mixta:** 15% | **Comercial:** 20%.'
 };
 
+// --- Generación / Recuperación de Web ID ---
+let webSessionId = '';
+
 onMounted(() => {
+  // Inicializar ID web
+  webSessionId = localStorage.getItem('tce_web_chat_id');
+  if (!webSessionId) {
+    webSessionId = 'web_' + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem('tce_web_chat_id', webSessionId);
+  }
+  userInfo.value.phone = webSessionId;
+
   setTimeout(() => {
     if (!isOpen.value) {
       showProactiveBubble.value = true;
@@ -321,7 +332,6 @@ function resetChat() {
 
 function getInputPlaceholder() {
   if (collectingInfo.value === 'name') return 'Escribe tu nombre completo...';
-  if (collectingInfo.value === 'phone') return 'Escribe tu teléfono (ej: +17045551234)...';
   if (isHumanMode.value) return 'Escribe tu mensaje para el asesor...';
   if (expectingGuide.value) return 'Escribe tu N° de guía en MAYÚSCULAS...';
   return 'Escribe tu mensaje o N° de guía...';
@@ -343,35 +353,6 @@ async function processUserMessage(userText, queryTag = null) {
   // Si estamos recolectando la información previa para conectar con un Asesor
   if (collectingInfo.value === 'name') {
     userInfo.value.name = userText;
-    collectingInfo.value = 'phone';
-
-    messages.value.push({ sender: 'user', text: userText, time: getCurrentTime() });
-    scrollToBottom();
-
-    setTimeout(() => {
-      messages.value.push({
-        sender: 'bot',
-        text: `¡Gracias, **${userText}**! 😊\n\nPor favor escribe tu **número de teléfono o WhatsApp** (con código de país ej: ` + '`+17045551234`' + `) para que nuestros agentes en **Tu Caja 2** identifiquen tu chat.`,
-        time: getCurrentTime()
-      });
-      scrollToBottom();
-    }, 500);
-    return;
-  }
-
-  if (collectingInfo.value === 'phone') {
-    const cleanPhone = userText.replace(/[^\d+]/g, '');
-    if (cleanPhone.length < 7) {
-      messages.value.push({
-        sender: 'bot',
-        text: '⚠️ Por favor escribe un número de teléfono válido con al menos 7 dígitos (ej: `+17049802879`).',
-        time: getCurrentTime()
-      });
-      scrollToBottom();
-      return;
-    }
-
-    userInfo.value.phone = cleanPhone;
     collectingInfo.value = false;
     isHumanMode.value = true;
 
