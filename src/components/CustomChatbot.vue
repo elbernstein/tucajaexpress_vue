@@ -202,7 +202,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import axios from 'axios';
 
 // Backend Base URL (Se usa la API centralizada o la URL relativa)
@@ -271,6 +271,24 @@ const companyKnowledge = {
 // --- Generación / Recuperación de Web ID ---
 let webSessionId = '';
 
+// --- Persistencia del Estado ---
+const saveChatState = () => {
+  try {
+    const stateToSave = {
+      isHumanMode: isHumanMode.value,
+      collectingInfo: collectingInfo.value,
+      userInfo: userInfo.value,
+      expectingGuide: expectingGuide.value,
+      isOpen: isOpen.value,
+      messages: messages.value,
+      lastKnownMessageIds: Array.from(lastKnownMessageIds)
+    };
+    sessionStorage.setItem('tce_chat_state', JSON.stringify(stateToSave));
+  } catch (e) {
+    console.error("Error saving chat state", e);
+  }
+};
+
 onMounted(() => {
   // Inicializar ID web
   webSessionId = localStorage.getItem('tce_web_chat_id');
@@ -278,7 +296,40 @@ onMounted(() => {
     webSessionId = 'web_' + Math.random().toString(36).substring(2, 10);
     localStorage.setItem('tce_web_chat_id', webSessionId);
   }
-  userInfo.value.phone = webSessionId;
+  
+  // Cargar estado previo si existe (para mantener chat vivo al refrescar F5)
+  const savedState = sessionStorage.getItem('tce_chat_state');
+  if (savedState) {
+    try {
+      const parsed = JSON.parse(savedState);
+      isHumanMode.value = parsed.isHumanMode || false;
+      collectingInfo.value = parsed.collectingInfo || false;
+      if (parsed.userInfo) userInfo.value = parsed.userInfo;
+      expectingGuide.value = parsed.expectingGuide || false;
+      isOpen.value = parsed.isOpen || false;
+      if (parsed.messages && parsed.messages.length > 0) {
+        messages.value = parsed.messages;
+      }
+      if (parsed.lastKnownMessageIds) {
+        lastKnownMessageIds = new Set(parsed.lastKnownMessageIds);
+      }
+      
+      // Si estábamos en modo humano y hay teléfono registrado, reanudamos el polling
+      if (isHumanMode.value && userInfo.value.phone) {
+        startPollingForAgentMessages();
+      }
+    } catch (e) {
+      console.error("Error loading chat state", e);
+      userInfo.value.phone = webSessionId;
+    }
+  } else {
+    userInfo.value.phone = webSessionId;
+  }
+
+  // Activar auto-guardado ante cualquier cambio de estado del chat
+  watch([isHumanMode, collectingInfo, userInfo, expectingGuide, isOpen, messages], () => {
+    saveChatState();
+  }, { deep: true });
 
   setTimeout(() => {
     if (!isOpen.value) {
