@@ -228,7 +228,7 @@ let lastKnownMessageIds = new Set();
 // --- Etapas del Viaje para Rastreo ---
 const journeyStages = [
   { key: 'generada',      label: 'Generada',     icon: 'fas fa-clipboard-list', keywords: ['generada en sistema', 'guia creada'] },
-  { key: 'recolecta',     label: 'Recolectado',   icon: 'fas fa-truck-moving',   keywords: ['recolectada de origen', 'recolectado', 'agregado a cedis'] },
+  { key: 'recolecta',     label: 'Recolectado',   icon: 'fas fa-truck-moving',   keywords: ['recolectada de origen', 'recolectado', 'agregado a cedis', 'agregado a trailer'] },
   { key: 'container',     label: 'Contenedor',   icon: 'fas fa-ship',           keywords: ['agregado a container', 'en contenedor'] },
   { key: 'aduana',        label: 'Aduanas',       icon: 'fas fa-passport',       keywords: ['transito aduana', 'tramites aduanales', 'revision aduanal'] },
   { key: 'bodega_destino',label: 'Bodega',        icon: 'fas fa-boxes-stacked',  keywords: ['en bodega para su distribucion', 'agregado deposito destino'] },
