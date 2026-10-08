@@ -23,14 +23,15 @@ import FormularioRecibo from '@/views/FormularioRecibo.vue'
 
 const routes = [
   { path: '/', name: 'inicio', component: InicioView },
-  { path: '/contactanos', name: 'Contactanos', component: Contactanos },
+  { path: '/contactanos', alias: '/contacto', name: 'Contactanos', component: Contactanos },
   { path: '/conocenos', name: 'Conocenos', component: Conocenos },
   { path: '/puerta-puerta', name: 'Puerta a Puerta', component: Puerta },
   { path: '/rutas', name: 'Rutas en EEUU', component: Rutas },
-  { path: '/gana', name: 'Gana Dinero Con Nosotros', component: Gana },
+  { path: '/gana', alias: '/aplicar-agente', name: 'Gana Dinero Con Nosotros', component: Gana },
   { path: '/calificanos', name: 'Calificanos', component: Calificanos },
   { path: '/politicas', name: 'Politicas', component: Politicas },
   { path: '/privacidad', name: 'Privacidad', component: Privacidad },
+  { path: '/rastreo', redirect: '/tracking-results' },
 
   {
     path: '/cotizar-form',
