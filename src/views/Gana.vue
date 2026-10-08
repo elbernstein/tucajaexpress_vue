@@ -1,289 +1,454 @@
 <template>
-  <div class="agent-application-page-v2">
-    <!-- Sección Hero (se mantiene igual) -->
-    <section class="application-hero-v2">
-      <div class="hero-overlay-v2"></div>
-      <div class="hero-content-v2 container">
-        <h1 class="hero-title-v2">Únete como <span class="highlight-v2">Agente Logístico</span> Asociado</h1>
-        <p class="hero-subtitle-v2">Expande tu negocio y genera ingresos extra con nuestra red de envíos.</p>
-        <div class="hero-cta-v2">
-          <a href="#application-form" class="cta-button-v2 scroll-to-form">
-            <i class="fas fa-rocket"></i> Iniciar Aplicación
+  <div class="agent-application-page">
+    <!-- 1. Hero Section Ultra-Premium -->
+    <section class="application-hero">
+      <div class="hero-bg-overlay"></div>
+      <div class="hero-glow-sphere sphere-1"></div>
+      <div class="hero-glow-sphere sphere-2"></div>
+
+      <div class="container hero-container">
+        <div class="hero-badge animate__animated animate__fadeInDown">
+          <span class="badge-icon">✨</span>
+          <span class="badge-text">Programa Oficial de Agentes • USA 2026</span>
+        </div>
+
+        <h1 class="hero-title animate__animated animate__fadeInUp">
+          Convierte tu Negocio en un <br>
+          <span class="gradient-text">Punto Oficial de Envíos</span>
+        </h1>
+
+        <p class="hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">
+          Monetiza el espacio de tu tienda latina o negocio en EE.UU. Ofrece envíos puerta a puerta a México y Centroamérica sin inventarios, sin inversión inicial y con comisiones directas.
+        </p>
+
+        <div class="hero-cta-group animate__animated animate__fadeInUp animate__delay-1s">
+          <a href="#application-form" class="btn-primary-glow scroll-to-form">
+            <i class="fas fa-rocket"></i> Solicitar Registro de Agente
+          </a>
+          <a href="#beneficios" class="btn-secondary-glass scroll-to-form">
+            <i class="fas fa-gift"></i> Ver Beneficios
           </a>
         </div>
+
       </div>
     </section>
 
-    <!-- Sección Beneficios (se mantiene igual) -->
-    <section class="benefits-section-v2 section-padding-v2">
+    <!-- 2. Sección Beneficios (Tarjetas Modernas con Glassmorphism) -->
+    <section id="beneficios" class="benefits-section">
       <div class="container">
-        <div class="section-header-v2">
-          <span class="section-tagline-v2">Ventajas Clave</span>
-          <h2 class="section-title-v2">¿Por Qué Ser Nuestro Agente?</h2>
+        <div class="section-badge-center">
+          <span>Ventajas Exclusivas</span>
         </div>
-        <div class="benefits-grid-v2">
-          <div class="benefit-card-v2">
-            <div class="benefit-icon-v2"><i class="fas fa-dollar-sign"></i></div>
-            <h3 class="benefit-title-v2">Nuevos Ingresos</h3>
-            <p class="benefit-description-v2">Obtén comisiones atractivas por cada paquete gestionado.</p>
+        <h2 class="section-title-dark text-center">
+          ¿Por Qué Tu Tienda Debería Ser Punto Autorizado?
+        </h2>
+        <p class="section-subtitle text-center">
+          Ofrecemos el respaldo de una empresa consolidada en transporte terrestre y marítimo hacia México y Centroamérica.
+        </p>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="card-glow glow-blue"></div>
+            <div class="card-icon-bubble">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <span class="benefit-tag">Ingresos Directos</span>
+            <h3 class="benefit-card-title">Comisiones Atractivas</h3>
+            <p class="benefit-card-text">
+              Gana comisiones netas por cada caja recibida y gestionada en tu establecimiento, sin arriesgar tu propio capital.
+            </p>
           </div>
-          <div class="benefit-card-v2">
-            <div class="benefit-icon-v2"><i class="fas fa-map-marker-alt"></i></div>
-            <h3 class="benefit-title-v2">Más Tráfico Local</h3>
-            <p class="benefit-description-v2">Atrae clientes a tu local que buscan nuestros servicios.</p>
+
+          <div class="benefit-card">
+            <div class="card-glow glow-red"></div>
+            <div class="card-icon-bubble icon-red">
+              <i class="fas fa-users"></i>
+            </div>
+            <span class="benefit-tag tag-red">Tráfico de Clientes</span>
+            <h3 class="benefit-card-title">Nuevos Clientes a tu Local</h3>
+            <p class="benefit-card-text">
+              La comunidad hispana visitará tu negocio para enviar paquetes, aumentando tus ventas cruzadas de comestibles, servicios y más.
+            </p>
           </div>
-          <div class="benefit-card-v2">
-            <div class="benefit-icon-v2"><i class="fas fa-headset"></i></div>
-            <h3 class="benefit-title-v2">Soporte Dedicado</h3>
-            <p class="benefit-description-v2">Te brindamos capacitación, herramientas y asistencia continua.</p>
+
+          <div class="benefit-card">
+            <div class="card-glow glow-purple"></div>
+            <div class="card-icon-bubble icon-purple">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <span class="benefit-tag tag-purple">Tecnología Incluida</span>
+            <h3 class="benefit-card-title">Plataforma Logística Fácil</h3>
+            <p class="benefit-card-text">
+              Accede a nuestro sistema para registrar recibos, emitir guías y consultar estatus en tiempo real desde tu teléfono o computadora.
+            </p>
           </div>
-          <div class="benefit-card-v2">
-            <div class="benefit-icon-v2"><i class="fas fa-handshake"></i></div>
-            <h3 class="benefit-title-v2">Asociación Fácil</h3>
-            <p class="benefit-description-v2">Integración simple, sin inventarios complicados ni grandes inversiones.</p>
+
+          <div class="benefit-card">
+            <div class="card-glow glow-green"></div>
+            <div class="card-icon-bubble icon-green">
+              <i class="fas fa-bullhorn"></i>
+            </div>
+            <span class="benefit-tag tag-green">Publicidad Gratuita</span>
+            <h3 class="benefit-card-title">Material de Marketing</h3>
+            <p class="benefit-card-text">
+              Te entregamos letreros publicitarios, banners, folletos promocionales y cajas oficiales para señalizar tu negocio como punto oficial.
+            </p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="card-glow glow-blue"></div>
+            <div class="card-icon-bubble">
+              <i class="fas fa-truck-pickup"></i>
+            </div>
+            <span class="benefit-tag">Recolección Semanal</span>
+            <h3 class="benefit-card-title">Rutas Programadas</h3>
+            <p class="benefit-card-text">
+              Nuestros camiones oficiales recogen la carga puntualmente cada semana en tu tienda para transportarla directo a aduana y destino.
+            </p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="card-glow glow-red"></div>
+            <div class="card-icon-bubble icon-red">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <span class="benefit-tag tag-red">Acompañamiento VIP</span>
+            <h3 class="benefit-card-title">Asesor Dedicado</h3>
+            <p class="benefit-card-text">
+              Cuentas con una línea directa de atención y capacitación para ti y tus empleados, resolviendo cualquier consulta en minutos.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sección Cómo Funciona (se mantiene igual) -->
-    <section class="how-it-works-v2 section-padding-v2 bg-light-v2">
+    <!-- 4. Sección Paso a Paso (Roadmap Moderno) -->
+    <section class="process-section">
       <div class="container">
-        <div class="section-header-v2">
-          <span class="section-tagline-v2">Paso a Paso</span>
-          <h2 class="section-title-v2">El Proceso para Unirte</h2>
+        <div class="section-badge-center">
+          <span>Proceso Simple</span>
         </div>
-        <div class="process-timeline-v2">
-          <div class="timeline-item-v2">
-            <div class="timeline-icon-v2"><i class="fas fa-file-alt"></i></div>
-            <div class="timeline-content-v2">
-              <span class="timeline-step-v2">Paso 1</span>
-              <h3 class="timeline-title-v2">Completa la Solicitud</h3>
-              <p class="timeline-description-v2">Llena nuestro formulario en línea con los datos de tu negocio.</p>
-            </div>
+        <h2 class="section-title-dark text-center">
+          Tu Camino para Convertirte en Agente
+        </h2>
+        <p class="section-subtitle text-center">
+          En 4 sencillos pasos comenzarás a recibir envíos y generar ganancias.
+        </p>
+
+        <div class="process-cards-grid">
+          <div class="process-step-card">
+            <div class="step-badge">01</div>
+            <div class="step-icon"><i class="fas fa-file-signature"></i></div>
+            <h4 class="step-title">Envía tu Solicitud</h4>
+            <p class="step-desc">Llena el formulario con los datos de tu negocio y la ubicación de tu local.</p>
           </div>
-          <div class="timeline-item-v2">
-            <div class="timeline-icon-v2"><i class="fas fa-search"></i></div>
-            <div class="timeline-content-v2">
-              <span class="timeline-step-v2">Paso 2</span>
-              <h3 class="timeline-title-v2">Evaluación Rápida</h3>
-              <p class="timeline-description-v2">Revisamos tu perfil y te contactamos en pocos días hábiles.</p>
-            </div>
+
+          <div class="process-step-card">
+            <div class="step-badge">02</div>
+            <div class="step-icon"><i class="fas fa-user-check"></i></div>
+            <h4 class="step-title">Validación Rápida</h4>
+            <p class="step-desc">Nuestro equipo revisa tu solicitud y valida tu zona de cobertura en menos de 24 horas.</p>
           </div>
-          <div class="timeline-item-v2">
-            <div class="timeline-icon-v2"><i class="fas fa-chalkboard-teacher"></i></div>
-            <div class="timeline-content-v2">
-              <span class="timeline-step-v2">Paso 3</span>
-              <h3 class="timeline-title-v2">Capacitación Inicial</h3>
-              <p class="timeline-description-v2">Te entrenamos en nuestros sistemas y buenas prácticas.</p>
-            </div>
+
+          <div class="process-step-card">
+            <div class="step-badge">03</div>
+            <div class="step-icon"><i class="fas fa-boxes"></i></div>
+            <h4 class="step-title">Recibe tu Kit</h4>
+            <p class="step-desc">Te enviamos publicidad oficial, stock de cajas y te capacitamos en el sistema.</p>
           </div>
-          <div class="timeline-item-v2">
-            <div class="timeline-icon-v2"><i class="fas fa-flag-checkered"></i></div>
-            <div class="timeline-content-v2">
-              <span class="timeline-step-v2">Paso 4</span>
-              <h3 class="timeline-title-v2">¡Listo para Empezar!</h3>
-              <p class="timeline-description-v2">Recibes tu kit de bienvenida y empiezas a operar.</p>
-            </div>
+
+          <div class="process-step-card highlight-step">
+            <div class="step-badge">04</div>
+            <div class="step-icon"><i class="fas fa-trophy"></i></div>
+            <h4 class="step-title">¡Empieza a Ganar!</h4>
+            <p class="step-desc">Recibe paquetes de tus clientes locales y cobra tus comisiones de inmediato.</p>
           </div>
         </div>
       </div>
     </section>
 
-
-    <!-- NUEVA SECCIÓN DE FORMULARIO MEJORADA -->
-    <section id="application-form" class="application-form-section-v2 section-padding-v2">
+    <!-- 5. Formulario de Aplicación Ultra-Moderno -->
+    <section id="application-form" class="application-form-section">
       <div class="container">
-        <div class="section-header-v2">
-          <span class="section-tagline-v2">Da el Primer Paso</span>
-          <h2 class="section-title-v2">Únete a Nuestra Red</h2>
-          <p class="section-subtitle-v2">Completa el formulario y nos pondremos en contacto contigo en menos de 24 horas</p>
-        </div>
-        
-        <div class="form-wrapper-v2">
-          <div class="form-decoration-v2">
-            <div class="decoration-circle-v2 circle-1"></div>
-            <div class="decoration-circle-v2 circle-2"></div>
-            <img src="/images/form-illustration.svg" alt="Ilustración formulario" class="form-illustration-v2">
-          </div>
-          
-          <div class="form-container-v2">
-            <form @submit.prevent="submitApplication" class="agent-application-form-v2">
-              <div class="form-header-v2">
-                <div class="form-progress-v2">
-                  <div class="progress-step-v2 active">1</div>
-                  <div class="progress-line-v2"></div>
-                  <div class="progress-step-v2">2</div>
-                  <div class="progress-line-v2"></div>
-                  <div class="progress-step-v2">3</div>
-                </div>
-                <h3 class="form-step-title-v2">Información Básica</h3>
+        <div class="form-outer-wrapper">
+          <!-- Columna Izquierda: Información de Valor & Testimonio -->
+          <div class="form-side-info">
+            <div class="side-badge">
+              <i class="fas fa-check-circle"></i> Registro Rápido
+            </div>
+            <h3 class="side-title">
+              Inicia Hoy Mismo tu Afiliación
+            </h3>
+            <p class="side-text">
+              Únete a la red líder de paquetería familiar hacia México, Guatemala, El Salvador, Honduras y Nicaragua.
+            </p>
+
+            <div class="side-perks-list">
+              <div class="perk-item">
+                <i class="fas fa-check"></i>
+                <span>Sin costos ocultos ni mensualidades fijas</span>
               </div>
-              
-              <div class="form-grid-v2">
-                <div class="form-group-v2">
+              <div class="perk-item">
+                <i class="fas fa-check"></i>
+                <span>Cajas gratis para tus primeros envíos</span>
+              </div>
+              <div class="perk-item">
+                <i class="fas fa-check"></i>
+                <span>Presencia en nuestro mapa y directorio web</span>
+              </div>
+              <div class="perk-item">
+                <i class="fas fa-check"></i>
+                <span>Soporte al cliente y rastreo automatizado</span>
+              </div>
+            </div>
+
+            <!-- Mini Testimonio destacado -->
+            <div class="side-quote-card">
+              <div class="stars-row">
+                <i class="fas fa-star" v-for="s in 5" :key="s"></i>
+              </div>
+              <p class="quote-text">
+                "Poner el punto de Tu Caja Express aumentó las visitas a mi tienda en más de un 40%. La gente viene a enviar y aprovecha para hacer sus compras."
+              </p>
+              <div class="quote-author">
+                <img src="/images/testimonial-1.jpg" alt="Carlos M." class="author-avatar" />
+                <div>
+                  <strong>Carlos Morales</strong>
+                  <small>Tienda La Mexicana • Charlotte, NC</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Tarjeta del Formulario -->
+          <div class="form-main-card">
+            <div class="form-card-header">
+              <div class="form-header-text">
+                <h3>Formulario de Registro de Agente</h3>
+                <p>Completa los campos marcados con (*) para iniciar el proceso</p>
+              </div>
+              <div class="ssl-badge">
+                <i class="fas fa-lock"></i> SSL Seguro
+              </div>
+            </div>
+
+            <form @submit.prevent="submitApplication" class="agent-form">
+              <div class="form-grid">
+                <!-- Nombre del Negocio -->
+                <div class="form-field">
                   <label for="business-name">
-                    <i class="fas fa-store"></i> Nombre del Negocio*
+                    <i class="fas fa-store"></i> Nombre del Negocio *
                   </label>
-                  <input type="text" id="business-name" v-model="form.businessName" required placeholder="Ej: Mi Tienda Local">
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="text" 
+                      id="business-name" 
+                      v-model="form.businessName" 
+                      required 
+                      placeholder="Ej: Tienda La Bendición"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Tipo de Negocio -->
+                <div class="form-field">
                   <label for="business-type">
-                    <i class="fas fa-tags"></i> Tipo de Negocio*
+                    <i class="fas fa-tags"></i> Tipo de Comercio *
                   </label>
-                  <div class="custom-select-v2">
+                  <div class="select-wrapper">
                     <select id="business-type" v-model="form.businessType" required>
                       <option value="" disabled selected>Selecciona tu tipo de negocio</option>
-                      <option value="tienda">Tienda de Abarrotes</option>
-                      <option value="restaurante">Restaurante/Café</option>
-                      <option value="farmacia">Farmacia</option>
-                      <option value="lavanderia">Lavandería</option>
-                      <option value="otros">Otro tipo de negocio</option>
+                      <option value="tienda">Tienda / Abarrotes / Supermercado</option>
+                      <option value="restaurante">Restaurante / Panadería / Taquería</option>
+                      <option value="envios">Agencia de Envíos / Remesas</option>
+                      <option value="farmacia">Farmacia / Botánica</option>
+                      <option value="servicios">Servicios Múltiples / Impuestos</option>
+                      <option value="otros">Otro Tipo de Local Comercial</option>
                     </select>
-                    <div class="select-arrow-v2">
-                      <i class="fas fa-chevron-down"></i>
-                    </div>
+                    <i class="fas fa-chevron-down select-icon"></i>
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Nombre del Contacto -->
+                <div class="form-field">
                   <label for="contact-name">
-                    <i class="fas fa-user"></i> Nombre del Contacto*
+                    <i class="fas fa-user"></i> Nombre del Propietario / Encargado *
                   </label>
-                  <input type="text" id="contact-name" v-model="form.contactName" required placeholder="Tu nombre completo">
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="text" 
+                      id="contact-name" 
+                      v-model="form.contactName" 
+                      required 
+                      placeholder="Tu nombre y apellido"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Teléfono -->
+                <div class="form-field">
                   <label for="phone">
-                    <i class="fas fa-phone-alt"></i> Teléfono*
+                    <i class="fas fa-phone-alt"></i> Teléfono Móvil / WhatsApp *
                   </label>
-                  <input type="tel" id="phone" v-model="form.phone" required placeholder="Ej: +1 (555) 123-4567">
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="tel" 
+                      id="phone" 
+                      v-model="form.phone" 
+                      required 
+                      placeholder="Ej: (704) 555-0192"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Correo Electrónico -->
+                <div class="form-field full-width">
                   <label for="email">
-                    <i class="fas fa-envelope"></i> Correo Electrónico*
+                    <i class="fas fa-envelope"></i> Correo Electrónico *
                   </label>
-                  <input type="email" id="email" v-model="form.email" required placeholder="tu@negocio.com">
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="email" 
+                      id="email" 
+                      v-model="form.email" 
+                      required 
+                      placeholder="contacto@tunegocio.com"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
-                  <label for="years-in-business">
-                    <i class="fas fa-calendar-alt"></i> Años en Operación*
-                  </label>
-                  <div class="range-input-v2">
-                    <input type="range" id="years-in-business" v-model.number="form.yearsInBusiness" min="0" max="20" step="1" required>
-                    <div class="range-value-v2">{{ form.yearsInBusiness }} {{ form.yearsInBusiness === 1 ? 'año' : 'años' }}</div>
+
+                <!-- Años en Operación -->
+                <div class="form-field full-width">
+                  <div class="slider-field-header">
+                    <label for="years-in-business">
+                      <i class="fas fa-calendar-check"></i> Tiempo con el Negocio Abierto
+                    </label>
+                    <span class="years-counter">{{ form.yearsInBusiness }} {{ form.yearsInBusiness === 1 ? 'año' : 'años' }}</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    id="years-in-business" 
+                    v-model.number="form.yearsInBusiness" 
+                    min="0" 
+                    max="20" 
+                    step="1"
+                    class="years-slider"
+                  />
+                  <div class="slider-marks">
+                    <span>Recién inaugurado (0)</span>
+                    <span>5 años</span>
+                    <span>10 años</span>
+                    <span>20+ años</span>
                   </div>
                 </div>
-                
-                <div class="form-group-v2 full-span-v2">
+
+                <!-- Dirección Completa -->
+                <div class="form-field full-width">
                   <label for="address">
-                    <i class="fas fa-map-marker-alt"></i> Dirección Completa*
+                    <i class="fas fa-map-marker-alt"></i> Dirección Física del Local *
                   </label>
-                  <input type="text" id="address" v-model="form.address" required placeholder="Calle, Número, Colonia/Barrio">
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="text" 
+                      id="address" 
+                      v-model="form.address" 
+                      required 
+                      placeholder="Calle, número, suite o local"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Ciudad -->
+                <div class="form-field">
                   <label for="city">
-                    <i class="fas fa-city"></i> Ciudad*
+                    <i class="fas fa-city"></i> Ciudad *
                   </label>
-                  <input type="text" id="city" v-model="form.city" required>
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="text" 
+                      id="city" 
+                      v-model="form.city" 
+                      required 
+                      placeholder="Ej: Charlotte"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Estado -->
+                <div class="form-field">
                   <label for="state">
-                    <i class="fas fa-map"></i> Estado/Departamento*
+                    <i class="fas fa-map"></i> Estado *
                   </label>
-                  <input type="text" id="state" v-model="form.state" required>
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="text" 
+                      id="state" 
+                      v-model="form.state" 
+                      required 
+                      placeholder="Ej: NC, GA, FL, SC, etc."
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2">
+
+                <!-- Código Postal -->
+                <div class="form-field">
                   <label for="zip">
-                    <i class="fas fa-mail-bulk"></i> Código Postal*
+                    <i class="fas fa-mail-bulk"></i> Código Postal (ZIP) *
                   </label>
-                  <input type="text" id="zip" v-model="form.zip" required>
-                  <div class="input-icon-v2">
-                    <i class="fas fa-check-circle"></i>
+                  <div class="input-wrapper">
+                    <input 
+                      type="text" 
+                      id="zip" 
+                      v-model="form.zip" 
+                      required 
+                      placeholder="Ej: 28206"
+                    />
                   </div>
                 </div>
-                
-                <div class="form-group-v2 full-span-v2">
+
+                <!-- ¿Por qué unirse? -->
+                <div class="form-field full-width">
                   <label for="why-join">
-                    <i class="fas fa-question-circle"></i> ¿Por qué quieres unirte a nuestra red?*
+                    <i class="fas fa-question-circle"></i> ¿Por qué te gustaría unirte a nuestra red? *
                   </label>
-                  <textarea id="why-join" v-model="form.whyJoin" rows="4" required placeholder="Describe brevemente tu interés en asociarte con nosotros..."></textarea>
-                  <div class="char-counter-v2">{{ 250 - form.whyJoin.length }} caracteres restantes</div>
+                  <textarea 
+                    id="why-join" 
+                    v-model="form.whyJoin" 
+                    rows="3" 
+                    required 
+                    placeholder="Cuéntanos brevemente sobre tu negocio y tu interés en ofrecer paquetería..."
+                  ></textarea>
                 </div>
-                
-                <div class="form-group-v2 full-span-v2">
-                  <label for="additional-info">
-                    <i class="fas fa-info-circle"></i> Información Adicional (Opcional)
-                  </label>
-                  <textarea id="additional-info" v-model="form.additionalInfo" rows="3" placeholder="Horarios de atención, servicios adicionales que ofreces, etc."></textarea>
-                </div>
-                
-                <div class="form-group-v2 full-span-v2">
-                  <div class="upload-area-v2" @click="triggerFileUpload" @dragover.prevent="dragOver" @drop.prevent="handleDrop">
-                    <input type="file" id="business-photo" ref="fileInput" @change="handleFileUpload" style="display: none;" accept="image/*">
-                    <div class="upload-content-v2">
-                      <i class="fas fa-cloud-upload-alt"></i>
-                      <h4>Sube una foto de tu negocio</h4>
-                      <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
-                      <div class="file-preview-v2" v-if="uploadedFile">
-                        <img :src="uploadedFilePreview" alt="Vista previa">
-                        <button @click.stop="removeFile" class="remove-file-v2">
-                          <i class="fas fa-times"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="form-group-v2 full-span-v2 terms-group-v2">
-                  <input type="checkbox" id="terms" v-model="form.termsAccepted" required>
-                  <label for="terms">
-                    Acepto los <a href="/terminos" target="_blank">Términos y Condiciones</a> y la <a href="/privacidad" target="_blank">Política de Privacidad</a>*
+
+                <!-- Términos y Condiciones -->
+                <div class="form-field full-width terms-field">
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="terms" v-model="form.termsAccepted" required />
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-label">
+                      Acepto los <router-link to="/politicas" target="_blank">Términos del Servicio</router-link> y la <router-link to="/privacidad" target="_blank">Política de Privacidad</router-link> de Tu Caja Express *
+                    </span>
                   </label>
                 </div>
               </div>
 
-              <div class="form-footer-v2">
-                <button type="submit" class="submit-button-v2" :disabled="isSubmitting">
+              <!-- Botón Submit -->
+              <div class="form-submit-wrapper">
+                <button 
+                  type="submit" 
+                  class="btn-submit-app" 
+                  :disabled="isSubmitting"
+                >
                   <span v-if="!isSubmitting">
-                    <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                    <i class="fas fa-paper-plane me-2"></i> Enviar Solicitud de Agente
                   </span>
                   <span v-else>
-                    <i class="fas fa-spinner fa-spin"></i> Procesando...
+                    <i class="fas fa-spinner fa-spin me-2"></i> Procesando Solicitud...
                   </span>
                 </button>
-                
-                <div class="form-security-v2">
-                  <i class="fas fa-lock"></i>
-                  <span>Tus datos están protegidos con encriptación SSL</span>
-                </div>
+                <p class="submit-note">
+                  <i class="fas fa-shield-alt"></i> Tus datos son confidenciales y solo se utilizarán para evaluar tu solicitud comercial.
+                </p>
               </div>
             </form>
           </div>
@@ -291,35 +456,64 @@
       </div>
     </section>
 
-    <!-- Sección Testimonios (se mantiene igual) -->
-    <section class="testimonials-section-v2 section-padding-v2 bg-light-v2">
+    <!-- 6. Testimonios Reales -->
+    <section class="testimonials-section">
       <div class="container">
-        <div class="section-header-v2">
-          <span class="section-tagline-v2">Voces de Éxito</span>
-          <h2 class="section-title-v2">La Experiencia de Nuestros Agentes</h2>
+        <div class="section-badge-center">
+          <span>Casos de Éxito</span>
         </div>
-        <div class="testimonials-grid-v2">
-          <div class="testimonial-card-v2">
-            <div class="testimonial-content-v2">
-              <p class="testimonial-text-v2">"Desde que somos agentes, las ventas cruzadas en nuestra tienda han subido notablemente. ¡Muy recomendado!"</p>
+        <h2 class="section-title-dark text-center">
+          Lo que Dicen Nuestros Puntos Aliados
+        </h2>
+        <p class="section-subtitle text-center">
+          Conoce la experiencia de otros dueños de negocios en Estados Unidos.
+        </p>
+
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star" v-for="s in 5" :key="s"></i>
             </div>
-            <div class="testimonial-author-v2">
-              <img src="/images/testimonial-1.jpg" alt="Carlos M." class="author-image-v2">
-              <div class="author-info-v2">
-                <h4 class="author-name-v2">Carlos M.</h4>
-                <p class="author-location-v2">Tienda La Mexicana, Charlotte NC</p>
+            <p class="testimonial-body">
+              "Desde que habilitamos el servicio de Tu Caja Express, las ventas generales de mi supermercado crecieron un 35%. Es un flujo continuo de familias que vienen cada semana."
+            </p>
+            <div class="testimonial-user">
+              <img src="/images/testimonial-1.jpg" alt="Carlos Morales" />
+              <div>
+                <h5>Carlos Morales</h5>
+                <span>Tienda La Mexicana • Charlotte, NC</span>
               </div>
             </div>
           </div>
-          <div class="testimonial-card-v2">
-            <div class="testimonial-content-v2">
-              <p class="testimonial-text-v2">"El soporte técnico es rápido y eficiente. La plataforma es fácil de usar. Ser agente nos ha traído muchos clientes nuevos."</p>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star" v-for="s in 5" :key="s"></i>
             </div>
-            <div class="testimonial-author-v2">
-              <img src="/images/testimonial-2.jpg" alt="Andrés G." class="author-image-v2">
-              <div class="author-info-v2">
-                <h4 class="author-name-v2">Andrés G.</h4>
-                <p class="author-location-v2">Mercadito Centroamericano, Atlanta</p>
+            <p class="testimonial-body">
+              "El sistema para registrar las cajas es súper fácil. Lo manejo desde una tablet en el mostrador y las recolecciones de los choferes son siempre puntuales."
+            </p>
+            <div class="testimonial-user">
+              <img src="/images/testimonial-2.jpg" alt="Andrés Gómez" />
+              <div>
+                <h5>Andrés Gómez</h5>
+                <span>Mercadito Centroamericano • Atlanta, GA</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star" v-for="s in 5" :key="s"></i>
+            </div>
+            <p class="testimonial-body">
+              "Excelente soporte. Nos dieron banners, cajas y capacitación sin cobrarnos un solo dólar. Es el mejor ingreso extra que hemos agregado a nuestra panadería."
+            </p>
+            <div class="testimonial-user">
+              <img src="/images/testimonial-3.jpg" alt="Marta Rivas" />
+              <div>
+                <h5>Marta Rivas</h5>
+                <span>Panadería Mi Tierra • Greenville, SC</span>
               </div>
             </div>
           </div>
@@ -327,22 +521,34 @@
       </div>
     </section>
 
-    <!-- Sección FAQ (se mantiene igual) -->
-    <section class="faq-section-v2 section-padding-v2">
+    <!-- 7. Preguntas Frecuentes (FAQ) -->
+    <section class="faq-section">
       <div class="container">
-        <div class="section-header-v2">
-          <span class="section-tagline-v2">Resolvemos tus Dudas</span>
-          <h2 class="section-title-v2">Preguntas Frecuentes</h2>
+        <div class="section-badge-center">
+          <span>Preguntas Frecuentes</span>
         </div>
-        <div class="faq-accordion-v2">
-          <div class="faq-item-v2" v-for="(faq, index) in faqs" :key="index" @click="toggleFaq(index)">
-            <div class="faq-question-v2">
-              <h3>{{ faq.question }}</h3>
-              <div class="faq-icon-v2">
+        <h2 class="section-title-dark text-center">
+          ¿Tienes Preguntas? Te Respondemos
+        </h2>
+        <p class="section-subtitle text-center">
+          Todo lo que necesitas saber antes de dar el paso.
+        </p>
+
+        <div class="faq-accordion-wrapper">
+          <div 
+            v-for="(faq, index) in faqs" 
+            :key="index" 
+            class="faq-box"
+            :class="{ 'is-open': faq.open }"
+            @click="toggleFaq(index)"
+          >
+            <div class="faq-header">
+              <h4>{{ faq.question }}</h4>
+              <div class="faq-toggle-icon">
                 <i class="fas" :class="faq.open ? 'fa-minus' : 'fa-plus'"></i>
               </div>
             </div>
-            <div class="faq-answer-v2" :class="{ 'open': faq.open }">
+            <div class="faq-content" v-if="faq.open">
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -350,15 +556,19 @@
       </div>
     </section>
 
-    <!-- Sección CTA Final (se mantiene igual) -->
-    <section class="final-cta-section-v2">
-      <div class="container">
-        <div class="cta-content-v2">
-          <h2 class="cta-title-v2">¿Preparado para Crecer con Nosotros?</h2>
-          <p class="cta-text-v2">No esperes más. Envía tu solicitud y forma parte de nuestra exitosa red de agentes.</p>
-          <a href="#application-form" class="cta-button-v2 scroll-to-form">
-            <i class="fas fa-pen-alt"></i> Aplicar Ahora Mismo
+    <!-- 8. CTA Final de Cierre -->
+    <section class="final-cta-section">
+      <div class="cta-glow"></div>
+      <div class="container cta-container">
+        <h2>¿Listo para Convertirte en Agente de Tu Caja Express?</h2>
+        <p>No esperes más. Envía tu formulario en 2 minutos y forma parte de nuestra exitosa red logística.</p>
+        <div class="cta-buttons-row">
+          <a href="#application-form" class="btn-primary-glow scroll-to-form">
+            <i class="fas fa-file-alt"></i> Completar Solicitud Ahora
           </a>
+          <router-link to="/conocenos" class="btn-secondary-glass">
+            <i class="fas fa-info-circle"></i> Conocer Más Sobre Nosotros
+          </router-link>
         </div>
       </div>
     </section>
@@ -366,1042 +576,1138 @@
 </template>
 
 <script>
-import Swiper from 'swiper';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://sistematce.com';
+const API_TOKEN = import.meta.env.VITE_API_TOKEN || 'TCE_PUBLIC_WEB_TOKEN_2026';
 
 export default {
   name: 'AgentApplicationV2',
   data() {
     return {
+      // Formulario
       form: {
         businessName: '',
         businessType: '',
         contactName: '',
         phone: '',
         email: '',
-        yearsInBusiness: 1,
+        yearsInBusiness: 2,
         address: '',
         city: '',
         state: '',
         zip: '',
         whyJoin: '',
-        additionalInfo: '',
         termsAccepted: false
       },
-      uploadedFile: null,
-      uploadedFilePreview: null,
       isSubmitting: false,
+
+      // Preguntas frecuentes
       faqs: [
-        { question: '¿Cuáles son los requisitos para ser agente?', answer: 'Necesitas tener un negocio establecido con local físico, identificación válida y estar dispuesto a cumplir con nuestros estándares de servicio.', open: false },
-        { question: '¿Cuánto cuesta unirse al programa?', answer: 'El costo de inicio es mínimo y depende del paquete que elijas. Contáctanos para más detalles sobre nuestras opciones.', open: false },
-        { question: '¿Qué tipo de capacitación recibiré?', answer: 'Proporcionamos entrenamiento completo sobre nuestros sistemas, procesos de empaque, manejo de envíos y atención al cliente.', open: false },
-        { question: '¿Cómo y cuándo recibo mis comisiones?', answer: 'Las comisiones se pagan cuando tengas envios por recolectar, depende del tamano de la caja sera el monto de la comision.', open: false },
-        { question: '¿Necesito tener experiencia previa en logística?', answer: 'No es necesario. Nuestro programa de capacitación está diseñado para que cualquier dueño de negocio pueda operar exitosamente como agente.', open: false }
-      ],
-      agencies: [
-        { id: 1, name: 'Tienda La Bendición', location: 'Miami, FL', imageUrl: '/images/agencias/agencia-1.jpg' },
-        { id: 2, name: 'Supermercado El Sol', location: 'Queens, NY', imageUrl: '/images/agencias/agencia-2.jpg' },
-        { id: 3, name: 'Restaurante Mi Tierra', location: 'Chicago, IL', imageUrl: '/images/agencias/agencia-3.jpg' },
-        { id: 4, name: 'Servicios Rápidos', location: 'Los Angeles, CA', imageUrl: '/images/agencias/agencia-4.jpg' },
-        { id: 5, name: 'Bodega Don José', location: 'Houston, TX', imageUrl: '/images/agencias/agencia-5.jpg' },
-      ],
-      agenciesSwiperInstance: null
-    }
+        { 
+          question: '¿Cuáles son los requisitos principales para ser agente autorizado?', 
+          answer: 'Tener un negocio o local físico establecido en Estados Unidos (tienda, restaurante, envíos, etc.), contar con espacio para ubicar las cajas temporalmente y una identificación válida.', 
+          open: false 
+        },
+        { 
+          question: '¿Tiene algún costo de inscripción o mensualidad?', 
+          answer: 'No. El ingreso al programa es totalmente gratuito. Te proporcionamos la señalización de marca, el material publicitario y las cajas iniciales sin costo.', 
+          open: false 
+        },
+        { 
+          question: '¿Cómo y cuándo se pagan las comisiones?', 
+          answer: 'Las comisiones son directas y se liquidan puntualmente por cada caja procesada y entregada al camión de recolección semanal.', 
+          open: false 
+        },
+        { 
+          question: '¿Con qué frecuencia pasan los camiones a recolectar?', 
+          answer: 'Contamos con rutas semanales fijas en Carolina del Norte, Carolina del Sur, Georgia, Florida, Virginia, Tennessee, Alabama, Kentucky, entre otros estados.', 
+          open: false 
+        },
+        { 
+          question: '¿Necesito experiencia previa en logística o paquetería?', 
+          answer: 'No se requiere experiencia. Nuestro equipo te capacita en 30 minutos sobre el uso del sistema web para registrar recibos y etiquetar las cajas fácilmente.', 
+          open: false 
+        }
+      ]
+    };
   },
   methods: {
-    triggerFileUpload() {
-      this.$refs.fileInput.click();
-    },
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.uploadedFile = file;
-        this.previewFile(file);
-      }
-    },
-    handleDrop(event) {
-      const file = event.dataTransfer.files[0];
-      if (file && file.type.match('image.*')) {
-        this.uploadedFile = file;
-        this.previewFile(file);
-      }
-    },
-    dragOver(event) {
-      event.currentTarget.classList.add('dragover');
-    },
-    previewFile(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.uploadedFilePreview = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-    removeFile() {
-      this.uploadedFile = null;
-      this.uploadedFilePreview = null;
-      this.$refs.fileInput.value = '';
-    },
-    submitApplication() {
+    async submitApplication() {
       this.isSubmitting = true;
-      
-      // Simulación de envío
-      setTimeout(() => {
-        console.log('Formulario enviado:', this.form);
-        if (this.uploadedFile) {
-          console.log('Archivo adjunto:', this.uploadedFile.name);
-        }
-        
-        // Mostrar mensaje de éxito
-        this.$swal({
-          title: '¡Solicitud Enviada!',
-          text: 'Hemos recibido tu aplicación. Nos pondremos en contacto contigo en menos de 24 horas.',
-          icon: 'success',
-          confirmButtonText: 'Entendido',
-          confirmButtonColor: '#0D9488',
-          backdrop: `
-            rgba(13,148,136,0.4)
-            url("/images/confetti.gif")
-            center top
-            no-repeat
-          `
+
+      try {
+        const payload = {
+          ...this.form,
+          origen: 'web_formulario_agente'
+        };
+
+        const response = await axios.post(`${BACKEND_BASE_URL}/api/agenteautorizado_new`, payload, {
+          headers: {
+            'Authorization': `Bearer ${API_TOKEN}`,
+            'Content-Type': 'application/json'
+          }
         });
-        
+
+        if (response.data && response.data.success) {
+          Swal.fire({
+            title: '¡Solicitud Recibida con Éxito!',
+            text: `Gracias ${this.form.contactName}. Hemos recibido la solicitud para ${this.form.businessName}. Un asesor regional se comunicará contigo al ${this.form.phone} en las próximas 24 horas.`,
+            icon: 'success',
+            confirmButtonText: 'Excelente, Entendido',
+            confirmButtonColor: '#2563EB'
+          });
+          this.resetForm();
+        } else {
+          throw new Error(response.data?.message || 'Error al procesar la solicitud.');
+        }
+      } catch (error) {
+        console.error('Error al enviar solicitud de agente:', error);
+        const mensajeError = error.response?.data?.message || 'Hubo un inconveniente al procesar tu solicitud. Por favor intenta de nuevo o comunícate vía WhatsApp.';
+        Swal.fire({
+          title: 'Atención',
+          text: mensajeError,
+          icon: 'warning',
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#E63946'
+        });
+      } finally {
         this.isSubmitting = false;
-      }, 2000);
+      }
+    },
+    resetForm() {
+      this.form = {
+        businessName: '',
+        businessType: '',
+        contactName: '',
+        phone: '',
+        email: '',
+        yearsInBusiness: 2,
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        whyJoin: '',
+        termsAccepted: false
+      };
     },
     toggleFaq(index) {
-      this.faqs.forEach((faq, i) => {
-        if (i !== index) {
-          faq.open = false;
-        }
-      });
       this.faqs[index].open = !this.faqs[index].open;
-    },
-    initAgenciesSlider() {
-      this.agenciesSwiperInstance = new Swiper('.agencies-swiper', {
-        modules: [Navigation, Pagination, Autoplay],
-        loop: true,
-        slidesPerView: 1,
-        spaceBetween: 20,
-        autoplay: {
-          delay: 4000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: '.agency-swiper-pagination',
-          clickable: true,
-        },
-        navigation: {
-          nextEl: '.agency-swiper-next',
-          prevEl: '.agency-swiper-prev',
-        },
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-          },
-          1024: {
-            slidesPerView: 4,
-            spaceBetween: 30,
-          },
-        }
-      });
     }
   },
   mounted() {
+    // Scroll suave a los anclas
     document.querySelectorAll('.scroll-to-form').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const targetElement = document.querySelector(this.getAttribute('href'));
-        if(targetElement) {
-            targetElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+        const href = this.getAttribute('href');
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
         }
       });
     });
-    
-    this.$nextTick(() => {
-        this.initAgenciesSlider();
-    });
-  },
-  beforeUnmount() {
-    if (this.agenciesSwiperInstance) {
-      this.agenciesSwiperInstance.destroy(true, true);
-      this.agenciesSwiperInstance = null;
-    }
   }
-}
+};
 </script>
 
 <style scoped>
-/* --- Variables y Estilos Generales --- */
-:root {
-  --primary-color-v2: #0D9488; /* Teal */
-  --secondary-color-v2: #10B981; /* Green */
-  --dark-color-v2: #1F2937; /* Dark Gray */
-  --light-color-v2: #F3F4F6; /* Light Gray */
-  --text-color-v2: #374151; /* Medium Gray */
-  --text-muted-v2: #6B7280; /* Gray */
-  --white-color-v2: #FFFFFF;
-  --border-color-v2: #D1D5DB;
-  --section-padding-v2: 6rem 0;
-}
+/* ==========================================================================
+   DESIGN SYSTEM - TU CAJA EXPRESS (AGENTS MODULE)
+   ========================================================================== */
 
-.agent-application-page-v2 {
-  font-family: 'Inter', sans-serif;
-  color: var(--text-color-v2);
+.agent-application-page {
+  --navy-dark: #0A192F;
+  --navy-midnight: #001233;
+  --blue-brand: #2563EB;
+  --blue-hover: #1D4ED8;
+  --red-accent: #E63946;
+  --red-hover: #DC2626;
+  --gold-accent: #F59E0B;
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-600: #475569;
+  --slate-800: #1E293B;
+  --slate-900: #0F172A;
+  
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--slate-800);
+  background-color: var(--slate-50);
   line-height: 1.6;
-  background-color: var(--white-color-v2);
+  overflow-x: hidden;
 }
 
-.section-padding-v2 { padding: var(--section-padding-v2); }
-.bg-light-v2 { background-color: var(--light-color-v2); }
-.container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 1rem; }
-.section-header-v2 { text-align: center; margin-bottom: 4rem; }
-.section-tagline-v2 { display: inline-block; color: var(--primary-color-v2); font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 1.5px; }
-.section-title-v2 { font-size: 2.5rem; font-weight: 700; color: var(--dark-color-v2); margin-bottom: 1rem; line-height: 1.2; }
-
-/* --- Hero Section --- */
-.application-hero-v2 {
-  position: relative;
+.container {
   width: 100%;
-  height: 500px;
-  background-image: url('/images/gana.png');
-  background-size: cover;
-  background-position: center center;
-  color: var(--white-color-v2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
+
+.application-hero {
+  position: relative;
+  background: linear-gradient(135deg, #001233 0%, #0A192F 50%, #0F2744 100%);
+  color: #FFFFFF;
+  padding: 5.5rem 0 4.5rem;
   overflow: hidden;
 }
 
-.hero-overlay-v2 {
+.hero-bg-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(rgba(17, 24, 39, 0.6), rgba(17, 24, 39, 0.8));
-  z-index: 1;
+  background: radial-gradient(circle at 70% 30%, rgba(37, 99, 235, 0.22) 0%, transparent 60%);
+  pointer-events: none;
 }
 
-.hero-content-v2 {
+.hero-glow-sphere {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.sphere-1 {
+  width: 320px;
+  height: 320px;
+  background: var(--blue-brand);
+  top: -60px;
+  right: -50px;
+}
+
+.sphere-2 {
+  width: 260px;
+  height: 260px;
+  background: var(--red-accent);
+  bottom: 0px;
+  left: -40px;
+}
+
+.hero-container {
   position: relative;
   z-index: 2;
-  max-width: 800px;
-  padding: 2rem;
+  text-align: center;
 }
 
-.hero-title-v2 {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  color: #ffffff;
-}
-
-.highlight-v2 {
-  color: var(--secondary-color-v2);
-}
-
-.hero-subtitle-v2 {
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  margin-bottom: 2rem;
-  max-width: 600px;
-  opacity: 0.9;
-}
-
-.cta-button-v2 {
+.hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.8rem 2rem;
-  background-color: var(--secondary-color-v2);
-  color: var(--white-color-v2);
-  border: none;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
   border-radius: 50px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  font-size: 1rem;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
-}
-
-.cta-button-v2:hover {
-  background-color: #059669;
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
-}
-
-.cta-button-v2 i { font-size: 1.1em; }
-
-/* --- Benefits Section --- */
-.benefits-grid-v2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; }
-.benefit-card-v2 { background: var(--white-color-v2); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color-v2); text-align: center; transition: all 0.3s ease; border-top: 4px solid var(--primary-color-v2); }
-.benefit-card-v2:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); border-top-color: var(--secondary-color-v2); }
-.benefit-icon-v2 { font-size: 2.5rem; color: var(--primary-color-v2); margin-bottom: 1.5rem; transition: color 0.3s ease; }
-.benefit-card-v2:hover .benefit-icon-v2 { color: var(--secondary-color-v2); }
-.benefit-title-v2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--dark-color-v2); }
-.benefit-description-v2 { color: var(--text-muted-v2); font-size: 0.95rem; }
-
-/* --- How It Works (Timeline) --- */
-.process-timeline-v2 { position: relative; max-width: 700px; margin: 0 auto; padding: 2rem 0; }
-.process-timeline-v2::before { content: ''; position: absolute; top: 0; bottom: 0; left: 30px; width: 3px; background-color: var(--border-color-v2); z-index: 1; }
-.timeline-item-v2 { position: relative; margin-bottom: 3rem; padding-left: 70px; z-index: 2; }
-.timeline-item-v2:last-child { margin-bottom: 0; }
-.timeline-icon-v2 { position: absolute; left: 0; top: 0; width: 60px; height: 60px; border-radius: 50%; background-color: var(--primary-color-v2); color: var(--white-color-v2); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 4px solid var(--light-color-v2); z-index: 3; transition: background-color 0.3s ease; }
-.timeline-item-v2:hover .timeline-icon-v2 { background-color: var(--secondary-color-v2); }
-.timeline-content-v2 { background: var(--white-color-v2); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); border: 1px solid var(--border-color-v2); }
-.timeline-step-v2 { display: inline-block; background-color: var(--primary-color-v2); color: var(--white-color-v2); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase; }
-.timeline-title-v2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--dark-color-v2); }
-.timeline-description-v2 { color: var(--text-muted-v2); font-size: 0.95rem; }
-
-/* --- Slider de Agencias --- */
-.agencies-slider-section .section-subtitle-v2 {
-  max-width: 600px;
-  margin: 0 auto 3rem auto;
-  color: var(--text-muted-v2);
-  font-size: 1.05rem;
-}
-
-.agencies-swiper {
-  width: 100%;
-  padding-bottom: 40px;
-}
-
-.agency-slide {
-  background-color: var(--white-color-v2);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 280px;
-  display: flex;
-  flex-direction: column;
-}
-
-
-.agency-slide:hover {
-   transform: translateY(-5px);
-   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.agency-slide img {
-  display: block;
-  width: 100%;
-  height: 75%; /* Ocupa la mayor parte de la tarjeta */
-  object-fit: cover; /* Asegura que la imagen cubra sin deformarse */
-}
-
-.agency-slide-caption {
-  padding: 0.8rem 1rem;
+  margin-bottom: 1.5rem;
   font-size: 0.9rem;
+  color: #E2E8F0;
   font-weight: 500;
-  color: var(--text-color-v2);
-  text-align: center;
-  background-color: var(--white-color-v2);
-  border-top: 1px solid var(--light-color-v2);
-  flex-grow: 1; /* Ocupa el espacio restante */
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* Estilos para Navegación y Paginación (ajusta colores a tu tema) */
-:deep(.agencies-swiper .swiper-button-prev), /* :deep para estilos de Swiper */
-:deep(.agencies-swiper .swiper-button-next) {
-  color: var(--primary-color-v2); /* Color Teal */
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: background-color 0.3s, color 0.3s;
-}
-:deep(.agencies-swiper .swiper-button-prev::after),
-:deep(.agencies-swiper .swiper-button-next::after) {
-  font-size: 1.2rem; /* Tamaño de las flechas */
-  font-weight: bold;
-}
-
-:deep(.agencies-swiper .swiper-button-prev:hover),
-:deep(.agencies-swiper .swiper-button-next:hover) {
-    background-color: var(--primary-color-v2);
-    color: var(--white-color-v2);
-}
-
-
-:deep(.agencies-swiper .swiper-pagination-bullet) {
-  background-color: var(--primary-color-v2);
-  opacity: 0.5;
-  transition: opacity 0.3s, background-color 0.3s;
-}
-
-:deep(.agencies-swiper .swiper-pagination-bullet-active) {
-  background-color: var(--secondary-color-v2); /* Verde para el activo */
-  opacity: 1;
-}
-
-/* Ocultar flechas en móvil si se prefiere */
-@media (max-width: 768px) {
-  :deep(.agencies-swiper .swiper-button-prev),
-  :deep(.agencies-swiper .swiper-button-next) {
-    display: none;
-  }
-  .agency-slide {
-      height: 250px; /* Un poco más bajo en móvil */
-  }
-}
-/* --- Estilos Generales V2 --- */
-:root {
-  --primary-color-v2: #0D9488; /* Teal */
-  --secondary-color-v2: #10B981; /* Green */
-  --dark-color-v2: #1F2937; /* Dark Gray */
-  --light-color-v2: #F3F4F6; /* Light Gray */
-  --text-color-v2: #374151; /* Medium Gray */
-  --text-muted-v2: #6B7280; /* Gray */
-  --white-color-v2: #FFFFFF;
-  --border-color-v2: #D1D5DB;
-  --section-padding-v2: 6rem 0;
-}
-
-.agent-application-page-v2 {
-  font-family: 'Inter', sans-serif; /* Asegúrate de importar esta fuente si no la tienes global */
-  color: var(--text-color-v2);
-  line-height: 1.6;
-  background-color: var(--white-color-v2); /* Fondo base */
-}
-
-.section-padding-v2 { padding: var(--section-padding-v2); }
-.bg-light-v2 { background-color: var(--light-color-v2); }
-.container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 1rem; }
-.section-header-v2 { text-align: center; margin-bottom: 4rem; }
-.section-tagline-v2 { display: inline-block; color: var(--primary-color-v2); font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 1.5px; }
-.section-title-v2 { font-size: 2.5rem; font-weight: 700; color: var(--dark-color-v2); margin-bottom: 1rem; line-height: 1.2; }
-
-/* --- Hero Section V2 (Altura Fija Corregida) --- */
-.application-hero-v2 {
-  position: relative;
-  width: 100%;
-  height: 500px; /* <<< ALTURA FIJA DEFINIDA <<< */
-  background-image: url('/images/gana.png'); /* Cambia por tu imagen real */
-  background-size: cover;
-  background-position: center center;
-  color: var(--white-color-v2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden; /* Evita desbordes si algo falla */
-}
-
-.hero-overlay-v2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Cubre la altura fija del padre */
-  background: linear-gradient(rgba(17, 24, 39, 0.6), rgba(17, 24, 39, 0.8));
-  z-index: 1;
-}
-
-.hero-content-v2 {
-  position: relative; /* Para estar sobre el overlay */
-  z-index: 2;
-  max-width: 800px;
-  padding: 2rem;
-}
-
-.hero-title-v2 {
-  font-size: clamp(2rem, 6vw, 3.5rem);
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
   font-weight: 800;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  color: #ffffff;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  color: #FFFFFF;
 }
 
-.highlight-v2 {
-  color: var(--secondary-color-v2);
+.gradient-text {
+  background: linear-gradient(135deg, #60A5FA 0%, #38BDF8 50%, #F87171 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.hero-subtitle-v2 {
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  margin-bottom: 2rem;
-  max-width: 600px;
-  opacity: 0.9;
+.hero-subtitle {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: #CBD5E1;
+  max-width: 820px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
 }
 
-.cta-button-v2 {
+.hero-cta-group {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.btn-primary-glow {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.8rem 2rem;
-  background-color: var(--secondary-color-v2);
-  color: var(--white-color-v2);
-  border: none;
+  gap: 0.65rem;
+  background: linear-gradient(135deg, var(--red-accent) 0%, #B91C1C 100%);
+  color: #FFFFFF;
+  padding: 0.95rem 2.2rem;
   border-radius: 50px;
   font-weight: 600;
+  font-size: 1.05rem;
   text-decoration: none;
+  box-shadow: 0 10px 25px rgba(230, 57, 70, 0.4);
   transition: all 0.3s ease;
-  cursor: pointer;
-  font-size: 1rem;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+  border: none;
 }
 
-.cta-button-v2:hover {
-  background-color: #059669;
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+.btn-primary-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(230, 57, 70, 0.55);
+  color: #FFFFFF;
 }
 
-.cta-button-v2 i { font-size: 1.1em; }
+.btn-secondary-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  padding: 0.95rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+}
 
-/* --- Benefits Section V2 --- */
-.benefits-grid-v2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; }
-.benefit-card-v2 { background: var(--white-color-v2); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color-v2); text-align: center; transition: all 0.3s ease; border-top: 4px solid var(--primary-color-v2); }
-.benefit-card-v2:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); border-top-color: var(--secondary-color-v2); }
-.benefit-icon-v2 { font-size: 2.5rem; color: var(--primary-color-v2); margin-bottom: 1.5rem; transition: color 0.3s ease; }
-.benefit-card-v2:hover .benefit-icon-v2 { color: var(--secondary-color-v2); }
-.benefit-title-v2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--dark-color-v2); }
-.benefit-description-v2 { color: var(--text-muted-v2); font-size: 0.95rem; }
+.btn-secondary-glass:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-3px);
+  color: #FFFFFF;
+}
 
-/* --- How It Works V2 (Timeline) --- */
-.process-timeline-v2 { position: relative; max-width: 700px; margin: 0 auto; padding: 2rem 0; }
-.process-timeline-v2::before { content: ''; position: absolute; top: 0; bottom: 0; left: 30px; width: 3px; background-color: var(--border-color-v2); z-index: 1; }
-.timeline-item-v2 { position: relative; margin-bottom: 3rem; padding-left: 70px; z-index: 2; }
-.timeline-item-v2:last-child { margin-bottom: 0; }
-.timeline-icon-v2 { position: absolute; left: 0; top: 0; width: 60px; height: 60px; border-radius: 50%; background-color: var(--primary-color-v2); color: var(--white-color-v2); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 4px solid var(--light-color-v2); z-index: 3; transition: background-color 0.3s ease; }
-.timeline-item-v2:hover .timeline-icon-v2 { background-color: var(--secondary-color-v2); }
-.timeline-content-v2 { background: var(--white-color-v2); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); border: 1px solid var(--border-color-v2); }
-.timeline-step-v2 { display: inline-block; background-color: var(--primary-color-v2); color: var(--white-color-v2); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase; }
-.timeline-title-v2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--dark-color-v2); }
-.timeline-description-v2 { color: var(--text-muted-v2); font-size: 0.95rem; }
 
-/* --- Estilos para el Formulario Mejorado --- */
-.application-form-section-v2 {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+
+/* ==========================================================================
+   2. SECCIÓN BENEFICIOS
+   ========================================================================== */
+
+.benefits-section {
+  padding: 5rem 0;
+  background: var(--slate-100);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.75rem;
+}
+
+.benefit-card {
   position: relative;
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
-.application-form-section-v2::before {
-  content: '';
+.benefit-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+  border-color: #BFDBFE;
+}
+
+.card-glow {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('/images/form-bg-pattern.png') repeat;
-  opacity: 0.03;
-  z-index: 0;
-}
-
-.section-subtitle-v2 {
-  color: var(--text-muted-v2);
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
-}
-
-.form-wrapper-v2 {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
-}
-
-@media (min-width: 992px) {
-  .form-wrapper-v2 {
-    flex-direction: row;
-    align-items: center;
-    gap: 3rem;
-  }
-}
-
-.form-decoration-v2 {
-  display: none;
-  position: relative;
-  min-height: 400px;
-}
-
-@media (min-width: 992px) {
-  .form-decoration-v2 {
-    display: block;
-  }
-}
-
-.decoration-circle-v2 {
-  position: absolute;
+  right: 0;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+  filter: blur(50px);
+  pointer-events: none;
+  opacity: 0.12;
 }
 
-.circle-1 {
-  width: 300px;
-  height: 300px;
-  top: -50px;
-  left: -50px;
-}
+.glow-blue { background: var(--blue-brand); }
+.glow-red { background: var(--red-accent); }
+.glow-purple { background: #8B5CF6; }
+.glow-green { background: #10B981; }
 
-.circle-2 {
-  width: 200px;
-  height: 200px;
-  bottom: -30px;
-  right: -30px;
-}
-
-.form-illustration-v2 {
-  position: absolute;
-  width: 80%; /* Ajustado para hacer el icono más pequeño */
-  max-width: 400px; /* Ajustado para hacer el icono más pequeño */
-  height: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-
-.form-container-v2 {
-  flex: 1;
-  background: white;
+.card-icon-bubble {
+  width: 60px;
+  height: 60px;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  position: relative;
-  z-index: 2;
-}
-
-.agent-application-form-v2 {
-  padding: 2.5rem;
-}
-
-@media (max-width: 768px) {
-  .agent-application-form-v2 {
-    padding: 1.5rem;
-  }
-}
-
-.form-header-v2 {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.form-progress-v2 {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  color: var(--blue-brand);
+  margin-bottom: 1.25rem;
+  transition: transform 0.3s ease;
 }
 
-.progress-step-v2 {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #e2e8f0;
-  color: #64748b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+.card-icon-bubble.icon-red {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+  color: var(--red-accent);
 }
 
-.progress-step-v2.active {
-  background-color: var(--primary-color-v2);
-  color: white;
+.card-icon-bubble.icon-purple {
+  background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
+  color: #7C3AED;
 }
 
-.progress-line-v2 {
-  width: 40px;
-  height: 2px;
-  background-color: #e2e8f0;
-  margin: 0 5px;
+.card-icon-bubble.icon-green {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #059669;
 }
 
-.form-step-title-v2 {
-  font-size: 1.3rem;
-  color: var(--dark-color-v2);
+.benefit-card:hover .card-icon-bubble {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.benefit-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--blue-brand);
+  letter-spacing: 0.8px;
   margin-bottom: 0.5rem;
-  font-weight: 600;
 }
 
-.form-grid-v2 {
+.benefit-tag.tag-red { color: var(--red-accent); }
+.benefit-tag.tag-purple { color: #7C3AED; }
+.benefit-tag.tag-green { color: #059669; }
+
+.benefit-card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  margin-bottom: 0.75rem;
+}
+
+.benefit-card-text {
+  font-size: 0.95rem;
+  color: var(--slate-600);
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   4. SECCIÓN PROCESO (ROADMAP)
+   ========================================================================== */
+
+.process-section {
+  padding: 5rem 0;
+  background-color: #FFFFFF;
+}
+
+.process-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
+  position: relative;
+}
+
+.process-step-card {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 18px;
+  padding: 2.25rem 1.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.process-step-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--blue-brand);
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.1);
+}
+
+.step-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--slate-200);
+  line-height: 1;
+}
+
+.step-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #EFF6FF;
+  color: var(--blue-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.step-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.9rem;
+  color: var(--slate-600);
+  line-height: 1.6;
+}
+
+.process-step-card.highlight-step {
+  background: linear-gradient(135deg, #0A192F 0%, #001233 100%);
+  color: #FFFFFF;
+  border-color: #1E3A8A;
+}
+
+.process-step-card.highlight-step .step-badge {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.process-step-card.highlight-step .step-icon {
+  background: rgba(230, 57, 70, 0.2);
+  color: #F87171;
+}
+
+.process-step-card.highlight-step .step-title {
+  color: #FFFFFF;
+}
+
+.process-step-card.highlight-step .step-desc {
+  color: #CBD5E1;
+}
+
+/* ==========================================================================
+   5. FORMULARIO DE APLICACIÓN
+   ========================================================================== */
+
+.application-form-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #F8FAFC 0%, #EEF2F6 100%);
+}
+
+.form-outer-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+/* Columna Lateral Info */
+.form-side-info {
+  background: linear-gradient(145deg, #0A192F 0%, #001233 100%);
+  color: #FFFFFF;
+  border-radius: 24px;
+  padding: 3rem 2.25rem;
+  box-shadow: 0 20px 40px rgba(10, 25, 47, 0.2);
+  position: sticky;
+  top: 90px;
+}
+
+.side-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
   margin-bottom: 1.5rem;
 }
 
-.form-group-v2 {
-  position: relative;
+.side-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  color: #FFFFFF;
+}
+
+.side-text {
+  font-size: 0.95rem;
+  color: #CBD5E1;
+  margin-bottom: 2rem;
+  line-height: 1.65;
+}
+
+.side-perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.perk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+  color: #E2E8F0;
+}
+
+.perk-item i {
+  color: #34D399;
+  font-size: 0.9rem;
+}
+
+.side-quote-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.stars-row {
+  color: var(--gold-accent);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.quote-text {
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #E2E8F0;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.quote-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--blue-brand);
+}
+
+.quote-author strong {
+  display: block;
+  font-size: 0.88rem;
+  color: #FFFFFF;
+}
+
+.quote-author small {
+  font-size: 0.75rem;
+  color: #94A3B8;
+}
+
+/* Tarjeta Principal del Formulario */
+.form-main-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--slate-200);
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.form-header-text h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  margin-bottom: 0.25rem;
+}
+
+.form-header-text p {
+  font-size: 0.88rem;
+  color: var(--slate-600);
+  margin: 0;
+}
+
+.ssl-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #059669;
+  font-weight: 600;
+  background: #ECFDF5;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-field {
   display: flex;
   flex-direction: column;
 }
 
-.form-group-v2.full-span-v2 {
+.form-field.full-width {
   grid-column: 1 / -1;
 }
 
-.form-group-v2 label {
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--text-color-v2);
+.form-field label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  margin-bottom: 0.45rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
-.form-group-v2 label i {
-  color: var(--primary-color-v2);
-  font-size: 0.9em;
+.form-field label i {
+  color: var(--blue-brand);
+  font-size: 0.85rem;
 }
 
-.form-group-v2 input,
-.form-group-v2 select,
-.form-group-v2 textarea {
+.input-wrapper input,
+.select-wrapper select,
+.form-field textarea {
   width: 100%;
-  padding: 0.8rem 1rem 0.8rem 2.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
   font-size: 0.95rem;
-  background-color: #f8fafc;
-  color: var(--text-color-v2);
-  transition: all 0.3s ease;
+  border: 1.5px solid var(--slate-200);
+  border-radius: 10px;
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+  transition: all 0.25s ease;
+  font-family: inherit;
 }
 
-.form-group-v2 input:focus,
-.form-group-v2 select:focus,
-.form-group-v2 textarea:focus {
+.input-wrapper input:focus,
+.select-wrapper select:focus,
+.form-field textarea:focus {
   outline: none;
-  border-color: var(--primary-color-v2);
-  background-color: white;
-  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+  border-color: var(--blue-brand);
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-.form-group-v2 input::placeholder,
-.form-group-v2 textarea::placeholder {
-  color: #94a3b8;
-  opacity: 0.8;
-}
-
-.input-icon-v2 {
-  position: absolute;
-  right: 1rem;
-  top: 2.4rem;
-  color: var(--primary-color-v2);
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease;
-}
-
-.form-group-v2 input:valid + .input-icon-v2,
-.form-group-v2 input:focus + .input-icon-v2 {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.custom-select-v2 {
+.select-wrapper {
   position: relative;
 }
 
-.custom-select-v2 select {
+.select-wrapper select {
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   cursor: pointer;
+  padding-right: 2.5rem;
 }
 
-.select-arrow-v2 {
+.select-icon {
   position: absolute;
-  right: 1rem;
+  right: 1.1rem;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: #94a3b8;
+  color: var(--slate-600);
+  font-size: 0.85rem;
 }
 
-.range-input-v2 {
+.form-field textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Slider de Años */
+.slider-field-header {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.8rem 0;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.range-input-v2 input[type="range"] {
+.years-counter {
+  background: #EFF6FF;
+  color: var(--blue-brand);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.years-slider {
   -webkit-appearance: none;
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: #e2e8f0;
-  padding: 0;
-  margin: 0;
+  background: var(--slate-200);
+  outline: none;
+  cursor: pointer;
 }
 
-.range-input-v2 input[type="range"]::-webkit-slider-thumb {
+.years-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--primary-color-v2);
+  background: var(--blue-brand);
   cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.range-value-v2 {
-  font-size: 0.9rem;
-  color: var(--primary-color-v2);
-  font-weight: 600;
-  text-align: center;
-}
-
-.form-group-v2 textarea {
-  min-height: 120px;
-  resize: vertical;
-  padding-left: 1rem;
-}
-
-.char-counter-v2 {
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
   font-size: 0.75rem;
-  color: #94a3b8;
-  text-align: right;
-  margin-top: 0.25rem;
+  color: var(--slate-600);
+  margin-top: 0.4rem;
 }
 
-.upload-area-v2 {
-  border: 2px dashed #cbd5e1;
-  border-radius: 8px;
-  padding: 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #f8fafc;
+
+
+/* Checkbox */
+.terms-field {
+  margin-top: 0.5rem;
 }
 
-.upload-area-v2:hover,
-.upload-area-v2.dragover {
-  border-color: var(--primary-color-v2);
-  background-color: rgba(13, 148, 136, 0.05);
-}
-
-.upload-content-v2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.upload-content-v2 i {
-  font-size: 2rem; /* Reducido de 2.5rem */
-  color: var(--primary-color-v2);
-  margin-bottom: 0.5rem;
-}
-
-.upload-content-v2 h4 {
-  font-size: 1.1rem;
-  color: var(--dark-color-v2);
-  margin: 0;
-}
-
-.upload-content-v2 p {
-  font-size: 0.85rem;
-  color: #64748b;
-  margin: 0;
-}
-
-.file-preview-v2 {
-  position: relative;
-  margin-top: 1rem;
-  max-width: 200px;
-}
-
-.file-preview-v2 img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.remove-file-v2 {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.7rem;
-}
-
-.terms-group-v2 {
+.checkbox-container {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 1rem;
+  cursor: pointer;
+  user-select: none;
 }
 
-.terms-group-v2 input[type="checkbox"] {
-  width: auto;
-  padding: 0;
-  margin: 0;
-  min-width: 18px;
-  min-height: 18px;
-  accent-color: var(--primary-color-v2);
+.checkbox-container input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--blue-brand);
+  cursor: pointer;
 }
 
-.terms-group-v2 label {
-  margin: 0;
+.checkbox-label {
   font-size: 0.85rem;
+  color: var(--slate-600);
 }
 
-.terms-group-v2 a {
-  color: var(--primary-color-v2);
+.checkbox-label a {
+  color: var(--blue-brand);
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 500;
 }
 
-.terms-group-v2 a:hover {
+.checkbox-label a:hover {
   text-decoration: underline;
 }
 
-.form-footer-v2 {
+/* Submit */
+.form-submit-wrapper {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.submit-button-v2 {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: #059669;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3);
+  gap: 1rem;
+}
+
+.btn-submit-app {
   width: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(135deg, var(--blue-brand) 0%, #1D4ED8 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+  transition: all 0.3s ease;
 }
 
-.submit-button-v2:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
-  background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
+.btn-submit-app:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.5);
 }
 
-.submit-button-v2:disabled {
+.btn-submit-app:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.form-security-v2 {
+.submit-note {
+  font-size: 0.8rem;
+  color: var(--slate-600);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ==========================================================================
+   6. TESTIMONIOS
+   ========================================================================== */
+
+.testimonials-section {
+  padding: 5rem 0;
+  background-color: #FFFFFF;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.07);
+  background: #FFFFFF;
+}
+
+.testimonial-stars {
+  color: var(--gold-accent);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.testimonial-body {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--slate-800);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid var(--slate-200);
+  padding-top: 1.25rem;
+}
+
+.testimonial-user img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--blue-brand);
+}
+
+.testimonial-user h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  margin: 0 0 0.2rem 0;
+}
+
+.testimonial-user span {
+  font-size: 0.8rem;
+  color: var(--slate-600);
+}
+
+/* ==========================================================================
+   7. PREGUNTAS FRECUENTES (FAQ)
+   ========================================================================== */
+
+.faq-section {
+  padding: 5rem 0;
+  background: var(--slate-100);
+}
+
+.faq-accordion-wrapper {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-box {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.faq-box:hover {
+  border-color: #93C5FD;
+}
+
+.faq-box.is-open {
+  border-color: var(--blue-brand);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+}
+
+.faq-header {
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.faq-header h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--slate-900);
+  margin: 0;
+}
+
+.faq-toggle-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--slate-100);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  color: #64748b;
+  color: var(--blue-brand);
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 
-.form-security-v2 i {
-  color: var(--primary-color-v2);
+.faq-box.is-open .faq-toggle-icon {
+  background: var(--blue-brand);
+  color: #FFFFFF;
 }
 
-/* --- Animaciones --- */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.faq-content {
+  padding: 0 1.75rem 1.5rem;
+  border-top: 1px solid var(--slate-100);
 }
 
-.submit-button-v2:hover {
-  animation: pulse 1.5s infinite;
+.faq-content p {
+  font-size: 0.95rem;
+  color: var(--slate-600);
+  line-height: 1.7;
+  margin: 1rem 0 0;
 }
 
-/* --- Testimonials Section --- */
-.testimonials-grid-v2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-.testimonial-card-v2 { background: var(--white-color-v2); border-radius: 12px; padding: 2rem; border: 1px solid var(--border-color-v2); display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; position: relative; overflow: hidden; }
-.testimonial-card-v2::before { content: '\f10d'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; top: 1rem; left: 1rem; font-size: 4rem; color: var(--primary-color-v2); opacity: 0.08; z-index: 1; }
-.testimonial-content-v2 { position: relative; z-index: 2; margin-bottom: 1.5rem; }
-.testimonial-text-v2 { font-size: 1.05rem; line-height: 1.7; color: var(--text-color-v2); }
-.testimonial-author-v2 { display: flex; align-items: center; margin-top: auto; position: relative; z-index: 2; padding-top: 1rem; border-top: 1px solid var(--light-color-v2); }
-.author-image-v2 { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 1rem; border: 2px solid var(--primary-color-v2); }
-.author-name-v2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--dark-color-v2); }
-.author-location-v2 { color: var(--text-muted-v2); font-size: 0.85rem; }
 
-/* --- FAQ Section --- */
-.faq-accordion-v2 { max-width: 800px; margin: 0 auto; }
-.faq-item-v2 { margin-bottom: 1rem; border: 1px solid var(--border-color-v2); border-radius: 8px; overflow: hidden; background-color: var(--white-color-v2); }
-.faq-question-v2 { padding: 1.25rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s ease; }
-.faq-question-v2:hover { background-color: var(--light-color-v2); }
-.faq-question-v2 h3 { font-size: 1.05rem; font-weight: 500; color: var(--dark-color-v2); margin: 0; }
-.faq-icon-v2 { color: var(--primary-color-v2); font-size: 1rem; transition: transform 0.3s ease; }
-.faq-answer-v2 { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease-out; padding: 0 1.5rem; }
-.faq-answer-v2.open { max-height: 300px; padding: 0.5rem 1.5rem 1.5rem; }
-.faq-answer-v2 p { margin: 0; color: var(--text-muted-v2); font-size: 0.95rem; line-height: 1.7; border-top: 1px solid var(--light-color-v2); padding-top: 1rem; }
 
-/* --- Final CTA Section --- */
-.final-cta-section-v2 { background-color: var(--dark-color-v2); color: var(--white-color-v2); padding: var(--section-padding-v2); text-align: center; }
-.cta-content-v2 { max-width: 700px; margin: 0 auto; }
-.cta-title-v2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 1rem; }
-.cta-text-v2 { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.8; }
+/* ==========================================================================
+   8. CTA FINAL DE CIERRE
+   ========================================================================== */
 
-/* --- Responsive --- */
+.final-cta-section {
+  position: relative;
+  background: linear-gradient(135deg, #001233 0%, #0A192F 100%);
+  color: #FFFFFF;
+  padding: 5rem 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.cta-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-container {
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
+}
+
+.final-cta-section h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #FFFFFF;
+}
+
+.final-cta-section p {
+  font-size: 1.1rem;
+  color: #CBD5E1;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+
+.cta-buttons-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
 @media (max-width: 992px) {
-  .section-title-v2 { font-size: 2rem; }
-  .process-timeline-v2::before { left: 30px; }
-  .timeline-item-v2 { padding-left: 70px; }
-  .testimonials-grid-v2 { grid-template-columns: 1fr; }
-  .application-hero-v2 { height: 450px; }
+  .form-outer-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .form-side-info {
+    position: static;
+  }
+
+
 }
 
 @media (max-width: 768px) {
-  :root { --section-padding-v2: 4rem 0; }
-  .section-title-v2 { font-size: 1.8rem; }
-  .form-grid-v2 { grid-template-columns: 1fr; }
-  .form-group-v2.full-span-v2 { grid-column: auto; }
-  .process-timeline-v2::before { left: 25px; }
-  .timeline-icon-v2 { width: 50px; height: 50px; font-size: 1.2rem; left:0; }
-  .timeline-item-v2 { padding-left: 65px; }
-  .application-hero-v2 { height: 400px; }
-  .upload-content-v2 h4 { font-size: 1rem; }
-  .upload-content-v2 p { font-size: 0.8rem; }
-}
+  .application-hero {
+    padding: 3.5rem 0 3rem;
+  }
 
-@media (max-width: 576px) {
-  :root { --section-padding-v2: 3rem 0; }
-  .hero-content-v2 { padding: 1rem; }
-  .cta-button-v2, .submit-button-v2 { width: 100%; justify-content: center; padding: 0.8rem 1rem; }
-  .form-container-v2 { padding: 1.5rem; }
-  .faq-question-v2 h3 { font-size: 0.95rem; }
-  .process-timeline-v2::before { left: 20px; }
-  .timeline-icon-v2 { width: 40px; height: 40px; font-size: 1rem; left: 0; }
-  .timeline-item-v2 { padding-left: 55px; }
-  .application-hero-v2 { height: 350px; }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-main-card {
+    padding: 2rem 1.5rem;
+  }
+
+
+
+  .cta-buttons-row,
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary-glow,
+  .btn-secondary-glass {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>
