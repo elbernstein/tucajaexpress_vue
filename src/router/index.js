@@ -29,8 +29,14 @@ const routes = [
   { path: '/rutas', name: 'Rutas en EEUU', component: Rutas },
   { path: '/gana', alias: '/aplicar-agente', name: 'Gana Dinero Con Nosotros', component: Gana },
   { path: '/calificanos', name: 'Calificanos', component: Calificanos },
-  { path: '/politicas', name: 'Politicas', component: Politicas },
+  { path: '/terms', alias: '/politicas', name: 'Politicas', component: Politicas },
   { path: '/privacidad', name: 'Privacidad', component: Privacidad },
+  {
+    path: '/trabaja-con-nosotros',
+    alias: ['/vacantes', '/empleos'],
+    name: 'Vacantes',
+    component: () => import('@/views/Vacantes.vue')
+  },
   { path: '/rastreo', redirect: '/tracking-results' },
 
   {
@@ -100,7 +106,13 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to) {
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' }
+    }
+    return { top: 0 }
+  }
 })
 
 // Función para rastrear y enviar la visita al servidor de TuCaja2

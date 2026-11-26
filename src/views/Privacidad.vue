@@ -109,7 +109,7 @@
       </section>
 
       <!-- 5. Information Security -->
-      <section class="policy-section">
+      <section id="seguridad" class="policy-section">
         <h2>{{ currentLanguage === 'es' ? '5. SEGURIDAD DE LA INFORMACIÓN' : '5. INFORMATION SECURITY' }}</h2>
         <p>
           {{ currentLanguage === 'es' 

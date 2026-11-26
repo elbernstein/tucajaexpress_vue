@@ -73,6 +73,7 @@
                 <li><RouterLink to="/paises">Paises</RouterLink></li>
                 <li><RouterLink to="/puerta-puerta">Puerta a Puerta</RouterLink></li>
                 <li><RouterLink to="/rutas">Zonas de Recolección</RouterLink></li>
+                <li><RouterLink to="/trabaja-con-nosotros">Vacantes</RouterLink></li>
                 <li><RouterLink to="/contactanos">Contáctanos</RouterLink></li>
               </ul>
             </nav>
